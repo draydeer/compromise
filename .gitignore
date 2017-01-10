@@ -1,0 +1,10 @@
+*.js
+*.js.map
+!webpack.config.js
+dist/*
+doc/*
+typings/*
+ignore*
+nohup*
+.idea
+node_modules
