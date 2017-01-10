@@ -24,4 +24,26 @@ describe('Obj', () => {
         expect(obj.get('b.a', 3)).toBe(2);
         expect(obj.get('b.c', 2)).toBe(2);
     });
+
+    it('should set old value and return same instance of Obj', () => {
+        const obj: any = Obj({a: 1, b: {a: 2}});
+        const ob2: any = obj.set('a', 1);
+        const ob3: any = obj.set('b.a', 2);
+
+        expect(ob2).toBe(obj);
+        expect(ob3).toBe(obj);
+    });
+
+    it('should set new value and return new instance of Obj', () => {
+        const obj: any = Obj({a: 1, b: {a: 2}});
+        const ob2: any = obj.set('a', 2);
+        const ob3: any = obj.set('b.a', 3);
+
+        expect(ob2).toNotBe(obj);
+        expect(ob3).toNotBe(obj);
+        expect(obj.a).toBe(1);
+        expect(ob2.a).toBe(2);
+        expect(obj.b).toBe(ob2.b);
+        expect(obj.b).toNotBe(ob3[1]);
+    });
 });

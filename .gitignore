@@ -1,10 +1,8 @@
-*.js
-*.js.map
-!webpack.config.js
-dist/*
-doc/*
-typings/*
-ignore*
-nohup*
 .idea
+*.js
+*.map
+coverage
+!dist/*/*.js
+*ignore*
 node_modules
+typings
