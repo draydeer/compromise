@@ -1,9 +1,18 @@
 
+const x = require('xxhashjs');
+
 const SEED = 0x811c9dc5;
 const SIZE = 32;
 const SIZE_MASK = SIZE - 1;
 
 function hash(str, seed?) {
+    var hash = seed, i, char;
+    for (i = 0; i < str.length; i++) {
+        char = str.charCodeAt(i);
+        hash = char + (hash << 6) + (hash << 16) - hash;
+    }
+    return hash;
+
     let hval = seed || SEED;
 
     for (let i = 0, l = str.length; i < l; i ++) {
@@ -99,19 +108,23 @@ class MapCompromise {
     }
 
     public get(key: string, def?: any): any {
+        hIndex = 0;
+
         let d: any[] = this.n.dict;
-        let h = hCache[hIndex = 0] = hash(key, this.n.seed);
+        let h = hash(key, this.n.seed) & SIZE_MASK;
 
         do {
-            let v = d[h & SIZE_MASK];
+            let v = d[h];
 
             if (v !== void 0) {
                 if (false === (v instanceof MapNode)) {
                     return v[0] === key ? v[1] : def;
                 }
 
+                hCache[hIndex ++] = h;
+
                 d = v.dict;
-                h = hCache[hIndex ++] = hash(key, v.seed);
+                h = hash(key, v.seed) & SIZE_MASK;
             } else {
                 return def;
             }
@@ -119,7 +132,7 @@ class MapCompromise {
     }
 
     public set(key: string, val: any): MapCompromise {
-        if (this.n.get(key) === val) {
+        if (this.get(key) === val) {
             return this;
         }
 

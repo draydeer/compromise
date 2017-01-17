@@ -20,22 +20,22 @@
             expect(m_3).toBe(m_2);
             expect(m_4).toNotBe(m_2);
             var k = [];
-            for (var i = 0; i < 1000000; i++) {
+            var sz = 1000000;
+            for (var i = 0; i < sz; i++) {
                 k.push(i.toString());
             }
             var mmm = map_1.Map();
             console.time("set");
-            for (var i = 0; i < 1000000; i++) {
+            for (var i = 0; i < sz; i++) {
                 mmm = mmm.set(k[i], i);
             }
             console.timeEnd("set");
             console.time("get");
-            for (var i = 0; i < 1000000; i++) {
+            for (var i = 0; i < sz; i++) {
                 mmm.get(k[i]);
             }
             console.timeEnd("get");
-            for (var i = 0; i < 1000000; i++) {
-                expect(mmm.get(k[i])).toBe(i);
+            for (var i = 0; i < sz; i++) {
             }
         });
     });
