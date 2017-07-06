@@ -89,6 +89,23 @@ allPatch(obj, 'a.b', 1, 'c', 2); // {}
 allPatch(obj, 'a.b', 2, 'c', 3); // {a: {b: 2}, c: 3} 
 ```
 
+*allPatchCompare* - generates patch that must be applied above the initial data checking source key in target.
+             
+Returns object with the new keys if any new value differs from old value.
+
+```javascript
+let obj = {
+    a: {
+        b: 1
+    },
+    c: 2
+}
+
+allPatchCompare(obj, {c: 2}); // {}
+
+allPatchCompare(obj, {c: 3}); // {c: 3} 
+```
+
 ## Arr, Obj
 
 Initialize immutable Array or Object:
