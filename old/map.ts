@@ -1,4 +1,3 @@
-
 const x = require('xxhashjs');
 
 const SEED = 0x811c9dc5;
@@ -6,12 +5,12 @@ const SIZE = 32;
 const SIZE_MASK = SIZE - 1;
 
 function hash(str, seed?) {
-    var hash = seed, i, char;
-    for (i = 0; i < str.length; i++) {
-        char = str.charCodeAt(i);
-        hash = char + (hash << 6) + (hash << 16) - hash;
-    }
-    return hash;
+    //var hash = seed, i, char;
+    //for (i = 0; i < str.length; i++) {
+    //    char = str.charCodeAt(i);
+    //    hash = char + (hash << 6) + (hash << 16) - hash;
+    //}
+    //return hash;
 
     let hval = seed || SEED;
 

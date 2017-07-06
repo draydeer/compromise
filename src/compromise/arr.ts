@@ -1,5 +1,10 @@
-
-import {arrFastCopyArrayLike, arrObjClone, objFastCopy} from "../lib";
+import {
+    Context,
+    anyGetInContext,
+    arrFastCopyArrayLike,
+    arrObjClone,
+    objFastCopy
+} from "../lib";
 
 export interface IArr extends Array<any> {
 
@@ -17,32 +22,143 @@ export const Arr = function<T> (value: any, force?: boolean): TArr<T> {
     return value instanceof ArrCompromise && ! force ? value : new ArrCompromise<TArr<T>>(value);
 };
 
-let getSetKeysCache;
+let copySet = new Set();
 
-const get = function (key: string, def?: any) {
-    let self = this;
-    let keys = getSetKeysCache = key.split(".");
-
-    for (let i = 0, l = keys.length; i < l; i ++) {
-        const k = keys[i];
-
-        if (k in self) {
-            const v = self[k];
-
-            if (v instanceof Object) {
-                self = v;
-            } else {
-                return i === l - 1 ? v : def;
-            }
-        } else {
-            return def;
-        }
+export const arrSetInContext = function (key: string, val: any) {
+    if (anyGetInContext.call(this, key) === val) {
+        return this;
     }
 
-    return self;
+    let root, self = root = new ArrCompromise(this);
+    let i, l;
+
+    for (i = 0, l = Context.getSetKeysCache.length - 1; i < l; i ++) {
+        const v = self[Context.getSetKeysCache[i]];
+
+        self = self[Context.getSetKeysCache[i]] = (v && typeof v === "object") ? arrObjClone(v) : v;
+    }
+
+    self[Context.getSetKeysCache[i]] = val;
+
+    Context.getSetKeysCache = null;
+
+    return root;
 };
 
-const ArrCompromise = function<T> (value?: any) {
+export const arrSetInContextPatch = function (key: string, val: any) {
+    if (anyGetInContext.call(this, key) === val) {
+        return {};
+    }
+
+    let root, self = root = {[Context.getSetKeysCache[0]]: this[Context.getSetKeysCache[0]]};
+    let i, l;
+
+    for (i = 0, l = Context.getSetKeysCache.length - 1; i < l; i ++) {
+        const v = self[Context.getSetKeysCache[i]];
+
+        self = self[Context.getSetKeysCache[i]] = (v && typeof v === "object") ? arrObjClone(v) : v;
+    }
+
+    self[Context.getSetKeysCache[i]] = val;
+
+    Context.getSetKeysCache = null;
+
+    return root;
+};
+
+export const arrAll = function (ctx, a?, b?, c?, d?, e?, f?, g?, h?) {
+    if (arguments.length < 4) {
+        return ArrCompromise.prototype.set.call(ctx, a, b);
+    }
+
+    let root = ctx;
+    let self;
+    let i, j, l, m;
+
+    copySet.clear();
+
+    for (i = 1, l = arguments.length; i < l; i += 2) {
+        if (anyGetInContext.call(ctx, arguments[i]) === arguments[i + 1]) {
+            continue;
+        }
+
+        if (root === ctx) {
+            self = root = new ArrCompromise(ctx);
+        } else {
+            self = root;
+        }
+
+        for (j = 0, m = Context.getSetKeysCache.length - 1; j < m; j ++) {
+            const v = self[Context.getSetKeysCache[j]];
+
+            if (v && typeof v === "object") {
+                if (false === copySet.has(v)) {
+                    self = self[Context.getSetKeysCache[j]] = arrObjClone(v);
+
+                    copySet.add(self);
+                } else {
+                    self = self[Context.getSetKeysCache[j]] = v;
+                }
+            } else {
+                self = self[Context.getSetKeysCache[j]] = v;
+            }
+        }
+
+        self[Context.getSetKeysCache[j]] = arguments[i + 1];
+    }
+
+    Context.getSetKeysCache = null;
+
+    return root;
+};
+
+export const arrAllPatch = function (ctx, a?, b?, c?, d?, e?, f?, g?, h?) {
+    if (arguments.length < 4) {
+        return arrSetInContextPatch.call(ctx, a, b);
+    }
+
+    let root = {};
+    let self;
+    let i, j, l, m;
+
+    copySet.clear();
+
+    for (i = 1, l = arguments.length; i < l; i += 2) {
+        if (anyGetInContext.call(ctx, arguments[i]) === arguments[i + 1]) {
+            continue;
+        }
+
+        if (root === ctx) {
+            self = root = {[Context.getSetKeysCache[0]]: ctx[Context.getSetKeysCache[0]]};
+        } else {
+            self = root;
+        }
+
+        for (j = 0, m = Context.getSetKeysCache.length - 1; j < m; j ++) {
+            const v = self[Context.getSetKeysCache[j]];
+
+            if (v && typeof v === "object") {
+                if (false === copySet.has(v)) {
+                    self = self[Context.getSetKeysCache[j]] = arrObjClone(v);
+
+                    copySet.add(self);
+                } else {
+                    self = self[Context.getSetKeysCache[j]] = v;
+                }
+            } else {
+                self = self[Context.getSetKeysCache[j]] = v;
+            }
+        }
+
+        self[Context.getSetKeysCache[j]] = arguments[i + 1];
+    }
+
+    Context.getSetKeysCache = null;
+
+    return root;
+};
+
+export const ArrCompromise = function<T> (value?: any) {
     value ? (<TArr<T>> arrFastCopyArrayLike(this, value)) : this.length = 0;
 };
 
@@ -52,23 +168,53 @@ ArrCompromiseProto.prototype = Array.prototype;
 
 ArrCompromise.prototype = objFastCopy(new ArrCompromiseProto(), {
     constructor: Array.prototype.constructor,
-    get,
-    set: function (key: string, val: any) {
-        if (get.call(this, key) === val) {
-            return this;
+    all: function (a?, b?, c?, d?, e?, f?, g?, h?) {
+        if (arguments.length < 3) {
+            return ArrCompromise.prototype.set.call(this, a, b);
         }
 
-        let root, self = root = new ArrCompromise(this);
-        let keys = getSetKeysCache;
+        let root = this;
+        let self;
+        let i, j, l, m;
 
-        for (let i = 0, l = keys.length; i < l; i ++) {
-            const v = self[keys[i]];
+        copySet.clear();
 
-            self = self[keys[i]] = i === l - 1 ? val : ((typeof v === "object" && v !== null) ? arrObjClone(v) : v);
+        for (i = 0, l = arguments.length; i < l; i += 2) {
+            if (anyGetInContext.call(this, arguments[i]) === arguments[i + 1]) {
+                continue;
+            }
+
+            if (root === this) {
+                self = root = new ArrCompromise(this);
+            } else {
+                self = root;
+            }
+
+            for (j = 0, m = Context.getSetKeysCache.length - 1; j < m; j ++) {
+                const v = self[Context.getSetKeysCache[j]];
+
+                if (v && typeof v === "object") {
+                    if (false === copySet.has(v)) {
+                        self = self[Context.getSetKeysCache[j]] = arrObjClone(v);
+
+                        copySet.add(self);
+                    } else {
+                        self = self[Context.getSetKeysCache[j]] = v;
+                    }
+                } else {
+                    self = self[Context.getSetKeysCache[j]] = v;
+                }
+            }
+
+            self[Context.getSetKeysCache[j]] = arguments[i + 1];
         }
+
+        Context.getSetKeysCache = null;
 
         return root;
     },
+    get: anyGetInContext,
+    set: arrSetInContext,
     isArr: (val: any): boolean => val instanceof ArrCompromise,
 });
 

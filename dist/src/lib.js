@@ -1,19 +1,22 @@
 (function (factory) {
-    if (typeof module === 'object' && typeof module.exports === 'object') {
-        var v = factory(require, exports); if (v !== undefined) module.exports = v;
+    if (typeof module === "object" && typeof module.exports === "object") {
+        var v = factory(require, exports);
+        if (v !== undefined) module.exports = v;
     }
-    else if (typeof define === 'function' && define.amd) {
+    else if (typeof define === "function" && define.amd) {
         define(["require", "exports"], factory);
     }
 })(function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
     exports.arrFastCombine = function (a, b, c, d, e, f, g, h) {
-        var target = new Array(Array.prototype.reduce.call(arguments, function (a, b) { return a + b.length; }, 0));
-        var offset = 0;
-        for (var i = 0, l = arguments.length; i < l; i++) {
+        var target = [];
+        var i, j, l, m;
+        for (i = 0, l = arguments.length; i < l; i++) {
             var argv = arguments[i];
             if (argv && argv.length) {
-                for (var j = 0, m = argv.length; j < m; j++, offset++) {
-                    target[offset] = argv[j];
+                for (j = 0, m = argv.length; j < m; j++) {
+                    target.push(argv[j]);
                 }
             }
         }
@@ -21,47 +24,81 @@
     };
     exports.objFastCombine = function (a, b, c, d, e, f, g, h) {
         var target = {};
-        for (var i = 0, l = arguments.length; i < l; i++) {
+        var i, j, l, k, m;
+        for (i = 0, l = arguments.length; i < l; i++) {
             var argv = arguments[i];
             if (argv) {
                 var keys = Object.keys(argv);
-                for (var j = 1, k = keys[0], m = keys.length; j <= m; k = keys[j++]) {
+                for (j = 1, k = keys[0], m = keys.length; j <= m; k = keys[j++]) {
                     target[k] = argv[k];
                 }
             }
         }
         return target;
     };
-    var arrFastCopyArrayLikeIndexCache;
     exports.arrFastCopyArrayLike = function (target, a, b, c, d, e, f, g, h) {
-        arrFastCopyArrayLikeIndexCache = 0;
-        for (var i = 1, l = arguments.length; i < l; i++) {
+        var i, j, l, m, length;
+        for (i = 1, l = arguments.length, length = 0; i < l; i++) {
             var argv = arguments[i];
             if (argv && argv.length) {
-                for (var j = 0, m = argv.length; j < m; j++, arrFastCopyArrayLikeIndexCache++) {
-                    target[arrFastCopyArrayLikeIndexCache] = argv[j];
+                for (j = 0, m = argv.length; j < m; j++, length++) {
+                    target[length] = argv[j];
                 }
             }
         }
-        target.length = arrFastCopyArrayLikeIndexCache;
-        return this;
+        target.length = length;
+        return target;
+    };
+    exports.arrFastCopyArrayLikeSingle = function (target, source) {
+        var i, l;
+        for (i = 0, l = this.length = source.length; i < l; i++) {
+            target[i] = source[i];
+        }
+        return target;
     };
     exports.objFastCopy = function (target, a, b, c, d, e, f, g, h) {
-        for (var i = 1, l = arguments.length; i < l; i++) {
+        var i, j, k, l, m;
+        for (i = 1, l = arguments.length; i < l; i++) {
             var argv = arguments[i];
             if (argv) {
                 var keys = Object.keys(argv);
-                for (var j = 1, k = keys[0], m = keys.length; j <= m; k = keys[j++]) {
+                for (j = 1, k = keys[0], m = keys.length; j <= m; k = keys[j++]) {
                     target[k] = argv[k];
                 }
             }
+        }
+        return target;
+    };
+    exports.objFastCopySingle = function (target, source) {
+        var i, l, k, keys = Object.keys(source);
+        for (i = 1, k = keys[0], l = keys.length; i <= l; k = keys[i++]) {
+            target[k] = source[k];
         }
         return target;
     };
     exports.arrObjClone = function (source) {
         if (source instanceof Array) {
-            return exports.arrFastCopyArrayLike([], source);
+            return exports.arrFastCopyArrayLikeSingle([], source);
         }
-        return exports.objFastCopy({}, source);
+        return exports.objFastCopySingle({}, source);
+    };
+    var Context;
+    (function (Context) {
+        Context.getSetKeysCache = [];
+    })(Context = exports.Context || (exports.Context = {}));
+    exports.anyGetInContext = function (key, def) {
+        var self = this;
+        var keys = Context.getSetKeysCache = key.split(".");
+        var i, l;
+        for (i = 0, l = keys.length - 1; i < l; i++) {
+            var v = self[keys[i]];
+            if (v && typeof v === "object") {
+                self = v;
+            }
+            else {
+                return def;
+            }
+        }
+        return keys[i] in self ? self[keys[i]] : def;
     };
 });

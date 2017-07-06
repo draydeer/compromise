@@ -1,13 +1,10 @@
-
 import {isArr, Arr} from "../src/compromise/arr";
 import {isObj, Obj} from "../src/compromise/obj";
 
 describe('Obj', () => {
     it('should be created by factory from object then be instance of Obj', () => {
-        const arr = Arr([1]);
         const obj = Obj({a: 1});
 
-        expect(isObj(arr)).toBeFalsy();
         expect(isObj(obj)).toBeTruthy();
         expect(isObj({})).toBeFalsy();
         expect(obj instanceof Array).toBeFalsy();
@@ -39,11 +36,11 @@ describe('Obj', () => {
         const ob2: any = obj.set('a', 2);
         const ob3: any = obj.set('b.a', 3);
 
-        expect(ob2).toNotBe(obj);
-        expect(ob3).toNotBe(obj);
+        expect(ob2).not.toBe(obj);
+        expect(ob3).not.toBe(obj);
         expect(obj.a).toBe(1);
         expect(ob2.a).toBe(2);
         expect(obj.b).toBe(ob2.b);
-        expect(obj.b).toNotBe(ob3[1]);
+        expect(obj.b).not.toBe(ob3[1]);
     });
 });

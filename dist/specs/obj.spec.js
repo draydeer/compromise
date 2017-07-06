@@ -1,18 +1,18 @@
 (function (factory) {
-    if (typeof module === 'object' && typeof module.exports === 'object') {
-        var v = factory(require, exports); if (v !== undefined) module.exports = v;
+    if (typeof module === "object" && typeof module.exports === "object") {
+        var v = factory(require, exports);
+        if (v !== undefined) module.exports = v;
     }
-    else if (typeof define === 'function' && define.amd) {
-        define(["require", "exports", "../src/compromise/arr", "../src/compromise/obj"], factory);
+    else if (typeof define === "function" && define.amd) {
+        define(["require", "exports", "../src/compromise/obj"], factory);
     }
 })(function (require, exports) {
-    var arr_1 = require("../src/compromise/arr");
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
     var obj_1 = require("../src/compromise/obj");
     describe('Obj', function () {
         it('should be created by factory from object then be instance of Obj', function () {
-            var arr = arr_1.Arr([1]);
             var obj = obj_1.Obj({ a: 1 });
-            expect(obj_1.isObj(arr)).toBeFalsy();
             expect(obj_1.isObj(obj)).toBeTruthy();
             expect(obj_1.isObj({})).toBeFalsy();
             expect(obj instanceof Array).toBeFalsy();
@@ -38,12 +38,12 @@
             var obj = obj_1.Obj({ a: 1, b: { a: 2 } });
             var ob2 = obj.set('a', 2);
             var ob3 = obj.set('b.a', 3);
-            expect(ob2).toNotBe(obj);
-            expect(ob3).toNotBe(obj);
+            expect(ob2).not.toBe(obj);
+            expect(ob3).not.toBe(obj);
             expect(obj.a).toBe(1);
             expect(ob2.a).toBe(2);
             expect(obj.b).toBe(ob2.b);
-            expect(obj.b).toNotBe(ob3[1]);
+            expect(obj.b).not.toBe(ob3[1]);
         });
     });
 });

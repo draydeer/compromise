@@ -1,15 +1,14 @@
-
 export const arrFastCombine = function (a?, b?, c?, d?, e?, f?, g?, h?): any {
-    const target = new Array(Array.prototype.reduce.call(arguments, function (a, b) { return a + b.length; }, 0));
+    const target = [];
 
-    let offset = 0;
+    let i, j, l, m;
 
-    for (var i = 0, l = arguments.length; i < l; i ++) {
+    for (i = 0, l = arguments.length; i < l; i ++) {
         const argv = arguments[i];
 
         if (argv && argv.length) {
-            for (var j = 0, m = argv.length; j < m; j ++, offset ++) {
-                target[offset] = argv[j];
+            for (j = 0, m = argv.length; j < m; j ++) {
+                target.push(argv[j]);
             }
         }
     }
@@ -20,13 +19,15 @@ export const arrFastCombine = function (a?, b?, c?, d?, e?, f?, g?, h?): any {
 export const objFastCombine = function (a?, b?, c?, d?, e?, f?, g?, h?): any {
     const target = {};
 
-    for (var i = 0, l = arguments.length; i < l; i ++) {
+    let i, j, l, k, m;
+
+    for (i = 0, l = arguments.length; i < l; i ++) {
         const argv = arguments[i];
 
         if (argv) {
             const keys = Object.keys(argv);
 
-            for (var j = 1, k = keys[0], m = keys.length; j <= m; k = keys[j ++]) {
+            for (j = 1, k = keys[0], m = keys.length; j <= m; k = keys[j ++]) {
                 target[k] = argv[k];
             }
         }
@@ -35,37 +36,57 @@ export const objFastCombine = function (a?, b?, c?, d?, e?, f?, g?, h?): any {
     return target;
 };
 
-let arrFastCopyArrayLikeIndexCache;
-
 export const arrFastCopyArrayLike = function (target, a?, b?, c?, d?, e?, f?, g?, h?): any {
-    arrFastCopyArrayLikeIndexCache = 0;
+    var i, j, l, m, length;
 
-    for (var i = 1, l = arguments.length; i < l; i ++) {
+    for (i = 1, l = arguments.length, length = 0; i < l; i ++) {
         const argv = arguments[i];
 
         if (argv && argv.length) {
-            for (var j = 0, m = argv.length; j < m; j ++, arrFastCopyArrayLikeIndexCache ++) {
-                target[arrFastCopyArrayLikeIndexCache] = argv[j];
+            for (j = 0, m = argv.length; j < m; j ++, length ++) {
+                target[length] = argv[j];
             }
         }
     }
 
-    target.length = arrFastCopyArrayLikeIndexCache;
+    target.length = length;
 
-    return this;
+    return target;
+};
+
+export const arrFastCopyArrayLikeSingle = function (target, source) {
+    var i, l;
+
+    for (i = 0, l = this.length = source.length; i < l; i ++) {
+        target[i] = source[i];
+    }
+
+    return target;
 };
 
 export const objFastCopy = function (target, a?, b?, c?, d?, e?, f?, g?, h?): any {
-    for (var i = 1, l = arguments.length; i < l; i ++) {
+    var i, j, k, l, m;
+
+    for (i = 1, l = arguments.length; i < l; i ++) {
         const argv = arguments[i];
 
         if (argv) {
             const keys = Object.keys(argv);
 
-            for (var j = 1, k = keys[0], m = keys.length; j <= m; k = keys[j ++]) {
+            for (j = 1, k = keys[0], m = keys.length; j <= m; k = keys[j ++]) {
                 target[k] = argv[k];
             }
         }
+    }
+
+    return target;
+};
+
+export const objFastCopySingle = function (target, source) {
+    var i, l, k, keys = Object.keys(source);
+
+    for (i = 1, k = keys[0], l = keys.length; i <= l; k = keys[i ++]) {
+        target[k] = source[k];
     }
 
     return target;
@@ -73,8 +94,30 @@ export const objFastCopy = function (target, a?, b?, c?, d?, e?, f?, g?, h?): an
 
 export const arrObjClone = function (source: any): any {
     if (source instanceof Array) {
-        return arrFastCopyArrayLike([], source);
+        return arrFastCopyArrayLikeSingle([], source);
     }
 
-    return objFastCopy({}, source);
+    return objFastCopySingle({}, source);
+};
+
+export module Context {
+    export let getSetKeysCache = [];
+}
+
+export const anyGetInContext = function (key: string, def?: any) {
+    let self = this;
+    let keys = Context.getSetKeysCache = key.split(".");
+    let i, l;
+
+    for (i = 0, l = keys.length - 1; i < l; i ++) {
+        const v = self[keys[i]];
+
+        if (v && typeof v === "object") {
+            self = v;
+        } else {
+            return def;
+        }
+    }
+
+    return keys[i] in self ? self[keys[i]] : def;
 };
