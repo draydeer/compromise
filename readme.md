@@ -1,4 +1,4 @@
-# Compomise
+# Compromise
 
 A small library of simple immutable data structures like Array and Object. For big data structures using of [immutable.js](https://github.com/facebook/immutable-js/) will be a better way.
 
