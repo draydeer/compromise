@@ -1,7 +1,7 @@
 {
     "compilerOptions": {
         "emitDecoratorMetadata": false,
-        "module": "umd",
+        "module": "commonjs",
         "outDir": "dist",
         "target": "ES5",
         "typeRoots": [

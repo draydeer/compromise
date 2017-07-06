@@ -18,13 +18,7 @@ import {
     isObj
 } from "./compromise/obj";
 
-export const Arr = Arr;
-
-export const isArr = isArr;
-
-export const Obj = Obj;
-
-export const isObj = isObj;
+export { Arr, isArr, Obj, isObj };
 
 export const get = function (ctx: any, key: string, def?: any) {
     return anyGetInContext.call(ctx, key, def);
