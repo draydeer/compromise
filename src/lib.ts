@@ -1,41 +1,3 @@
-export const arrMerge = function (a?, b?, c?, d?, e?, f?, g?, h?): any {
-    const target = [];
-
-    let i, j, l, m;
-
-    for (i = 0, l = arguments.length; i < l; i ++) {
-        const argv = arguments[i];
-
-        if (argv && argv.length) {
-            for (j = 0, m = argv.length; j < m; j ++) {
-                target.push(argv[j]);
-            }
-        }
-    }
-
-    return target;
-};
-
-export const objMerge = function (a?, b?, c?, d?, e?, f?, g?, h?): any {
-    const target = {};
-
-    let i, j, l, k, m;
-
-    for (i = 0, l = arguments.length; i < l; i ++) {
-        const argv = arguments[i];
-
-        if (argv) {
-            const keys = Object.keys(argv);
-
-            for (j = 1, k = keys[0], m = keys.length; j <= m; k = keys[j ++]) {
-                target[k] = argv[k];
-            }
-        }
-    }
-
-    return target;
-};
-
 export const arrAssignArrayLike = function (target, a?, b?, c?, d?, e?, f?, g?, h?): any {
     var i, j, l, m, length;
 
@@ -64,6 +26,36 @@ export const arrAssignArrayLikeSingle = function (target, source) {
     return target;
 };
 
+export const arrMerge = function (a?, b?, c?, d?, e?, f?, g?, h?): any {
+    const target = [];
+
+    let i, j, l, m;
+
+    for (i = 0, l = arguments.length; i < l; i ++) {
+        const argv = arguments[i];
+
+        if (argv && argv.length) {
+            for (j = 0, m = argv.length; j < m; j ++) {
+                target.push(argv[j]);
+            }
+        }
+    }
+
+    return target;
+};
+
+export const arrPatchCompare = function (target, source): any {
+    var i, l, patch = {};
+
+    for (i = 0, l = source.length; i <= l; i ++) {
+        if (source[i] !== target[i]) {
+            patch[i] = arrObjClone(source[i]);
+        }
+    }
+
+    return patch;
+};
+
 export const objAssign = function (target, a?, b?, c?, d?, e?, f?, g?, h?): any {
     var i, j, k, l, m;
 
@@ -90,6 +82,38 @@ export const objAssignSingle = function (target, source) {
     }
 
     return target;
+};
+
+export const objMerge = function (a?, b?, c?, d?, e?, f?, g?, h?): any {
+    const target = {};
+
+    let i, j, l, k, m;
+
+    for (i = 0, l = arguments.length; i < l; i ++) {
+        const argv = arguments[i];
+
+        if (argv) {
+            const keys = Object.keys(argv);
+
+            for (j = 1, k = keys[0], m = keys.length; j <= m; k = keys[j ++]) {
+                target[k] = argv[k];
+            }
+        }
+    }
+
+    return target;
+};
+
+export const objPatchCompare = function (target, source): any {
+    let i, l, k, keys = Object.keys(source), patch = {};
+
+    for (i = 1, k = keys[0], l = keys.length; i <= l; k = keys[i ++]) {
+        if (source[k] !== target[k]) {
+            patch[k] = arrObjClone(source[k]);
+        }
+    }
+
+    return patch;
 };
 
 export const arrObjClone = function (source: any): any {

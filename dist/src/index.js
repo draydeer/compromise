@@ -7,21 +7,24 @@ exports.isArr = arr_1.isArr;
 var obj_1 = require("./compromise/obj");
 exports.Obj = obj_1.Obj;
 exports.isObj = obj_1.isObj;
-exports.get = function (ctx, key, def) {
-    return lib_1.anyGetInContext.call(ctx, key, def);
+exports.get = function (target, key, def) {
+    return lib_1.anyGetInContext.call(target, key, def);
 };
-exports.set = function (ctx, key, val) {
-    return ctx instanceof Array ? arr_1.arrSetInContext.call(ctx, key, val) : obj_1.objSetInContext.call(ctx, key, val);
+exports.set = function (target, key, val) {
+    return target instanceof Array ? arr_1.arrSetInContext.call(target, key, val) : obj_1.objSetInContext.call(target, key, val);
 };
-exports.all = function (ctx) {
-    return ctx instanceof Array ? arr_1.arrAll.apply(null, arguments) : obj_1.objAll.apply(null, arguments);
+exports.all = function (target) {
+    return target instanceof Array ? arr_1.arrAll.apply(null, arguments) : obj_1.objAll.apply(null, arguments);
 };
-exports.getPatch = function (ctx, key, def) {
-    return lib_1.anyGetInContext.call(ctx, key, def);
+exports.getPatch = function (target, key, def) {
+    return lib_1.anyGetInContext.call(target, key, def);
 };
-exports.setPatch = function (ctx, key, val) {
-    return obj_1.objSetInContextPatch.call(ctx, key, val);
+exports.setPatch = function (target, key, val) {
+    return obj_1.objSetInContextPatch.call(target, key, val);
 };
-exports.allPatch = function (ctx) {
+exports.allPatch = function (target) {
     return obj_1.objAllPatch.apply(null, arguments);
+};
+exports.allPatchCompare = function (target, source) {
+    return source instanceof Array ? lib_1.arrPatchCompare(target, source) : lib_1.objPatchCompare(target, source);
 };
