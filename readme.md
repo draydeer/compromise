@@ -38,7 +38,7 @@ obj === set(obj, 'a.b', 1); // true
 obj === set(obj, 'a.b', 2); // false, result of operation = {a: {b: 2}, c: 2} 
 ```
 
-*setPatch* - generates patch that must bu applied above the initial data.
+*setPatch* - generates patch that must be applied above the initial data.
 
 Returns object with the new key if new value differs from old value.
 
@@ -72,7 +72,7 @@ obj === all(obj, 'a.b', 1, 'c', 2); // true
 obj === all(obj, 'a.b', 2, 'c', 3); // false, result of operation = {a: {b: 2}, c: 3} 
 ```
 
-*allPatch* - generates patch that must bu applied above the initial data checking multiple keys.
+*allPatch* - generates patch that must be applied above the initial data checking multiple keys.
              
 Returns object with the new keys if any new value differs from old value.
 
