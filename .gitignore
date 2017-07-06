@@ -1,9 +1,0 @@
-.idea
-*.js
-*.log
-*.map
-coverage
-!dist/*/*.js
-*ignore*
-node_modules
-typings
