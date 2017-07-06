@@ -91,7 +91,7 @@ allPatch(obj, 'a.b', 2, 'c', 3); // {a: {b: 2}, c: 3}
 
 ## Arr, Obj
 
-Initialize immutable Array of Object:
+Initialize immutable Array or Object:
 
 ```javascript
 let arr = Arr([1, 2]);
