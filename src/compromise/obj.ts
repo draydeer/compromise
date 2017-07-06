@@ -1,9 +1,9 @@
 import {
     Context,
     anyGetInContext,
-    arrFastCopyArrayLike,
+    arrAssignArrayLike,
     arrObjClone,
-    objFastCopy
+    objAssign
 } from "../lib";
 
 export interface IObj extends Object {
@@ -159,14 +159,14 @@ export const objAllPatch = function (ctx, a?, b?, c?, d?, e?, f?, g?, h?) {
 };
 
 const ObjCompromise = function<T> (value?: any) {
-    value && (<TObj<T>> objFastCopy(this, value));
+    value && (<TObj<T>> objAssign(this, value));
 };
 
 const ObjCompromiseProto = function () {};
 
 ObjCompromiseProto.prototype = Object.prototype;
 
-ObjCompromise.prototype = objFastCopy(new ObjCompromiseProto(), {
+ObjCompromise.prototype = objAssign(new ObjCompromiseProto(), {
     constructor: Object.prototype.constructor,
     all: function (a?, b?, c?, d?, e?, f?, g?, h?) {
         if (arguments.length < 3) {

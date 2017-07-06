@@ -1,9 +1,9 @@
 import {
     Context,
     anyGetInContext,
-    arrFastCopyArrayLike,
+    arrAssignArrayLike,
     arrObjClone,
-    objFastCopy
+    objAssign
 } from "../lib";
 
 export interface IArr extends Array<any> {
@@ -159,14 +159,14 @@ export const arrAllPatch = function (ctx, a?, b?, c?, d?, e?, f?, g?, h?) {
 };
 
 export const ArrCompromise = function<T> (value?: any) {
-    value ? (<TArr<T>> arrFastCopyArrayLike(this, value)) : this.length = 0;
+    value ? (<TArr<T>> arrAssignArrayLike(this, value)) : this.length = 0;
 };
 
 const ArrCompromiseProto = function () {};
 
 ArrCompromiseProto.prototype = Array.prototype;
 
-ArrCompromise.prototype = objFastCopy(new ArrCompromiseProto(), {
+ArrCompromise.prototype = objAssign(new ArrCompromiseProto(), {
     constructor: Array.prototype.constructor,
     all: function (a?, b?, c?, d?, e?, f?, g?, h?) {
         if (arguments.length < 3) {

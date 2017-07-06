@@ -1,4 +1,4 @@
-export const arrFastCombine = function (a?, b?, c?, d?, e?, f?, g?, h?): any {
+export const arrMerge = function (a?, b?, c?, d?, e?, f?, g?, h?): any {
     const target = [];
 
     let i, j, l, m;
@@ -16,7 +16,7 @@ export const arrFastCombine = function (a?, b?, c?, d?, e?, f?, g?, h?): any {
     return target;
 };
 
-export const objFastCombine = function (a?, b?, c?, d?, e?, f?, g?, h?): any {
+export const objMerge = function (a?, b?, c?, d?, e?, f?, g?, h?): any {
     const target = {};
 
     let i, j, l, k, m;
@@ -36,7 +36,7 @@ export const objFastCombine = function (a?, b?, c?, d?, e?, f?, g?, h?): any {
     return target;
 };
 
-export const arrFastCopyArrayLike = function (target, a?, b?, c?, d?, e?, f?, g?, h?): any {
+export const arrAssignArrayLike = function (target, a?, b?, c?, d?, e?, f?, g?, h?): any {
     var i, j, l, m, length;
 
     for (i = 1, l = arguments.length, length = 0; i < l; i ++) {
@@ -54,7 +54,7 @@ export const arrFastCopyArrayLike = function (target, a?, b?, c?, d?, e?, f?, g?
     return target;
 };
 
-export const arrFastCopyArrayLikeSingle = function (target, source) {
+export const arrAssignArrayLikeSingle = function (target, source) {
     var i, l;
 
     for (i = 0, l = this.length = source.length; i < l; i ++) {
@@ -64,7 +64,7 @@ export const arrFastCopyArrayLikeSingle = function (target, source) {
     return target;
 };
 
-export const objFastCopy = function (target, a?, b?, c?, d?, e?, f?, g?, h?): any {
+export const objAssign = function (target, a?, b?, c?, d?, e?, f?, g?, h?): any {
     var i, j, k, l, m;
 
     for (i = 1, l = arguments.length; i < l; i ++) {
@@ -82,7 +82,7 @@ export const objFastCopy = function (target, a?, b?, c?, d?, e?, f?, g?, h?): an
     return target;
 };
 
-export const objFastCopySingle = function (target, source) {
+export const objAssignSingle = function (target, source) {
     var i, l, k, keys = Object.keys(source);
 
     for (i = 1, k = keys[0], l = keys.length; i <= l; k = keys[i ++]) {
@@ -94,10 +94,10 @@ export const objFastCopySingle = function (target, source) {
 
 export const arrObjClone = function (source: any): any {
     if (source instanceof Array) {
-        return arrFastCopyArrayLikeSingle([], source);
+        return arrAssignArrayLikeSingle([], source);
     }
 
-    return objFastCopySingle({}, source);
+    return objAssignSingle({}, source);
 };
 
 export module Context {

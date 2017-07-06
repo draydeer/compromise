@@ -18,7 +18,7 @@
   },
   "license": "MIT",
   "scripts": {
-    "compile": "rm -rf dist/ && tsc -d -p . --outDir dist",
+    "build": "rm -rf dist/ && tsc -d -p . --outDir dist",
     "coveralls": "istanbul cover --root dist/src jasmine-node dist/specs",
     "test": "jasmine-node dist/specs"
   },

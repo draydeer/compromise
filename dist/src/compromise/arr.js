@@ -112,11 +112,11 @@ exports.arrAllPatch = function (ctx, a, b, c, d, e, f, g, h) {
     var _a;
 };
 exports.ArrCompromise = function (value) {
-    value ? lib_1.arrFastCopyArrayLike(this, value) : this.length = 0;
+    value ? lib_1.arrAssignArrayLike(this, value) : this.length = 0;
 };
 var ArrCompromiseProto = function () { };
 ArrCompromiseProto.prototype = Array.prototype;
-exports.ArrCompromise.prototype = lib_1.objFastCopy(new ArrCompromiseProto(), {
+exports.ArrCompromise.prototype = lib_1.objAssign(new ArrCompromiseProto(), {
     constructor: Array.prototype.constructor,
     all: function (a, b, c, d, e, f, g, h) {
         if (arguments.length < 3) {

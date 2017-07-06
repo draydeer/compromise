@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.arrFastCombine = function (a, b, c, d, e, f, g, h) {
+exports.arrMerge = function (a, b, c, d, e, f, g, h) {
     var target = [];
     var i, j, l, m;
     for (i = 0, l = arguments.length; i < l; i++) {
@@ -13,7 +13,7 @@ exports.arrFastCombine = function (a, b, c, d, e, f, g, h) {
     }
     return target;
 };
-exports.objFastCombine = function (a, b, c, d, e, f, g, h) {
+exports.objMerge = function (a, b, c, d, e, f, g, h) {
     var target = {};
     var i, j, l, k, m;
     for (i = 0, l = arguments.length; i < l; i++) {
@@ -27,7 +27,7 @@ exports.objFastCombine = function (a, b, c, d, e, f, g, h) {
     }
     return target;
 };
-exports.arrFastCopyArrayLike = function (target, a, b, c, d, e, f, g, h) {
+exports.arrAssignArrayLike = function (target, a, b, c, d, e, f, g, h) {
     var i, j, l, m, length;
     for (i = 1, l = arguments.length, length = 0; i < l; i++) {
         var argv = arguments[i];
@@ -40,14 +40,14 @@ exports.arrFastCopyArrayLike = function (target, a, b, c, d, e, f, g, h) {
     target.length = length;
     return target;
 };
-exports.arrFastCopyArrayLikeSingle = function (target, source) {
+exports.arrAssignArrayLikeSingle = function (target, source) {
     var i, l;
     for (i = 0, l = this.length = source.length; i < l; i++) {
         target[i] = source[i];
     }
     return target;
 };
-exports.objFastCopy = function (target, a, b, c, d, e, f, g, h) {
+exports.objAssign = function (target, a, b, c, d, e, f, g, h) {
     var i, j, k, l, m;
     for (i = 1, l = arguments.length; i < l; i++) {
         var argv = arguments[i];
@@ -60,7 +60,7 @@ exports.objFastCopy = function (target, a, b, c, d, e, f, g, h) {
     }
     return target;
 };
-exports.objFastCopySingle = function (target, source) {
+exports.objAssignSingle = function (target, source) {
     var i, l, k, keys = Object.keys(source);
     for (i = 1, k = keys[0], l = keys.length; i <= l; k = keys[i++]) {
         target[k] = source[k];
@@ -69,9 +69,9 @@ exports.objFastCopySingle = function (target, source) {
 };
 exports.arrObjClone = function (source) {
     if (source instanceof Array) {
-        return exports.arrFastCopyArrayLikeSingle([], source);
+        return exports.arrAssignArrayLikeSingle([], source);
     }
-    return exports.objFastCopySingle({}, source);
+    return exports.objAssignSingle({}, source);
 };
 var Context;
 (function (Context) {
