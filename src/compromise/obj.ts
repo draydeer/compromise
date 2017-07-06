@@ -35,7 +35,7 @@ export const objSetInContext = function (key: string, val: any) {
     for (i = 0, l = Context.getSetKeysCache.length - 1; i < l; i ++) {
         const v = self[Context.getSetKeysCache[i]];
 
-        self = self[Context.getSetKeysCache[i]] = (v && typeof v === "object") ? arrObjClone(v) : v;
+        self = self[Context.getSetKeysCache[i]] = (v && typeof v === "object") ? arrObjClone(v) : {};
     }
 
     self[Context.getSetKeysCache[i]] = val;

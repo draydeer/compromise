@@ -1,8 +1,8 @@
 # Compomise
 
-A small library of simple immutable data structures like Array and Object.
- 
-## Global methods.
+A small library of simple immutable data structures like Array and Object. For big data structures using of [immutable.js](https://github.com/facebook/immutable-js/) will be a better way.
+
+## Global methods
 
 *Get* - gets value by path like 'a.b.c'.
 
@@ -53,6 +53,38 @@ let obj = {
 obj === all(obj, 'a.b', 1, 'c', 2); // true
 
 obj === set(obj, 'a.b', 2, 'c', 3); // false, result of operation = {a: {b: 2}, c: 3} 
+```
+
+## Arr, Obj
+
+Initialize immutable Array of Object:
+
+```javascript
+let arr = Arr([1, 2]);
+```
+
+```javascript
+let obj = Obj({a: 1});
+```
+
+Structures provide the methods with same behavior as the *get*, *set* and *all* described above:
+
+```javascript
+let obj = Obj({a: 1});
+
+obj.get('b', 2); // 2
+```
+
+```javascript
+let obj = Obj({a: 1});
+
+obj.set('b', 2); // new Obj = {a: 1, b: 2}
+```
+
+```javascript
+let obj = Obj({a: 1});
+
+obj.all('a': 2, 'b', 2); // new Obj = {a: 2, b: 2}
 ```
 
 ## Benchmarks

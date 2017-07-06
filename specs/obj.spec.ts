@@ -3,7 +3,7 @@ import {isObj, Obj} from "../src/compromise/obj";
 
 describe('Obj', () => {
     it('should be created by factory from object then be instance of Obj', () => {
-        const obj = Obj({a: 1});
+        const obj = Obj({a: 1, b: {a: 1}});
 
         expect(isObj(obj)).toBeTruthy();
         expect(isObj({})).toBeFalsy();

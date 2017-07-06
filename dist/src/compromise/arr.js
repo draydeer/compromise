@@ -13,7 +13,7 @@ exports.arrSetInContext = function (key, val) {
     var i, l;
     for (i = 0, l = lib_1.Context.getSetKeysCache.length - 1; i < l; i++) {
         var v = self[lib_1.Context.getSetKeysCache[i]];
-        self = self[lib_1.Context.getSetKeysCache[i]] = (v && typeof v === "object") ? lib_1.arrObjClone(v) : v;
+        self = self[lib_1.Context.getSetKeysCache[i]] = (v && typeof v === "object") ? lib_1.arrObjClone(v) : {};
     }
     self[lib_1.Context.getSetKeysCache[i]] = val;
     lib_1.Context.getSetKeysCache = null;

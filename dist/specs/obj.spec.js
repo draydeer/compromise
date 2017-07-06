@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var obj_1 = require("../src/compromise/obj");
 describe('Obj', function () {
     it('should be created by factory from object then be instance of Obj', function () {
-        var obj = obj_1.Obj({ a: 1 });
+        var obj = obj_1.Obj({ a: 1, b: { a: 1 } });
         expect(obj_1.isObj(obj)).toBeTruthy();
         expect(obj_1.isObj({})).toBeFalsy();
         expect(obj instanceof Array).toBeFalsy();
