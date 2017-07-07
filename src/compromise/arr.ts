@@ -6,6 +6,7 @@ import {
     arrObjClone,
     objAssign
 } from "../lib";
+import {arrCopySingle} from "../lib";
 
 export interface IArr extends Array<any> {
 
@@ -216,7 +217,68 @@ ArrCompromise.prototype = objAssign(new ArrCompromiseProto(), {
     },
     get: anyGetInContext,
     set: arrSetInContext,
+    deleteIndex: function (index) {
+        if (index !== void 0 && index < this.length) {
+            let copy = Arr([]), i, l;
+
+            for (i = 0, l = this.length; i < l; i ++) {
+                if (i !== index) {
+                    Array.prototype.push.call(copy, this[i]);
+                }
+            }
+
+            return copy;
+        }
+
+        return this;
+    },
+    insertIndex: function (index, value) {
+        if (index !== void 0 && index < this.length) {
+            let copy = Arr([]), i, l;
+
+            for (i = 0, l = this.length; i < l; i ++) {
+                i !== index
+                    ? Array.prototype.push.call(copy, this[i])
+                    : Array.prototype.push.call(copy, value);
+            }
+
+            return copy;
+        }
+
+        return this;
+    },
     isArr: (val: any): boolean => val instanceof ArrCompromise,
+    pop: function () {
+        let copy = Arr(this);
+
+        let result = Array.prototype.pop.apply(copy);
+
+        return [copy, result];
+    },
+    push: function (a?, b?, c?, d?, e?, f?, g?, h?) {
+        let copy = Arr(this);
+
+        let result = Array.prototype.push.apply(copy, arguments);
+
+        return [copy, result];
+    },
+    slice: function (begin, end) {
+        return Arr(this.slice(begin, end));
+    },
+    shift: function () {
+        let copy = Arr(this);
+
+        let result = Array.prototype.shift.apply(copy);
+
+        return [copy, result];
+    },
+    unshift: function (a?, b?, c?, d?, e?, f?, g?, h?) {
+        let copy =  Arr(this);
+
+        let result = Array.prototype.unshift.apply(copy, arguments);
+
+        return [copy, result];
+    },
 });
 
 export const isArr = ArrCompromise.prototype.isArr;

@@ -158,6 +158,53 @@ exports.ArrCompromise.prototype = lib_1.objAssign(new ArrCompromiseProto(), {
     },
     get: lib_1.anyGetInContext,
     set: exports.arrSetInContext,
+    deleteIndex: function (index) {
+        if (index !== void 0 && index < this.length) {
+            var copy = exports.Arr([]), i = void 0, l = void 0;
+            for (i = 0, l = this.length; i < l; i++) {
+                if (i !== index) {
+                    Array.prototype.push.call(copy, this[i]);
+                }
+            }
+            return copy;
+        }
+        return this;
+    },
+    insertIndex: function (index, value) {
+        if (index !== void 0 && index < this.length) {
+            var copy = exports.Arr([]), i = void 0, l = void 0;
+            for (i = 0, l = this.length; i < l; i++) {
+                i !== index
+                    ? Array.prototype.push.call(copy, this[i])
+                    : Array.prototype.push.call(copy, value);
+            }
+            return copy;
+        }
+        return this;
+    },
     isArr: function (val) { return val instanceof exports.ArrCompromise; },
+    pop: function () {
+        var copy = exports.Arr(this);
+        var result = Array.prototype.pop.apply(copy);
+        return [copy, result];
+    },
+    push: function (a, b, c, d, e, f, g, h) {
+        var copy = exports.Arr(this);
+        var result = Array.prototype.push.apply(copy, arguments);
+        return [copy, result];
+    },
+    slice: function (begin, end) {
+        return exports.Arr(this.slice(begin, end));
+    },
+    shift: function () {
+        var copy = exports.Arr(this);
+        var result = Array.prototype.shift.apply(copy);
+        return [copy, result];
+    },
+    unshift: function (a, b, c, d, e, f, g, h) {
+        var copy = exports.Arr(this);
+        var result = Array.prototype.unshift.apply(copy, arguments);
+        return [copy, result];
+    },
 });
 exports.isArr = exports.ArrCompromise.prototype.isArr;
