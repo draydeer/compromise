@@ -167,9 +167,9 @@ To increase performance of the immutable operations these operations can be perf
 arr = Arr([1, 2, 3]);
 
 arr = arr.bulk((mutable) {
-    mutable.set([0], 2);
-    mutable.set([1], 3);
-    mutable.push(6);
+    mutable = mutable.set([0], 2);
+    mutable = mutable.set([1], 3);
+    mutable = mutable.push(6);
     
     return mutable;
 });
