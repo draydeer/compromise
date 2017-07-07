@@ -20,6 +20,8 @@ export interface IObj extends Object {
 export type TObj<T> = IObj & T;
 
 export const Obj = function<T> (value: any, force?: boolean): TObj<T> {
+    Object.prototype.constructor.call(this);
+
     return value instanceof ObjCompromise && ! force ? value : new ObjCompromise<TObj<T>>(value);
 };
 
@@ -159,7 +161,7 @@ export const objAllPatch = function (ctx, a?, b?, c?, d?, e?, f?, g?, h?) {
     return root;
 };
 
-const ObjCompromise = function<T> (value?: any) {
+export const ObjCompromise = function<T> (value?: any) {
     value && (<TObj<T>> objAssign(this, value));
 };
 

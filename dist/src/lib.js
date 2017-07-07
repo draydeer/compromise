@@ -15,13 +15,13 @@ exports.arrAssignArrayLike = function (target, a, b, c, d, e, f, g, h) {
 };
 exports.arrAssignArrayLikeSingle = function (target, source) {
     var i, l;
-    for (i = 0, l = this.length = source.length; i < l; i++) {
+    for (i = 0, l = target.length = source.length; i < l; i++) {
         target[i] = source[i];
     }
     return target;
 };
 exports.arrCopySingle = function (source) {
-    var i, l, target = [];
+    var i, l, target = this || [];
     for (i = 0, l = source.length; i < l; i++) {
         target.push(source[i]);
     }
@@ -69,7 +69,7 @@ exports.objAssignSingle = function (target, source) {
     return target;
 };
 exports.objCopySingle = function (source) {
-    var i, l, k, keys = Object.keys(source), target = {};
+    var i, l, k, keys = Object.keys(source), target = this || {};
     for (i = 1, k = keys[0], l = keys.length; i <= l; k = keys[i++]) {
         target[k] = source[k];
     }

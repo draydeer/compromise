@@ -112,6 +112,7 @@ exports.arrAllPatch = function (ctx, a, b, c, d, e, f, g, h) {
     var _a;
 };
 exports.ArrCompromise = function (value) {
+    Array.prototype.constructor.call(this);
     value ? lib_1.arrAssignArrayLike(this, value) : this.length = 0;
 };
 var ArrCompromiseProto = function () { };
@@ -174,9 +175,8 @@ exports.ArrCompromise.prototype = lib_1.objAssign(new ArrCompromiseProto(), {
         if (index !== void 0 && index < this.length) {
             var copy = exports.Arr([]), i = void 0, l = void 0;
             for (i = 0, l = this.length; i < l; i++) {
-                i !== index
-                    ? Array.prototype.push.call(copy, this[i])
-                    : Array.prototype.push.call(copy, value);
+                i === index && Array.prototype.push.call(copy, value);
+                Array.prototype.push.call(copy, this[i]);
             }
             return copy;
         }

@@ -19,7 +19,7 @@ export const arrAssignArrayLike = function (target, a?, b?, c?, d?, e?, f?, g?, 
 export const arrAssignArrayLikeSingle = function (target, source) {
     let i, l;
 
-    for (i = 0, l = this.length = source.length; i < l; i ++) {
+    for (i = 0, l = target.length = source.length; i < l; i ++) {
         target[i] = source[i];
     }
 
@@ -27,7 +27,7 @@ export const arrAssignArrayLikeSingle = function (target, source) {
 };
 
 export const arrCopySingle = function (source): any {
-    let i, l, target = [];
+    let i, l, target = this || [];
 
     for (i = 0, l = source.length; i < l; i ++) {
         target.push(source[i]);
@@ -93,7 +93,7 @@ export const objAssignSingle = function (target, source) {
 };
 
 export const objCopySingle = function (source) {
-    let i, l, k, keys = Object.keys(source), target = {};
+    let i, l, k, keys = Object.keys(source), target = this || {};
 
     for (i = 1, k = keys[0], l = keys.length; i <= l; k = keys[i ++]) {
         target[k] = source[k];

@@ -2,14 +2,15 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var lib_1 = require("../lib");
 exports.Obj = function (value, force) {
-    return value instanceof ObjCompromise && !force ? value : new ObjCompromise(value);
+    Object.prototype.constructor.call(this);
+    return value instanceof exports.ObjCompromise && !force ? value : new exports.ObjCompromise(value);
 };
 var copySet = new Set();
 exports.objSetInContext = function (key, val) {
     if (lib_1.anyGetInContext.call(this, key) === val) {
         return this;
     }
-    var root, self = root = new ObjCompromise(this);
+    var root, self = root = new exports.ObjCompromise(this);
     var i, l;
     for (i = 0, l = lib_1.Context.getSetKeysCache.length - 1; i < l; i++) {
         var v = self[lib_1.Context.getSetKeysCache[i]];
@@ -36,7 +37,7 @@ exports.objSetInContextPatch = function (key, val) {
 };
 exports.objAll = function (ctx, a, b, c, d, e, f, g, h) {
     if (arguments.length < 4) {
-        return ObjCompromise.prototype.set.call(ctx, a, b);
+        return exports.ObjCompromise.prototype.set.call(ctx, a, b);
     }
     var root = ctx;
     var self;
@@ -47,7 +48,7 @@ exports.objAll = function (ctx, a, b, c, d, e, f, g, h) {
             continue;
         }
         if (root === ctx) {
-            self = root = new ObjCompromise((_a = {}, _a[lib_1.Context.getSetKeysCache[0]] = ctx[lib_1.Context.getSetKeysCache[0]], _a));
+            self = root = new exports.ObjCompromise((_a = {}, _a[lib_1.Context.getSetKeysCache[0]] = ctx[lib_1.Context.getSetKeysCache[0]], _a));
         }
         else {
             self = root;
@@ -111,16 +112,16 @@ exports.objAllPatch = function (ctx, a, b, c, d, e, f, g, h) {
     lib_1.Context.getSetKeysCache = null;
     return root;
 };
-var ObjCompromise = function (value) {
+exports.ObjCompromise = function (value) {
     value && lib_1.objAssign(this, value);
 };
 var ObjCompromiseProto = function () { };
 ObjCompromiseProto.prototype = Object.prototype;
-ObjCompromise.prototype = lib_1.objAssign(new ObjCompromiseProto(), {
+exports.ObjCompromise.prototype = lib_1.objAssign(new ObjCompromiseProto(), {
     constructor: Object.prototype.constructor,
     all: function (a, b, c, d, e, f, g, h) {
         if (arguments.length < 3) {
-            return ObjCompromise.prototype.set.call(this, a, b);
+            return exports.ObjCompromise.prototype.set.call(this, a, b);
         }
         var root = this;
         var self;
@@ -131,7 +132,7 @@ ObjCompromise.prototype = lib_1.objAssign(new ObjCompromiseProto(), {
                 continue;
             }
             if (root === this) {
-                self = root = new ObjCompromise(this);
+                self = root = new exports.ObjCompromise(this);
             }
             else {
                 self = root;
@@ -158,6 +159,6 @@ ObjCompromise.prototype = lib_1.objAssign(new ObjCompromiseProto(), {
     },
     get: lib_1.anyGetInContext,
     set: exports.objSetInContext,
-    isObj: function (val) { return val instanceof ObjCompromise; },
+    isObj: function (val) { return val instanceof exports.ObjCompromise; },
 });
-exports.isObj = ObjCompromise.prototype.isObj;
+exports.isObj = exports.ObjCompromise.prototype.isObj;

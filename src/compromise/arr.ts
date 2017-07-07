@@ -7,6 +7,7 @@ import {
     objAssign
 } from "../lib";
 import {arrCopySingle} from "../lib";
+import {arrAssignArrayLikeSingle} from "../lib";
 
 export interface IArr extends Array<any> {
 
@@ -161,6 +162,8 @@ export const arrAllPatch = function (ctx, a?, b?, c?, d?, e?, f?, g?, h?) {
 };
 
 export const ArrCompromise = function<T> (value?: any) {
+    Array.prototype.constructor.call(this);
+
     value ? (<TArr<T>> arrAssignArrayLike(this, value)) : this.length = 0;
 };
 
@@ -237,9 +240,9 @@ ArrCompromise.prototype = objAssign(new ArrCompromiseProto(), {
             let copy = Arr([]), i, l;
 
             for (i = 0, l = this.length; i < l; i ++) {
-                i !== index
-                    ? Array.prototype.push.call(copy, this[i])
-                    : Array.prototype.push.call(copy, value);
+                i === index && Array.prototype.push.call(copy, value);
+
+                Array.prototype.push.call(copy, this[i]);
             }
 
             return copy;
