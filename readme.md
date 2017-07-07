@@ -4,7 +4,7 @@ A small library of simple immutable data structures like Array and Object. For b
 
 ## Global methods
 
-*get* - gets value by path like 'a.b.c'.
+*get* - gets value by path like 'a.b.c' or ['a', 'b', 'c'].
 
 Returns default value if the path doesn't exists.
 
@@ -21,7 +21,7 @@ get(obj, 'a.b', 3); // {b: 1}
 get(obj, 'b', 3); // 3
 ```
 
-*set* - sets value by path like 'a.b.c'.
+*set* - sets value by path like 'a.b.c' or ['a', 'b', 'c'].
 
 Returns the copy of the initial data if new value differs from old value.
 
@@ -38,7 +38,7 @@ obj === set(obj, 'a.b', 1); // true
 obj === set(obj, 'a.b', 2); // false, result of operation = {a: {b: 2}, c: 2} 
 ```
 
-*setPatch* - generates patch that must be applied above the initial data.
+*setPatch* - generates patch (difference) which should be applied above the initial data.
 
 Returns object with the new key if new value differs from old value.
 
@@ -55,7 +55,7 @@ setPatch(obj, 'a.b', 1); // {}
 setPatch(obj, 'a.b', 2); // {a: {b: 2}} 
 ```
 
-*all* - sets multiple values by paths like 'a.b.c'.
+*all* - sets multiple values by paths like 'a.b.c' or ['a', 'b', 'c'].
 
 Returns the copy of the initial data if any new value differs from old value.
 
@@ -72,7 +72,7 @@ obj === all(obj, 'a.b', 1, 'c', 2); // true
 obj === all(obj, 'a.b', 2, 'c', 3); // false, result of operation = {a: {b: 2}, c: 3} 
 ```
 
-*allPatch* - generates patch that must be applied above the initial data checking multiple keys.
+*allPatch* - generates patch (differences) checking multiple keys which should be applied above the initial data.
              
 Returns object with the new keys if any new value differs from old value.
 
@@ -89,7 +89,7 @@ allPatch(obj, 'a.b', 1, 'c', 2); // {}
 allPatch(obj, 'a.b', 2, 'c', 3); // {a: {b: 2}, c: 3} 
 ```
 
-*allPatchCompare* - generates patch that must be applied above the initial data checking source key in target.
+*allPatchCompare* - generates patch (differences) checking source key in target which should be applied above the initial data.
              
 Returns object with the new keys if any new value differs from old value.
 
@@ -118,7 +118,7 @@ let arr = Arr([1, 2]);
 let obj = Obj({a: 1});
 ```
 
-Structures provide the methods with same behavior as the *get*, *set* and *all* described above:
+Structures provide methods with the same behavior, as well as the methods (*get*, *set* and *all*) described above:
 
 ```javascript
 let obj = Obj({a: 1});
