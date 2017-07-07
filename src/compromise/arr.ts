@@ -32,7 +32,7 @@ export const arrSetInContext = function (key: TKey, val: any) {
         return this;
     }
 
-    let root, self = root = new ArrCompromise(this);
+    let root, self = root = arrCopySingle(this);
     let i, l;
 
     for (i = 0, l = Context.getSetKeysCache.length - 1; i < l; i ++) {
@@ -161,6 +161,8 @@ export const arrAllPatch = function (ctx, a?, b?, c?, d?, e?, f?, g?, h?) {
     return root;
 };
 
+let mutable = null;
+
 export const ArrCompromise = function<T> (value?: any) {
     Array.prototype.constructor.call(this);
 
@@ -190,7 +192,11 @@ ArrCompromise.prototype = objAssign(new ArrCompromiseProto(), {
             }
 
             if (root === this) {
-                self = root = new ArrCompromise(this);
+                if (mutable === true) {
+                    mutable = new ArrCompromise(this);
+                }
+
+                self = root = mutable || new ArrCompromise(this);
             } else {
                 self = root;
             }
@@ -219,9 +225,51 @@ ArrCompromise.prototype = objAssign(new ArrCompromiseProto(), {
         return root;
     },
     get: anyGetInContext,
-    set: arrSetInContext,
+    set: function (key: TKey, val: any) {
+        if (anyGetInContext.call(this, key) === val) {
+            return this;
+        }
+
+        if (mutable === true) {
+            mutable = new ArrCompromise(this);
+        }
+
+        let root, self = root = mutable || new ArrCompromise(this);
+        let i, l;
+
+        for (i = 0, l = Context.getSetKeysCache.length - 1; i < l; i ++) {
+            const v = self[Context.getSetKeysCache[i]];
+
+            self = self[Context.getSetKeysCache[i]] = (v && typeof v === "object") ? arrObjClone(v) : {};
+        }
+
+        self[Context.getSetKeysCache[i]] = val;
+
+        Context.getSetKeysCache = null;
+
+        return root;
+    },
+    bulk: function (callback) {
+        mutable = true;
+
+        let result = callback(this);
+
+        mutable = null;
+
+        return result;
+    },
     deleteIndex: function (index) {
         if (index !== void 0 && index < this.length) {
+            if (mutable) {
+                if (mutable === true) {
+                    mutable = new ArrCompromise(this);
+                }
+
+                mutable.splice(index, 1);
+
+                return mutable;
+            }
+
             let copy = new ArrCompromise(), i, l;
 
             for (i = 0, l = this.length; i < l; i ++) {
@@ -237,6 +285,16 @@ ArrCompromise.prototype = objAssign(new ArrCompromiseProto(), {
     },
     insertIndex: function (index, value) {
         if (index !== void 0 && index < this.length) {
+            if (mutable) {
+                if (mutable === true) {
+                    mutable = new ArrCompromise(this);
+                }
+
+                mutable.splice(index, 0, value);
+
+                return mutable;
+            }
+
             let copy = new ArrCompromise(), i, l;
 
             for (i = 0, l = this.length; i < l; i ++) {
@@ -252,6 +310,14 @@ ArrCompromise.prototype = objAssign(new ArrCompromiseProto(), {
     },
     isArr: (val: any): boolean => val instanceof ArrCompromise,
     pop: function () {
+        if (mutable) {
+            if (mutable === true) {
+                mutable = new ArrCompromise(this);
+            }
+
+            return [mutable, Array.prototype.pop.apply(mutable)];
+        }
+
         let copy = new ArrCompromise(this);
 
         let result = Array.prototype.pop.apply(copy);
@@ -259,6 +325,14 @@ ArrCompromise.prototype = objAssign(new ArrCompromiseProto(), {
         return [copy, result];
     },
     push: function (a?, b?, c?, d?, e?, f?, g?, h?) {
+        if (mutable) {
+            if (mutable === true) {
+                mutable = new ArrCompromise(this);
+            }
+
+            return [mutable, Array.prototype.push.apply(mutable, arguments)];
+        }
+
         let copy = new ArrCompromise(this);
 
         let result = Array.prototype.push.apply(copy, arguments);
@@ -269,6 +343,14 @@ ArrCompromise.prototype = objAssign(new ArrCompromiseProto(), {
         return new ArrCompromise(this.slice(begin, end));
     },
     shift: function () {
+        if (mutable) {
+            if (mutable === true) {
+                mutable = new ArrCompromise(this);
+            }
+
+            return [mutable, Array.prototype.shift.apply(mutable)];
+        }
+
         let copy = new ArrCompromise(this);
 
         let result = Array.prototype.shift.apply(copy);
@@ -276,6 +358,14 @@ ArrCompromise.prototype = objAssign(new ArrCompromiseProto(), {
         return [copy, result];
     },
     unshift: function (a?, b?, c?, d?, e?, f?, g?, h?) {
+        if (mutable) {
+            if (mutable === true) {
+                mutable = new ArrCompromise(this);
+            }
+
+            return [mutable, Array.prototype.unshift.apply(mutable)];
+        }
+
         let copy = new ArrCompromise(this);
 
         let result = Array.prototype.unshift.apply(copy, arguments);

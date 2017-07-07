@@ -6,6 +6,7 @@ import {
     arrObjClone,
     objAssign
 } from "../lib";
+import {objCopySingle} from "../lib";
 
 export interface IObj extends Object {
 
@@ -32,7 +33,7 @@ export const objSetInContext = function (key: TKey, val: any) {
         return this;
     }
 
-    let root, self = root = new ObjCompromise(this);
+    let root, self = root = objCopySingle(this);
     let i, l;
 
     for (i = 0, l = Context.getSetKeysCache.length - 1; i < l; i ++) {
@@ -161,6 +162,8 @@ export const objAllPatch = function (ctx, a?, b?, c?, d?, e?, f?, g?, h?) {
     return root;
 };
 
+let mutable = false;
+
 export const ObjCompromise = function<T> (value?: any) {
     value && (<TObj<T>> objAssign(this, value));
 };
@@ -188,7 +191,11 @@ ObjCompromise.prototype = objAssign(new ObjCompromiseProto(), {
             }
 
             if (root === this) {
-                self = root = new ObjCompromise(this);
+                if (mutable === true) {
+                    mutable = new ObjCompromise(this);
+                }
+
+                self = root = mutable || new ObjCompromise(this);
             } else {
                 self = root;
             }
@@ -217,7 +224,39 @@ ObjCompromise.prototype = objAssign(new ObjCompromiseProto(), {
         return root;
     },
     get: anyGetInContext,
-    set: objSetInContext,
+    set: function (key: TKey, val: any) {
+        if (anyGetInContext.call(this, key) === val) {
+            return this;
+        }
+
+        if (mutable === true) {
+            mutable = new ObjCompromise(this);
+        }
+
+        let root, self = root = mutable || new ObjCompromise(this);
+        let i, l;
+
+        for (i = 0, l = Context.getSetKeysCache.length - 1; i < l; i ++) {
+            const v = self[Context.getSetKeysCache[i]];
+
+            self = self[Context.getSetKeysCache[i]] = (v && typeof v === "object") ? arrObjClone(v) : {};
+        }
+
+        self[Context.getSetKeysCache[i]] = val;
+
+        Context.getSetKeysCache = null;
+
+        return root;
+    },
+    bulk: function (callback) {
+        mutable = true;
+
+        let result = callback(this);
+
+        mutable = null;
+
+        return result;
+    },
     isObj: (val: any): boolean => val instanceof ObjCompromise,
 });
 

@@ -106,7 +106,7 @@ allPatchCompare(obj, {c: 2}); // {}
 allPatchCompare(obj, {c: 3}); // {c: 3} 
 ```
 
-## Arr, Obj
+## Arr and Obj commons
 
 Initialize immutable Array or Object:
 
@@ -135,7 +135,42 @@ obj.set('b', 2); // new Obj = {a: 1, b: 2}
 ```javascript
 let obj = Obj({a: 1});
 
-obj.all('a': 2, 'b', 2); // new Obj = {a: 2, b: 2}
+obj.all('a', 2, 'b', 2); // new Obj = {a: 2, b: 2}
+```
+
+## Arr
+
+Arr provides immutable analogs of the common Array methods.
+
+The result of calling of these methods is a tuple with the reference to the new Arr and the result of operation.
+
+```javascript
+let arr = Arr([0, 1, 2]);
+
+arr = arr.pop(); // [new Arr([0, 1]), 2]
+```
+
+Methods:
+
+* **deleteIndex** - deletes the provided position
+* **insertIndex** - inserts value in the provided position
+* **pop** - like Array.pop 
+* **push** - like Array.push 
+* **shift** - like Array.shift
+* **unshift** - like Array.unshift
+
+## Bulk mode
+
+To increase performance of the immutable operations these operations can be performed in *bulk* context:
+
+```javascript
+arr = Arr([1, 2, 3]);
+
+arr = arr.bulk((mutable) {
+    arr.set([0], 2);
+    arr.set([1], 3);
+    arr.push(6);
+});
 ```
 
 ## Benchmarks

@@ -83,4 +83,42 @@ describe('Arr', () => {
         expect(ar2.length).toBe(3);
         expect(_).toBe(4);
     });
+
+    it('should process bulk operations and return new instance of Arr', () => {
+        const arr: any = Arr([1, {a: 2}, 3, 4]);
+
+        const ar2: any = arr.bulk((mutable) => {
+            mutable = mutable.set([0], 2);
+
+            expect(mutable).not.toBe(arr);
+
+            mutable = mutable.set([0], 3);
+
+            expect(mutable).toBe(mutable);
+
+            mutable = mutable.all([0], 4, [1], 5);
+
+            expect(mutable).toBe(mutable);
+
+            mutable = mutable.push(3)[0];
+
+            expect(mutable).toBe(mutable);
+
+            mutable = mutable.pop()[0];
+
+            expect(mutable).toBe(mutable);
+
+            mutable = mutable.shift()[0];
+
+            expect(mutable).toBe(mutable);
+
+            mutable = mutable.unshift()[0];
+
+            expect(mutable).toBe(mutable);
+
+            return mutable;
+        });
+
+        expect(ar2).not.toBe(arr);
+    });
 });

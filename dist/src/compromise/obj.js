@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var lib_1 = require("../lib");
+var lib_2 = require("../lib");
 exports.Obj = function (value, force) {
     Object.prototype.constructor.call(this);
     return value instanceof exports.ObjCompromise && !force ? value : new exports.ObjCompromise(value);
@@ -10,7 +11,7 @@ exports.objSetInContext = function (key, val) {
     if (lib_1.anyGetInContext.call(this, key) === val) {
         return this;
     }
-    var root, self = root = new exports.ObjCompromise(this);
+    var root, self = root = lib_2.objCopySingle(this);
     var i, l;
     for (i = 0, l = lib_1.Context.getSetKeysCache.length - 1; i < l; i++) {
         var v = self[lib_1.Context.getSetKeysCache[i]];
@@ -112,6 +113,7 @@ exports.objAllPatch = function (ctx, a, b, c, d, e, f, g, h) {
     lib_1.Context.getSetKeysCache = null;
     return root;
 };
+var mutable = false;
 exports.ObjCompromise = function (value) {
     value && lib_1.objAssign(this, value);
 };
@@ -132,7 +134,10 @@ exports.ObjCompromise.prototype = lib_1.objAssign(new ObjCompromiseProto(), {
                 continue;
             }
             if (root === this) {
-                self = root = new exports.ObjCompromise(this);
+                if (mutable === true) {
+                    mutable = new exports.ObjCompromise(this);
+                }
+                self = root = mutable || new exports.ObjCompromise(this);
             }
             else {
                 self = root;
@@ -158,7 +163,29 @@ exports.ObjCompromise.prototype = lib_1.objAssign(new ObjCompromiseProto(), {
         return root;
     },
     get: lib_1.anyGetInContext,
-    set: exports.objSetInContext,
+    set: function (key, val) {
+        if (lib_1.anyGetInContext.call(this, key) === val) {
+            return this;
+        }
+        if (mutable === true) {
+            mutable = new exports.ObjCompromise(this);
+        }
+        var root, self = root = mutable || new exports.ObjCompromise(this);
+        var i, l;
+        for (i = 0, l = lib_1.Context.getSetKeysCache.length - 1; i < l; i++) {
+            var v = self[lib_1.Context.getSetKeysCache[i]];
+            self = self[lib_1.Context.getSetKeysCache[i]] = (v && typeof v === "object") ? lib_1.arrObjClone(v) : {};
+        }
+        self[lib_1.Context.getSetKeysCache[i]] = val;
+        lib_1.Context.getSetKeysCache = null;
+        return root;
+    },
+    bulk: function (callback) {
+        mutable = true;
+        var result = callback(this);
+        mutable = null;
+        return result;
+    },
     isObj: function (val) { return val instanceof exports.ObjCompromise; },
 });
 exports.isObj = exports.ObjCompromise.prototype.isObj;
