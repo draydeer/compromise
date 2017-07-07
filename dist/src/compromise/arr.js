@@ -114,7 +114,7 @@ exports.arrAllPatch = function (ctx, a, b, c, d, e, f, g, h) {
 };
 var mutable = null;
 exports.ArrCompromise = function (value) {
-    Array.prototype.constructor.call(this);
+    Array.prototype.constructor.apply(this, value);
     value ? lib_1.arrAssignArrayLike(this, value) : this.length = 0;
 };
 var ArrCompromiseProto = function () { };
@@ -259,6 +259,16 @@ exports.ArrCompromise.prototype = lib_1.objAssign(new ArrCompromiseProto(), {
         var copy = new exports.ArrCompromise(this);
         var result = Array.prototype.shift.apply(copy);
         return [copy, result];
+    },
+    toJSON: function () {
+        var i, l, json = '[';
+        for (i = 0, l = this.length; i < l; i++) {
+            json += JSON.stringify(this[i]);
+            if (i < l - 1) {
+                json += ',';
+            }
+        }
+        return json + ']';
     },
     unshift: function (a, b, c, d, e, f, g, h) {
         if (mutable) {

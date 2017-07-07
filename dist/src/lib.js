@@ -23,7 +23,7 @@ exports.arrAssignArrayLikeSingle = function (target, source) {
 exports.arrCopySingle = function (source, target) {
     var i, l, target = target || [];
     for (i = 0, l = source.length; i < l; i++) {
-        target.push(source[i]);
+        Array.prototype.push.call(target, source[i]);
     }
     return target;
 };

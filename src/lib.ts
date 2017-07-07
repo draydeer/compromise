@@ -30,7 +30,7 @@ export const arrCopySingle = function (source, target?): any {
     let i, l, target = target || [];
 
     for (i = 0, l = source.length; i < l; i ++) {
-        target.push(source[i]);
+        Array.prototype.push.call(target, source[i]);
     }
 
     return target;
