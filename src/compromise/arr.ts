@@ -222,7 +222,7 @@ ArrCompromise.prototype = objAssign(new ArrCompromiseProto(), {
     set: arrSetInContext,
     deleteIndex: function (index) {
         if (index !== void 0 && index < this.length) {
-            let copy = Arr([]), i, l;
+            let copy = new ArrCompromise(), i, l;
 
             for (i = 0, l = this.length; i < l; i ++) {
                 if (i !== index) {
@@ -237,7 +237,7 @@ ArrCompromise.prototype = objAssign(new ArrCompromiseProto(), {
     },
     insertIndex: function (index, value) {
         if (index !== void 0 && index < this.length) {
-            let copy = Arr([]), i, l;
+            let copy = new ArrCompromise(), i, l;
 
             for (i = 0, l = this.length; i < l; i ++) {
                 i === index && Array.prototype.push.call(copy, value);
@@ -252,31 +252,31 @@ ArrCompromise.prototype = objAssign(new ArrCompromiseProto(), {
     },
     isArr: (val: any): boolean => val instanceof ArrCompromise,
     pop: function () {
-        let copy = Arr(this);
+        let copy = new ArrCompromise(this);
 
         let result = Array.prototype.pop.apply(copy);
 
         return [copy, result];
     },
     push: function (a?, b?, c?, d?, e?, f?, g?, h?) {
-        let copy = Arr(this);
+        let copy = new ArrCompromise(this);
 
         let result = Array.prototype.push.apply(copy, arguments);
 
         return [copy, result];
     },
     slice: function (begin, end) {
-        return Arr(this.slice(begin, end));
+        return new ArrCompromise(this.slice(begin, end));
     },
     shift: function () {
-        let copy = Arr(this);
+        let copy = new ArrCompromise(this);
 
         let result = Array.prototype.shift.apply(copy);
 
         return [copy, result];
     },
     unshift: function (a?, b?, c?, d?, e?, f?, g?, h?) {
-        let copy =  Arr(this);
+        let copy = new ArrCompromise(this);
 
         let result = Array.prototype.unshift.apply(copy, arguments);
 

@@ -3,9 +3,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var lib_1 = require("./lib");
 var arr_1 = require("./compromise/arr");
 exports.Arr = arr_1.Arr;
+exports.ArrCompromise = arr_1.ArrCompromise;
 exports.isArr = arr_1.isArr;
 var obj_1 = require("./compromise/obj");
 exports.Obj = obj_1.Obj;
+exports.ObjCompromise = obj_1.ObjCompromise;
 exports.isObj = obj_1.isObj;
 exports.get = function (target, key, def) {
     return lib_1.anyGetInContext.call(target, key, def);

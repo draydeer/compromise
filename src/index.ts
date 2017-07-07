@@ -5,6 +5,7 @@ import {
 } from "./lib";
 import {
     Arr,
+    ArrCompromise,
     arrAll,
     arrAllPatch,
     arrSetInContext,
@@ -13,6 +14,7 @@ import {
 } from "./compromise/arr";
 import {
     Obj,
+    ObjCompromise,
     objAll,
     objAllPatch,
     objSetInContext,
@@ -20,7 +22,7 @@ import {
     isObj
 } from "./compromise/obj";
 
-export { Arr, isArr, Obj, isObj };
+export { Arr, ArrCompromise, isArr, Obj, ObjCompromise, isObj };
 
 export const get = function (target: any, key: string, def?: any) {
     return anyGetInContext.call(target, key, def);
