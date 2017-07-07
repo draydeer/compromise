@@ -169,7 +169,7 @@ arr = Arr([1, 2, 3]);
 arr = arr.bulk((mutable) {
     mutable = mutable.set([0], 2);
     mutable = mutable.set([1], 3);
-    mutable = mutable.push(6);
+    mutable = mutable.push(6)[0];
     
     return mutable;
 });
