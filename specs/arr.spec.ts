@@ -65,4 +65,22 @@ describe('Arr', () => {
         expect(ar2[1]).toBe(2);
         expect(ar2[2]).toBe(arr[1]);
     });
+
+    it('should push value and return new instance of Arr', () => {
+        const arr: any = Arr([1, {a: 2}, 3, 4]);
+        const [ar2, _] = arr.push(1);
+
+        expect(ar2).not.toBe(arr);
+        expect(ar2.length).toBe(5);
+        expect(ar2[4]).toBe(1);
+    });
+
+    it('should pop value and return new instance of Arr', () => {
+        const arr: any = Arr([1, {a: 2}, 3, 4]);
+        const [ar2, _] = arr.pop();
+
+        expect(ar2).not.toBe(arr);
+        expect(ar2.length).toBe(3);
+        expect(_).toBe(4);
+    });
 });

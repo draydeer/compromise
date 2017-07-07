@@ -54,4 +54,18 @@ describe('Arr', function () {
         expect(ar2[1]).toBe(2);
         expect(ar2[2]).toBe(arr[1]);
     });
+    it('should push value and return new instance of Arr', function () {
+        var arr = arr_1.Arr([1, { a: 2 }, 3, 4]);
+        var _a = arr.push(1), ar2 = _a[0], _ = _a[1];
+        expect(ar2).not.toBe(arr);
+        expect(ar2.length).toBe(5);
+        expect(ar2[4]).toBe(1);
+    });
+    it('should pop value and return new instance of Arr', function () {
+        var arr = arr_1.Arr([1, { a: 2 }, 3, 4]);
+        var _a = arr.pop(), ar2 = _a[0], _ = _a[1];
+        expect(ar2).not.toBe(arr);
+        expect(ar2.length).toBe(3);
+        expect(_).toBe(4);
+    });
 });
