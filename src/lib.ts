@@ -1,5 +1,5 @@
 export const arrAssignArrayLike = function (target, a?, b?, c?, d?, e?, f?, g?, h?): any {
-    var i, j, l, m, length;
+    let i, j, l, m, length;
 
     for (i = 1, l = arguments.length, length = 0; i < l; i ++) {
         const argv = arguments[i];
@@ -17,7 +17,7 @@ export const arrAssignArrayLike = function (target, a?, b?, c?, d?, e?, f?, g?, 
 };
 
 export const arrAssignArrayLikeSingle = function (target, source) {
-    var i, l;
+    let i, l;
 
     for (i = 0, l = this.length = source.length; i < l; i ++) {
         target[i] = source[i];
@@ -26,10 +26,18 @@ export const arrAssignArrayLikeSingle = function (target, source) {
     return target;
 };
 
-export const arrMerge = function (a?, b?, c?, d?, e?, f?, g?, h?): any {
-    const target = [];
+export const arrCopySingle = function (source): any {
+    let i, l, target = [];
 
-    let i, j, l, m;
+    for (i = 0, l = source.length; i < l; i ++) {
+        target.push(source[i]);
+    }
+
+    return target;
+};
+
+export const arrMerge = function (a?, b?, c?, d?, e?, f?, g?, h?): any {
+    let i, j, l, m, target = [];
 
     for (i = 0, l = arguments.length; i < l; i ++) {
         const argv = arguments[i];
@@ -45,7 +53,7 @@ export const arrMerge = function (a?, b?, c?, d?, e?, f?, g?, h?): any {
 };
 
 export const arrPatchCompare = function (target, source): any {
-    var i, l, patch = {};
+    let i, l, patch = {};
 
     for (i = 0, l = source.length; i <= l; i ++) {
         if (source[i] !== target[i]) {
@@ -57,7 +65,7 @@ export const arrPatchCompare = function (target, source): any {
 };
 
 export const objAssign = function (target, a?, b?, c?, d?, e?, f?, g?, h?): any {
-    var i, j, k, l, m;
+    let i, j, k, l, m;
 
     for (i = 1, l = arguments.length; i < l; i ++) {
         const argv = arguments[i];
@@ -75,7 +83,17 @@ export const objAssign = function (target, a?, b?, c?, d?, e?, f?, g?, h?): any 
 };
 
 export const objAssignSingle = function (target, source) {
-    var i, l, k, keys = Object.keys(source);
+    let i, l, k, keys = Object.keys(source);
+
+    for (i = 1, k = keys[0], l = keys.length; i <= l; k = keys[i ++]) {
+        target[k] = source[k];
+    }
+
+    return target;
+};
+
+export const objCopySingle = function (source) {
+    let i, l, k, keys = Object.keys(source), target = {};
 
     for (i = 1, k = keys[0], l = keys.length; i <= l; k = keys[i ++]) {
         target[k] = source[k];
@@ -85,9 +103,7 @@ export const objAssignSingle = function (target, source) {
 };
 
 export const objMerge = function (a?, b?, c?, d?, e?, f?, g?, h?): any {
-    const target = {};
-
-    let i, j, l, k, m;
+    let i, j, l, k, m, target = {};
 
     for (i = 0, l = arguments.length; i < l; i ++) {
         const argv = arguments[i];
@@ -118,19 +134,21 @@ export const objPatchCompare = function (target, source): any {
 
 export const arrObjClone = function (source: any): any {
     if (source instanceof Array) {
-        return arrAssignArrayLikeSingle([], source);
+        return arrCopySingle(source);
     }
 
-    return objAssignSingle({}, source);
+    return objCopySingle(source);
 };
 
 export module Context {
     export let getSetKeysCache = [];
 }
 
-export const anyGetInContext = function (key: string, def?: any) {
+export type TKey = string|(number|string)[];
+
+export const anyGetInContext = function (key: TKey, def?: any) {
     let self = this;
-    let keys = Context.getSetKeysCache = key.split(".");
+    let keys = Context.getSetKeysCache = key instanceof Array ? key : (<string> key).split(".");
     let i, l;
 
     for (i = 0, l = keys.length - 1; i < l; i ++) {

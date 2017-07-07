@@ -142,82 +142,98 @@ obj.all('a': 2, 'b', 2); // new Obj = {a: 2, b: 2}
 
 ```
 ------------------------------
-objAssignSingle of object with 10 keys
+Arr (10 elements, depth 0) get existing index
 
-Total ops.: 1000000
-Time spent: 391 ms
-Ops. per second: 2557544.757033248
-Time per single op.: 0.000391 ms
-
-------------------------------
-Object.assign of object with 10 keys
-
-Total ops.: 1000000
-Time spent: 1634 ms
-Ops. per second: 611995.1040391676
-Time per single op.: 0.001634 ms
-
-==============================
-317.9028132992327% faster
-==============================
+Total ops.: 10000000
+Time spent: 525 ms
+Ops. per second: 19047619.047619045
+Time per single op.: 0.0000525 ms
 
 ------------------------------
-objAssign of 2 objects each one with 10 keys
+Arr (10 elements, depth 4) get existing index
 
-Total ops.: 1000000
-Time spent: 1838 ms
-Ops. per second: 544069.640914037
-Time per single op.: 0.001838 ms
-
-------------------------------
-Object.assign of 2 objects each one with 10 keys
-
-Total ops.: 1000000
-Time spent: 4532 ms
-Ops. per second: 220653.1332744925
-Time per single op.: 0.004532 ms
-
-==============================
-146.57236126224154% faster
-==============================
+Total ops.: 10000000
+Time spent: 956 ms
+Ops. per second: 10460251.046025105
+Time per single op.: 0.0000956 ms
 
 ------------------------------
-arrMerge of array with 10 elements
+Arr (10 elements, depth 0) set existing index with same value
 
-Total ops.: 1000000
-Time spent: 59 ms
-Ops. per second: 16949152.542372882
-Time per single op.: 0.000059 ms
-
-------------------------------
-Array.concat with array with 10 elements
-
-Total ops.: 1000000
-Time spent: 144 ms
-Ops. per second: 6944444.444444445
-Time per single op.: 0.000144 ms
-
-==============================
-144.0677966101695% faster
-==============================
+Total ops.: 10000000
+Time spent: 597 ms
+Ops. per second: 16750418.760469012
+Time per single op.: 0.0000597 ms
 
 ------------------------------
-arrMerge of 2 arrays each one with 10 elements
+Arr (10 elements, depth 4) set existing index with same value
 
-Total ops.: 1000000
-Time spent: 112 ms
-Ops. per second: 8928571.42857143
-Time per single op.: 0.000112 ms
+Total ops.: 10000000
+Time spent: 1010 ms
+Ops. per second: 9900990.099009901
+Time per single op.: 0.000101 ms
 
 ------------------------------
-Array.concat with 2 arrays each one with 10 elements
+Arr (10 elements, depth 0) set existing index with new value
 
-Total ops.: 1000000
-Time spent: 173 ms
-Ops. per second: 5780346.820809249
-Time per single op.: 0.000173 ms
+Total ops.: 10000000
+Time spent: 5514 ms
+Ops. per second: 1813565.4697134567
+Time per single op.: 0.0005514 ms
 
-==============================
-54.46428571428572% faster
-==============================
+------------------------------
+Arr (10 elements, depth 4) set existing index with new value
+
+Total ops.: 10000000
+Time spent: 17529 ms
+Ops. per second: 570483.1992697815
+Time per single op.: 0.0017529 ms
+
+------------------------------
+Obj (10 props, depth 0) get existing key
+
+Total ops.: 10000000
+Time spent: 795 ms
+Ops. per second: 12578616.352201257
+Time per single op.: 0.0000795 ms
+
+------------------------------
+Obj (10 props, depth 4) get existing key
+
+Total ops.: 10000000
+Time spent: 1011 ms
+Ops. per second: 9891196.834817013
+Time per single op.: 0.0001011 ms
+
+------------------------------
+Obj (10 props, depth 0) set existing key with same value
+
+Total ops.: 10000000
+Time spent: 794 ms
+Ops. per second: 12594458.438287152
+Time per single op.: 0.0000794 ms
+
+------------------------------
+Obj (10 props, depth 4) set existing key with same value
+
+Total ops.: 10000000
+Time spent: 1027 ms
+Ops. per second: 9737098.34469328
+Time per single op.: 0.0001027 ms
+
+------------------------------
+Obj (10 props, depth 0) set existing key with new value
+
+Total ops.: 10000000
+Time spent: 4759 ms
+Ops. per second: 2101281.781886951
+Time per single op.: 0.0004759 ms
+
+------------------------------
+Obj (10 props, depth 4) set existing key with new value
+
+Total ops.: 10000000
+Time spent: 15703 ms
+Ops. per second: 636820.9896198179
+Time per single op.: 0.0015703 ms
 ```

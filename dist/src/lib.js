@@ -20,9 +20,15 @@ exports.arrAssignArrayLikeSingle = function (target, source) {
     }
     return target;
 };
+exports.arrCopySingle = function (source) {
+    var i, l, target = [];
+    for (i = 0, l = source.length; i < l; i++) {
+        target.push(source[i]);
+    }
+    return target;
+};
 exports.arrMerge = function (a, b, c, d, e, f, g, h) {
-    var target = [];
-    var i, j, l, m;
+    var i, j, l, m, target = [];
     for (i = 0, l = arguments.length; i < l; i++) {
         var argv = arguments[i];
         if (argv && argv.length) {
@@ -62,9 +68,15 @@ exports.objAssignSingle = function (target, source) {
     }
     return target;
 };
+exports.objCopySingle = function (source) {
+    var i, l, k, keys = Object.keys(source), target = {};
+    for (i = 1, k = keys[0], l = keys.length; i <= l; k = keys[i++]) {
+        target[k] = source[k];
+    }
+    return target;
+};
 exports.objMerge = function (a, b, c, d, e, f, g, h) {
-    var target = {};
-    var i, j, l, k, m;
+    var i, j, l, k, m, target = {};
     for (i = 0, l = arguments.length; i < l; i++) {
         var argv = arguments[i];
         if (argv) {
@@ -87,9 +99,9 @@ exports.objPatchCompare = function (target, source) {
 };
 exports.arrObjClone = function (source) {
     if (source instanceof Array) {
-        return exports.arrAssignArrayLikeSingle([], source);
+        return exports.arrCopySingle(source);
     }
-    return exports.objAssignSingle({}, source);
+    return exports.objCopySingle(source);
 };
 var Context;
 (function (Context) {
@@ -97,7 +109,7 @@ var Context;
 })(Context = exports.Context || (exports.Context = {}));
 exports.anyGetInContext = function (key, def) {
     var self = this;
-    var keys = Context.getSetKeysCache = key.split(".");
+    var keys = Context.getSetKeysCache = key instanceof Array ? key : key.split(".");
     var i, l;
     for (i = 0, l = keys.length - 1; i < l; i++) {
         var v = self[keys[i]];

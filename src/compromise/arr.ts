@@ -1,5 +1,6 @@
 import {
     Context,
+    TKey,
     anyGetInContext,
     arrAssignArrayLike,
     arrObjClone,
@@ -8,9 +9,9 @@ import {
 
 export interface IArr extends Array<any> {
 
-    get(key: string, def?: any): any;
+    get(key: TKey, def?: any): any;
 
-    set(key: string, val: any): this;
+    set(key: TKey, val: any): this;
 
     isArr(val: any): boolean;
 
@@ -24,7 +25,7 @@ export const Arr = function<T> (value: any, force?: boolean): TArr<T> {
 
 let copySet = new Set();
 
-export const arrSetInContext = function (key: string, val: any) {
+export const arrSetInContext = function (key: TKey, val: any) {
     if (anyGetInContext.call(this, key) === val) {
         return this;
     }
@@ -45,7 +46,7 @@ export const arrSetInContext = function (key: string, val: any) {
     return root;
 };
 
-export const arrSetInContextPatch = function (key: string, val: any) {
+export const arrSetInContextPatch = function (key: TKey, val: any) {
     if (anyGetInContext.call(this, key) === val) {
         return {};
     }

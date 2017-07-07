@@ -1,5 +1,6 @@
 import {
     Context,
+    TKey,
     anyGetInContext,
     arrAssignArrayLike,
     arrObjClone,
@@ -8,9 +9,9 @@ import {
 
 export interface IObj extends Object {
 
-    get(key: string, def?: any): any;
+    get(key: TKey, def?: any): any;
 
-    set(key: string, val: any): this;
+    set(key: TKey, val: any): this;
 
     isObj(val: any): boolean;
 
@@ -24,7 +25,7 @@ export const Obj = function<T> (value: any, force?: boolean): TObj<T> {
 
 let copySet = new Set();
 
-export const objSetInContext = function (key: string, val: any) {
+export const objSetInContext = function (key: TKey, val: any) {
     if (anyGetInContext.call(this, key) === val) {
         return this;
     }
@@ -45,7 +46,7 @@ export const objSetInContext = function (key: string, val: any) {
     return root;
 };
 
-export const objSetInContextPatch = function (key: string, val: any) {
+export const objSetInContextPatch = function (key: TKey, val: any) {
     if (anyGetInContext.call(this, key) === val) {
         return {};
     }

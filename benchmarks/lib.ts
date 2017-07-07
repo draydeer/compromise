@@ -5,6 +5,12 @@ import {
     objAssign,
     objAssignSingle
 } from "../src/lib";
+import {
+    Arr
+} from "../src/compromise/arr";
+import {
+    Obj
+} from "../src/compromise/obj";
 
 let time, timeSpentNew, timeSpentOld;
 
@@ -41,9 +47,12 @@ function stop(title, ops) {
 }
 
 
+
 let a = {a: 0, b: 1, c: 2, d: 3, e: 4, f: 5, g: 6, h: 7, i: 8, j: 9};
 let b = {k: 9, l: 9, m: 9, n: 9, o: 9, p: 9, q: 9, r: 9, s: 9, t: 9};
 let c = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+
+
 
 // objAssignSingle / Object.assign
 start();
