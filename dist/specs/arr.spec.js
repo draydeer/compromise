@@ -68,9 +68,9 @@ describe('Arr', function () {
         expect(ar2.length).toBe(3);
         expect(_).toBe(4);
     });
-    it('should process bulk operations and return new instance of Arr', function () {
+    it('should process batch operations and return new instance of Arr', function () {
         var arr = arr_1.Arr([1, { a: 2 }, 3, 4]);
-        var ar2 = arr.bulk(function (mutable) {
+        var ar2 = arr.batch(function (mutable) {
             mutable = mutable.set([0], 2);
             expect(mutable).not.toBe(arr);
             mutable = mutable.set([0], 3);

@@ -180,7 +180,7 @@ exports.ArrCompromise.prototype = lib_1.objAssign(new ArrCompromiseProto(), {
         lib_1.Context.getSetKeysCache = null;
         return root;
     },
-    bulk: function (callback) {
+    batch: function (callback) {
         mutable = true;
         var result = callback(this);
         mutable = null;

@@ -26,8 +26,8 @@ export const arrAssignArrayLikeSingle = function (target, source) {
     return target;
 };
 
-export const arrCopySingle = function (source, target?): any {
-    let i, l, target = target || [];
+export const arrCopySingle = function (source, ctx?): any {
+    let i, l, target = ctx || [];
 
     for (i = 0, l = source.length; i < l; i ++) {
         Array.prototype.push.call(target, source[i]);
@@ -92,8 +92,8 @@ export const objAssignSingle = function (target, source) {
     return target;
 };
 
-export const objCopySingle = function (source, target?) {
-    let i, l, k, keys = Object.keys(source), target = target || {};
+export const objCopySingle = function (source, ctx?) {
+    let i, l, k, keys = Object.keys(source), target = ctx || {};
 
     for (i = 1, k = keys[0], l = keys.length; i <= l; k = keys[i ++]) {
         target[k] = source[k];

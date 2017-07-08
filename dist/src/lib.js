@@ -20,8 +20,8 @@ exports.arrAssignArrayLikeSingle = function (target, source) {
     }
     return target;
 };
-exports.arrCopySingle = function (source, target) {
-    var i, l, target = target || [];
+exports.arrCopySingle = function (source, ctx) {
+    var i, l, target = ctx || [];
     for (i = 0, l = source.length; i < l; i++) {
         Array.prototype.push.call(target, source[i]);
     }
@@ -68,8 +68,8 @@ exports.objAssignSingle = function (target, source) {
     }
     return target;
 };
-exports.objCopySingle = function (source, target) {
-    var i, l, k, keys = Object.keys(source), target = target || {};
+exports.objCopySingle = function (source, ctx) {
+    var i, l, k, keys = Object.keys(source), target = ctx || {};
     for (i = 1, k = keys[0], l = keys.length; i <= l; k = keys[i++]) {
         target[k] = source[k];
     }

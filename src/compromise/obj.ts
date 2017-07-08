@@ -248,7 +248,7 @@ ObjCompromise.prototype = objAssign(new ObjCompromiseProto(), {
 
         return root;
     },
-    bulk: function (callback) {
+    batch: function (callback) {
         mutable = true;
 
         let result = callback(this);

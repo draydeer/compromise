@@ -249,7 +249,7 @@ ArrCompromise.prototype = objAssign(new ArrCompromiseProto(), {
 
         return root;
     },
-    bulk: function (callback) {
+    batch: function (callback) {
         mutable = true;
 
         let result = callback(this);

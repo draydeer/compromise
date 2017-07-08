@@ -84,10 +84,10 @@ describe('Arr', () => {
         expect(_).toBe(4);
     });
 
-    it('should process bulk operations and return new instance of Arr', () => {
+    it('should process batch operations and return new instance of Arr', () => {
         const arr: any = Arr([1, {a: 2}, 3, 4]);
 
-        const ar2: any = arr.bulk((mutable) => {
+        const ar2: any = arr.batch((mutable) => {
             mutable = mutable.set([0], 2);
 
             expect(mutable).not.toBe(arr);

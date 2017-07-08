@@ -159,14 +159,16 @@ Methods:
 * **shift** - like Array.shift
 * **unshift** - like Array.unshift
 
-## Bulk mode
+## Batch
 
-To increase performance of the immutable operations these operations can be performed in *bulk* context:
+To increase performance of the immutable operations these operations can be performed in a batch on the mutable copy of data.
+Operations are lazy and return the mutable copy of data only if it is necessary.
+After the mutable copy of data has been created all operations will work with this copy.
 
 ```javascript
 arr = Arr([1, 2, 3]);
 
-arr = arr.bulk((mutable) {
+arr = arr.batch((mutable) {
     mutable = mutable.set([0], 2);
     mutable = mutable.set([1], 3);
     mutable = mutable.push(6)[0];
