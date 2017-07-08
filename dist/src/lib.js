@@ -97,11 +97,15 @@ exports.objPatchCompare = function (target, source) {
     }
     return patch;
 };
+var substituteArrCopy = true;
 exports.arrObjClone = function (source) {
     if (source instanceof Array) {
-        return exports.arrCopySingle(source);
+        return substituteArrCopy ? exports.arrAssignArrayLikeSingle([], source) : exports.arrCopySingle(source);
     }
     return exports.objCopySingle(source);
+};
+exports.setSubstituteArrCopy = function (value) {
+    substituteArrCopy = value === true;
 };
 var Context;
 (function (Context) {

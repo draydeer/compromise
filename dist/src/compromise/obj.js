@@ -115,11 +115,11 @@ exports.objAllPatch = function (ctx, a, b, c, d, e, f, g, h) {
 };
 var mutable = false;
 exports.ObjCompromise = function (value) {
-    value && lib_1.objAssign(this, value);
+    value && lib_1.objAssignSingle(this, value);
 };
 var ObjCompromiseProto = function () { };
 ObjCompromiseProto.prototype = Object.prototype;
-exports.ObjCompromise.prototype = lib_1.objAssign(new ObjCompromiseProto(), {
+exports.ObjCompromise.prototype = lib_1.objAssignSingle(new ObjCompromiseProto(), {
     constructor: Object.prototype.constructor,
     all: function (a, b, c, d, e, f, g, h) {
         if (arguments.length < 3) {

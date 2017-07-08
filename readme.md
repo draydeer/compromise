@@ -184,95 +184,95 @@ arr = arr.batch((mutable) {
 Arr (10 elements, depth 0) get existing index
 
 Total ops.: 10000000
-Time spent: 525 ms
-Ops. per second: 19047619.047619045
-Time per single op.: 0.0000525 ms
+Time spent: 524 ms
+Ops. per second: 19083969.465648856
+Time per single op.: 0.0000524 ms
 
 ------------------------------
 Arr (10 elements, depth 4) get existing index
 
 Total ops.: 10000000
-Time spent: 956 ms
-Ops. per second: 10460251.046025105
-Time per single op.: 0.0000956 ms
+Time spent: 953 ms
+Ops. per second: 10493179.433368312
+Time per single op.: 0.0000953 ms
 
 ------------------------------
 Arr (10 elements, depth 0) set existing index with same value
 
 Total ops.: 10000000
-Time spent: 597 ms
-Ops. per second: 16750418.760469012
-Time per single op.: 0.0000597 ms
+Time spent: 596 ms
+Ops. per second: 16778523.489932887
+Time per single op.: 0.0000596 ms
 
 ------------------------------
 Arr (10 elements, depth 4) set existing index with same value
 
 Total ops.: 10000000
-Time spent: 1010 ms
-Ops. per second: 9900990.099009901
-Time per single op.: 0.000101 ms
+Time spent: 981 ms
+Ops. per second: 10193679.91845056
+Time per single op.: 0.0000981 ms
 
 ------------------------------
-Arr (10 elements, depth 0) set existing index with new value
+Arr (10 elements, depth 0) set existing index with new value (substitute array copy)
 
 Total ops.: 10000000
-Time spent: 5514 ms
-Ops. per second: 1813565.4697134567
-Time per single op.: 0.0005514 ms
+Time spent: 5292 ms
+Ops. per second: 1889644.746787604
+Time per single op.: 0.0005292 ms
 
 ------------------------------
-Arr (10 elements, depth 4) set existing index with new value
+Arr (10 elements, depth 4) set existing index with new value (substitute array copy)
 
 Total ops.: 10000000
-Time spent: 17529 ms
-Ops. per second: 570483.1992697815
-Time per single op.: 0.0017529 ms
+Time spent: 16730 ms
+Ops. per second: 597728.6312014345
+Time per single op.: 0.001673 ms
 
 ------------------------------
 Obj (10 props, depth 0) get existing key
 
 Total ops.: 10000000
-Time spent: 795 ms
-Ops. per second: 12578616.352201257
-Time per single op.: 0.0000795 ms
+Time spent: 793 ms
+Ops. per second: 12610340.479192939
+Time per single op.: 0.0000793 ms
 
 ------------------------------
 Obj (10 props, depth 4) get existing key
 
 Total ops.: 10000000
-Time spent: 1011 ms
-Ops. per second: 9891196.834817013
-Time per single op.: 0.0001011 ms
+Time spent: 1026 ms
+Ops. per second: 9746588.693957115
+Time per single op.: 0.0001026 ms
 
 ------------------------------
 Obj (10 props, depth 0) set existing key with same value
 
 Total ops.: 10000000
-Time spent: 794 ms
-Ops. per second: 12594458.438287152
-Time per single op.: 0.0000794 ms
+Time spent: 793 ms
+Ops. per second: 12610340.479192939
+Time per single op.: 0.0000793 ms
 
 ------------------------------
 Obj (10 props, depth 4) set existing key with same value
 
 Total ops.: 10000000
-Time spent: 1027 ms
-Ops. per second: 9737098.34469328
-Time per single op.: 0.0001027 ms
+Time spent: 1009 ms
+Ops. per second: 9910802.775024777
+Time per single op.: 0.0001009 ms
 
 ------------------------------
 Obj (10 props, depth 0) set existing key with new value
 
 Total ops.: 10000000
-Time spent: 4759 ms
-Ops. per second: 2101281.781886951
-Time per single op.: 0.0004759 ms
+Time spent: 4497 ms
+Ops. per second: 2223704.6920169
+Time per single op.: 0.0004497 ms
 
 ------------------------------
 Obj (10 props, depth 4) set existing key with new value
 
 Total ops.: 10000000
-Time spent: 15703 ms
-Ops. per second: 636820.9896198179
-Time per single op.: 0.0015703 ms
+Time spent: 15411 ms
+Ops. per second: 648887.1585231329
+Time per single op.: 0.0015411 ms
 ```

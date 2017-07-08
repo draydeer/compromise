@@ -2,11 +2,12 @@ import {
     Context,
     TKey,
     anyGetInContext,
-    arrAssignArrayLike,
+    arrAssignArrayLikeSingle,
     arrObjClone,
-    objAssign
+    objAssignSingle
 } from "../lib";
 import {objCopySingle} from "../lib";
+import {objAssignSingle} from "../../dist/src/lib";
 
 export interface IObj extends Object {
 
@@ -165,14 +166,14 @@ export const objAllPatch = function (ctx, a?, b?, c?, d?, e?, f?, g?, h?) {
 let mutable = false;
 
 export const ObjCompromise = function<T> (value?: any) {
-    value && (<TObj<T>> objAssign(this, value));
+    value && (<TObj<T>> objAssignSingle(this, value));
 };
 
 const ObjCompromiseProto = function () {};
 
 ObjCompromiseProto.prototype = Object.prototype;
 
-ObjCompromise.prototype = objAssign(new ObjCompromiseProto(), {
+ObjCompromise.prototype = objAssignSingle(new ObjCompromiseProto(), {
     constructor: Object.prototype.constructor,
     all: function (a?, b?, c?, d?, e?, f?, g?, h?) {
         if (arguments.length < 3) {

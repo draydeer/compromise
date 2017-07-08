@@ -1,4 +1,5 @@
 import {
+    setSubstituteArrCopy,
     arrMerge,
     arrAssignArrayLike,
     arrAssignArrayLikeSingle,
@@ -11,6 +12,8 @@ import {
 import {
     Obj
 } from "../src/compromise/obj";
+
+setSubstituteArrCopy();
 
 let time, timeSpentNew, timeSpentOld;
 
@@ -96,7 +99,7 @@ for (let i = 0; i < 10000000; i ++) {
     b.set([0], 1);
 }
 
-stop('Arr (10 elements, depth 0) set existing index with new value', 10000000);
+stop('Arr (10 elements, depth 0) set existing index with new value (substitute array copy)', 10000000);
 
 // Arr (10 props, depth 4) set existing index with new value
 start();
@@ -105,7 +108,7 @@ for (let i = 0; i < 10000000; i ++) {
     b.set([1, 'b1', 'b11', 'b111'], 3);
 }
 
-stop('Arr (10 elements, depth 4) set existing index with new value', 10000000);
+stop('Arr (10 elements, depth 4) set existing index with new value (substitute array copy)', 10000000);
 
 
 

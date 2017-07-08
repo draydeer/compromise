@@ -1,0 +1,9 @@
+.idea
+*.js
+*.log
+*.map
+**/ignore*
+**/junk*
+coverage
+!dist/**/*.js
+node_modules

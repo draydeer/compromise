@@ -1,7 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+var lib_1 = require("../src/lib");
 var arr_1 = require("../src/compromise/arr");
 var obj_1 = require("../src/compromise/obj");
+lib_1.setSubstituteArrCopy();
 var time, timeSpentNew, timeSpentOld;
 function percent() {
     console.log('==============================');
@@ -60,13 +62,13 @@ start();
 for (var i = 0; i < 10000000; i++) {
     b.set([0], 1);
 }
-stop('Arr (10 elements, depth 0) set existing index with new value', 10000000);
+stop('Arr (10 elements, depth 0) set existing index with new value (substitute array copy)', 10000000);
 // Arr (10 props, depth 4) set existing index with new value
 start();
 for (var i = 0; i < 10000000; i++) {
     b.set([1, 'b1', 'b11', 'b111'], 3);
 }
-stop('Arr (10 elements, depth 4) set existing index with new value', 10000000);
+stop('Arr (10 elements, depth 4) set existing index with new value (substitute array copy)', 10000000);
 // Obj (10 props, depth 0) get existing key
 start();
 for (var i = 0; i < 10000000; i++) {

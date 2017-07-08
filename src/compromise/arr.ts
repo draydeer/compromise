@@ -2,9 +2,9 @@ import {
     Context,
     TKey,
     anyGetInContext,
-    arrAssignArrayLike,
+    arrAssignArrayLikeSingle,
     arrObjClone,
-    objAssign
+    objAssignSingle
 } from "../lib";
 import {arrCopySingle} from "../lib";
 import {arrAssignArrayLikeSingle} from "../lib";
@@ -164,16 +164,14 @@ export const arrAllPatch = function (ctx, a?, b?, c?, d?, e?, f?, g?, h?) {
 let mutable = null;
 
 export const ArrCompromise = function<T> (value?: any) {
-    Array.prototype.constructor.apply(this, value);
-
-    value ? (<TArr<T>> arrAssignArrayLike(this, value)) : this.length = 0;
+    value ? (<TArr<T>> arrAssignArrayLikeSingle(this, value)) : this.length = 0;
 };
 
 const ArrCompromiseProto = function () {};
 
 ArrCompromiseProto.prototype = Array.prototype;
 
-ArrCompromise.prototype = objAssign(new ArrCompromiseProto(), {
+ArrCompromise.prototype = objAssignSingle(new ArrCompromiseProto(), {
     constructor: Array.prototype.constructor,
     all: function (a?, b?, c?, d?, e?, f?, g?, h?) {
         if (arguments.length < 3) {
