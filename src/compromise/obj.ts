@@ -163,7 +163,9 @@ export const objAllPatch = function (ctx, a?, b?, c?, d?, e?, f?, g?, h?) {
     return root;
 };
 
-let mutable = false;
+let mutables = new Array(32);
+let mutableCurrent = false;
+let mutableIndex = 0;
 
 export const ObjCompromise = function<T> (obj?: any) {
     if (obj) {
@@ -194,10 +196,10 @@ ObjCompromise.prototype = objAssignSingle(new ObjCompromiseProto(), {
             }
 
             if (root === this) {
-                if (mutable === true) {
-                    self = root = mutable = new ObjCompromise(this);
+                if (mutableCurrent === true) {
+                    self = root = mutableCurrent = new ObjCompromise(this);
                 } else {
-                    self = root = mutable || new ObjCompromise(this);
+                    self = root = mutableCurrent || new ObjCompromise(this);
                 }
             } else {
                 self = root;
@@ -235,10 +237,10 @@ ObjCompromise.prototype = objAssignSingle(new ObjCompromiseProto(), {
         let root, self;
         let i, l;
 
-        if (mutable === true) {
-            self = root = mutable = new ObjCompromise(this);
+        if (mutableCurrent === true) {
+            self = root = mutableCurrent = new ObjCompromise(this);
         } else {
-            self = root = mutable || new ObjCompromise(this);
+            self = root = mutableCurrent || new ObjCompromise(this);
         }
 
         for (i = 0, l = Context.getSetKeysCache.length - 1; i < l; i ++) {
@@ -254,11 +256,13 @@ ObjCompromise.prototype = objAssignSingle(new ObjCompromiseProto(), {
         return root;
     },
     batch: function (callback) {
-        mutable = true;
+        mutables[++ mutableIndex] = mutableCurrent;
+
+        mutableCurrent = true;
 
         let result = callback(this);
 
-        mutable = null;
+        mutableCurrent = mutables[-- mutableIndex];
 
         return result;
     },

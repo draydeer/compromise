@@ -176,6 +176,20 @@ arr = arr.batch((mutable) {
 });
 ```
 
+Batch operations can be nested:
+
+```javascript
+arr = Arr([1, 2, 3]);
+
+arr = arr.batch((mutable1) {
+    const ar2 = mutable1.batch((mutable2) {
+        ... do something ...
+    });
+    
+    return mutable1;
+});
+```
+
 ## Benchmarks
 
 ```

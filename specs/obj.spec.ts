@@ -43,4 +43,26 @@ describe('Obj', () => {
         expect(obj.b).toBe(ob2.b);
         expect(obj.b).not.toBe(ob3[1]);
     });
+
+    it('should process nested batch operations', () => {
+        const arr: any = Obj({a: 1, b: {a: 2}});
+
+        const ar2: any = arr.batch((mutable1) => {
+            const ar3: any = mutable1.batch((mutable2) => {
+                mutable2 = mutable2.set(['a'], 3);
+
+                expect(mutable2).not.toBe(arr);
+                expect(mutable2).not.toBe(ar2);
+
+                return mutable2;
+            });
+
+            mutable1 = mutable1.set(['a'], 2);
+
+            expect(mutable1).not.toBe(arr);
+            expect(mutable1).not.toBe(ar3);
+
+            return mutable1;
+        });
+    });
 });

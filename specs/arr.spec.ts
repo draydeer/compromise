@@ -133,4 +133,26 @@ describe('Arr', () => {
 
         expect(ar2).not.toBe(arr);
     });
+
+    it('should process nested batch operations', () => {
+        const arr: any = Arr([1, {a: 2}, 3, 4]);
+
+        const ar2: any = arr.batch((mutable1) => {
+            const ar3: any = mutable1.batch((mutable2) => {
+                mutable2 = mutable2.set([0], 3);
+
+                expect(mutable2).not.toBe(arr);
+                expect(mutable2).not.toBe(ar2);
+
+                return mutable2;
+            });
+
+            mutable1 = mutable1.set([0], 2);
+
+            expect(mutable1).not.toBe(arr);
+            expect(mutable1).not.toBe(ar3);
+
+            return mutable1;
+        });
+    });
 });

@@ -113,7 +113,9 @@ exports.objAllPatch = function (ctx, a, b, c, d, e, f, g, h) {
     lib_1.Context.getSetKeysCache = null;
     return root;
 };
-var mutable = false;
+var mutables = new Array(32);
+var mutableCurrent = false;
+var mutableIndex = 0;
 exports.ObjCompromise = function (obj) {
     if (obj) {
         lib_1.objAssignSingle(this, obj);
@@ -136,11 +138,11 @@ exports.ObjCompromise.prototype = lib_1.objAssignSingle(new ObjCompromiseProto()
                 continue;
             }
             if (root === this) {
-                if (mutable === true) {
-                    self = root = mutable = new exports.ObjCompromise(this);
+                if (mutableCurrent === true) {
+                    self = root = mutableCurrent = new exports.ObjCompromise(this);
                 }
                 else {
-                    self = root = mutable || new exports.ObjCompromise(this);
+                    self = root = mutableCurrent || new exports.ObjCompromise(this);
                 }
             }
             else {
@@ -173,11 +175,11 @@ exports.ObjCompromise.prototype = lib_1.objAssignSingle(new ObjCompromiseProto()
         }
         var root, self;
         var i, l;
-        if (mutable === true) {
-            self = root = mutable = new exports.ObjCompromise(this);
+        if (mutableCurrent === true) {
+            self = root = mutableCurrent = new exports.ObjCompromise(this);
         }
         else {
-            self = root = mutable || new exports.ObjCompromise(this);
+            self = root = mutableCurrent || new exports.ObjCompromise(this);
         }
         for (i = 0, l = lib_1.Context.getSetKeysCache.length - 1; i < l; i++) {
             var v = self[lib_1.Context.getSetKeysCache[i]];
@@ -188,9 +190,10 @@ exports.ObjCompromise.prototype = lib_1.objAssignSingle(new ObjCompromiseProto()
         return root;
     },
     batch: function (callback) {
-        mutable = true;
+        mutables[++mutableIndex] = mutableCurrent;
+        mutableCurrent = true;
         var result = callback(this);
-        mutable = null;
+        mutableCurrent = mutables[--mutableIndex];
         return result;
     },
     isObj: function (val) { return val instanceof exports.ObjCompromise; },

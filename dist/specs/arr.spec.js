@@ -101,4 +101,19 @@ describe('Arr', function () {
         });
         expect(ar2).not.toBe(arr);
     });
+    it('should process nested batch operations', function () {
+        var arr = arr_1.Arr([1, { a: 2 }, 3, 4]);
+        var ar2 = arr.batch(function (mutable1) {
+            var ar3 = mutable1.batch(function (mutable2) {
+                mutable2 = mutable2.set([0], 3);
+                expect(mutable2).not.toBe(arr);
+                expect(mutable2).not.toBe(ar2);
+                return mutable2;
+            });
+            mutable1 = mutable1.set([0], 2);
+            expect(mutable1).not.toBe(arr);
+            expect(mutable1).not.toBe(ar3);
+            return mutable1;
+        });
+    });
 });
