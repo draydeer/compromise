@@ -91,30 +91,42 @@ describe('Arr', () => {
             mutable = mutable.set([0], 2);
 
             expect(mutable).not.toBe(arr);
+            expect(mutable[0]).toBe(2);
 
             mutable = mutable.set([0], 3);
 
             expect(mutable).toBe(mutable);
+            expect(mutable[0]).toBe(3);
 
             mutable = mutable.all([0], 4, [1], 5);
 
             expect(mutable).toBe(mutable);
+            expect(mutable[0]).toBe(4);
+            expect(mutable[1]).toBe(5);
 
             mutable = mutable.push(3)[0];
 
             expect(mutable).toBe(mutable);
+            expect(mutable[4]).toBe(3);
+            expect(mutable.length).toBe(5);
 
             mutable = mutable.pop()[0];
 
             expect(mutable).toBe(mutable);
+            expect(mutable[3]).toBe(4);
+            expect(mutable.length).toBe(4);
 
             mutable = mutable.shift()[0];
 
             expect(mutable).toBe(mutable);
+            expect(mutable[0]).toBe(5);
+            expect(mutable.length).toBe(3);
 
-            mutable = mutable.unshift()[0];
+            mutable = mutable.unshift(2)[0];
 
             expect(mutable).toBe(mutable);
+            expect(mutable[0]).toBe(2);
+            expect(mutable.length).toBe(4);
 
             return mutable;
         });

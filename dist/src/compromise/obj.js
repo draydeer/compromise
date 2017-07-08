@@ -114,8 +114,10 @@ exports.objAllPatch = function (ctx, a, b, c, d, e, f, g, h) {
     return root;
 };
 var mutable = false;
-exports.ObjCompromise = function (value) {
-    value && lib_1.objAssignSingle(this, value);
+exports.ObjCompromise = function (obj) {
+    if (obj) {
+        lib_1.objAssignSingle(this, obj);
+    }
 };
 var ObjCompromiseProto = function () { };
 ObjCompromiseProto.prototype = Object.prototype;
@@ -135,9 +137,11 @@ exports.ObjCompromise.prototype = lib_1.objAssignSingle(new ObjCompromiseProto()
             }
             if (root === this) {
                 if (mutable === true) {
-                    mutable = new exports.ObjCompromise(this);
+                    self = root = mutable = new exports.ObjCompromise(this);
                 }
-                self = root = mutable || new exports.ObjCompromise(this);
+                else {
+                    self = root = mutable || new exports.ObjCompromise(this);
+                }
             }
             else {
                 self = root;
@@ -150,7 +154,7 @@ exports.ObjCompromise.prototype = lib_1.objAssignSingle(new ObjCompromiseProto()
                         copySet.add(self);
                     }
                     else {
-                        self = self[lib_1.Context.getSetKeysCache[j]] = v;
+                        self = self[lib_1.Context.getSetKeysCache[j]] = {};
                     }
                 }
                 else {
@@ -167,11 +171,14 @@ exports.ObjCompromise.prototype = lib_1.objAssignSingle(new ObjCompromiseProto()
         if (lib_1.anyGetInContext.call(this, key) === val) {
             return this;
         }
-        if (mutable === true) {
-            mutable = new exports.ObjCompromise(this);
-        }
-        var root, self = root = mutable || new exports.ObjCompromise(this);
+        var root, self;
         var i, l;
+        if (mutable === true) {
+            self = root = mutable = new exports.ObjCompromise(this);
+        }
+        else {
+            self = root = mutable || new exports.ObjCompromise(this);
+        }
         for (i = 0, l = lib_1.Context.getSetKeysCache.length - 1; i < l; i++) {
             var v = self[lib_1.Context.getSetKeysCache[i]];
             self = self[lib_1.Context.getSetKeysCache[i]] = (v && typeof v === "object") ? lib_1.arrObjClone(v) : {};

@@ -27,10 +27,10 @@ export let arrAssignArrayLikeSingle = function (target, source) {
 };
 
 export let arrCopySingle = function (source, ctx?): any {
-    let i, l, target = ctx || [];
+    let i, l, target = ctx || new Array(source.length);
 
-    for (i = 0, l = source.length; i < l; i ++) {
-        Array.prototype.push.call(target, source[i]);
+    for (i = 0, l = ctx ? ctx.length = source.length : source.length; i < l; i ++) {
+        target[i] = source[i];
     }
 
     return target;
@@ -132,18 +132,8 @@ export let objPatchCompare = function (target, source): any {
     return patch;
 };
 
-let substituteArrCopy = true;
-
 export let arrObjClone = function (source: any): any {
-    if (source instanceof Array) {
-        return substituteArrCopy ? arrAssignArrayLikeSingle([], source) : arrCopySingle(source);
-    }
-
-    return objCopySingle(source);
-};
-
-export let setSubstituteArrCopy = function (value?) {
-    substituteArrCopy = value === true;
+    return source instanceof Array ? arrCopySingle(source) : objCopySingle(source);
 };
 
 export module Context {

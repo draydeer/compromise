@@ -163,8 +163,10 @@ export const arrAllPatch = function (ctx, a?, b?, c?, d?, e?, f?, g?, h?) {
 
 let mutable = null;
 
-export const ArrCompromise = function<T> (value?: any) {
-    value ? (<TArr<T>> arrAssignArrayLikeSingle(this, value)) : this.length = 0;
+export const ArrCompromise = function<T> (arr?: any) {
+    if (arr) {
+        <TArr<T>> arrCopySingle(arr, this);
+    }
 };
 
 const ArrCompromiseProto = function () {};
@@ -191,10 +193,10 @@ ArrCompromise.prototype = objAssignSingle(new ArrCompromiseProto(), {
 
             if (root === this) {
                 if (mutable === true) {
-                    mutable = new ArrCompromise(this);
+                    self = root = mutable = new ArrCompromise(this);
+                } else {
+                    self = root = mutable || new ArrCompromise(this);
                 }
-
-                self = root = mutable || new ArrCompromise(this);
             } else {
                 self = root;
             }
@@ -211,7 +213,7 @@ ArrCompromise.prototype = objAssignSingle(new ArrCompromiseProto(), {
                         self = self[Context.getSetKeysCache[j]] = v;
                     }
                 } else {
-                    self = self[Context.getSetKeysCache[j]] = v;
+                    self = self[Context.getSetKeysCache[j]] = {};
                 }
             }
 
@@ -228,12 +230,14 @@ ArrCompromise.prototype = objAssignSingle(new ArrCompromiseProto(), {
             return this;
         }
 
-        if (mutable === true) {
-            mutable = new ArrCompromise(this);
-        }
-
-        let root, self = root = mutable || new ArrCompromise(this);
+        let root, self;
         let i, l;
+
+        if (mutable === true) {
+            self = root = mutable = new ArrCompromise(this);
+        } else {
+            self = root = mutable || new ArrCompromise(this);
+        }
 
         for (i = 0, l = Context.getSetKeysCache.length - 1; i < l; i ++) {
             const v = self[Context.getSetKeysCache[i]];
@@ -257,24 +261,34 @@ ArrCompromise.prototype = objAssignSingle(new ArrCompromiseProto(), {
         return result;
     },
     deleteIndex: function (index) {
-        if (index !== void 0 && index < this.length) {
+        if (index !== void 0 && index < this.length && index > - 1) {
             if (mutable) {
+                let i, l;
+
                 if (mutable === true) {
                     mutable = new ArrCompromise(this);
                 }
 
-                mutable.splice(index, 1);
+                mutable[index] = null;
+
+                for (i = index, l = this.length - 1; i < l; i ++) {
+                    mutable[i] = mutable[i + 1];
+                }
+
+                Array.prototype.pop.call(mutable);
 
                 return mutable;
             }
 
-            let copy = new ArrCompromise(), i, l;
+            let copy = new ArrCompromise(this), i, l;
 
-            for (i = 0, l = this.length; i < l; i ++) {
-                if (i !== index) {
-                    Array.prototype.push.call(copy, this[i]);
-                }
+            copy[index] = null;
+
+            for (i = index, l = this.length - 1; i < l; i ++) {
+                copy[i] = copy[i + 1];
             }
+
+            Array.prototype.pop.call(copy);
 
             return copy;
         }
@@ -282,24 +296,34 @@ ArrCompromise.prototype = objAssignSingle(new ArrCompromiseProto(), {
         return this;
     },
     insertIndex: function (index, value) {
-        if (index !== void 0 && index < this.length) {
+        if (index !== void 0 && index < this.length && index > - 1) {
             if (mutable) {
+                let i, l;
+
                 if (mutable === true) {
                     mutable = new ArrCompromise(this);
                 }
 
-                mutable.splice(index, 0, value);
+                Array.prototype.push.call(mutable, null);
+
+                for (i = this.length - 1, l = index; i >= l; i --) {
+                    mutable[i + 1] = mutable[i];
+                }
+
+                mutable[index] = value;
 
                 return mutable;
             }
 
-            let copy = new ArrCompromise(), i, l;
+            let copy = new ArrCompromise(this), i, l;
 
-            for (i = 0, l = this.length; i < l; i ++) {
-                i === index && Array.prototype.push.call(copy, value);
+            Array.prototype.push.call(copy, null);
 
-                Array.prototype.push.call(copy, this[i]);
+            for (i = this.length - 1, l = index; i >= l; i --) {
+                copy[i + 1] = copy[i];
             }
+
+            copy[index] = value;
 
             return copy;
         }
@@ -374,7 +398,7 @@ ArrCompromise.prototype = objAssignSingle(new ArrCompromiseProto(), {
                 mutable = new ArrCompromise(this);
             }
 
-            return [mutable, Array.prototype.unshift.apply(mutable)];
+            return [mutable, Array.prototype.unshift.apply(mutable, arguments)];
         }
 
         let copy = new ArrCompromise(this);

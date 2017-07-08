@@ -165,8 +165,10 @@ export const objAllPatch = function (ctx, a?, b?, c?, d?, e?, f?, g?, h?) {
 
 let mutable = false;
 
-export const ObjCompromise = function<T> (value?: any) {
-    value && (<TObj<T>> objAssignSingle(this, value));
+export const ObjCompromise = function<T> (obj?: any) {
+    if (obj) {
+        <TObj<T>> objAssignSingle(this, obj);
+    }
 };
 
 const ObjCompromiseProto = function () {};
@@ -193,10 +195,10 @@ ObjCompromise.prototype = objAssignSingle(new ObjCompromiseProto(), {
 
             if (root === this) {
                 if (mutable === true) {
-                    mutable = new ObjCompromise(this);
+                    self = root = mutable = new ObjCompromise(this);
+                } else {
+                    self = root = mutable || new ObjCompromise(this);
                 }
-
-                self = root = mutable || new ObjCompromise(this);
             } else {
                 self = root;
             }
@@ -210,7 +212,7 @@ ObjCompromise.prototype = objAssignSingle(new ObjCompromiseProto(), {
 
                         copySet.add(self);
                     } else {
-                        self = self[Context.getSetKeysCache[j]] = v;
+                        self = self[Context.getSetKeysCache[j]] = {};
                     }
                 } else {
                     self = self[Context.getSetKeysCache[j]] = v;
@@ -230,12 +232,14 @@ ObjCompromise.prototype = objAssignSingle(new ObjCompromiseProto(), {
             return this;
         }
 
-        if (mutable === true) {
-            mutable = new ObjCompromise(this);
-        }
-
-        let root, self = root = mutable || new ObjCompromise(this);
+        let root, self;
         let i, l;
+
+        if (mutable === true) {
+            self = root = mutable = new ObjCompromise(this);
+        } else {
+            self = root = mutable || new ObjCompromise(this);
+        }
 
         for (i = 0, l = Context.getSetKeysCache.length - 1; i < l; i ++) {
             const v = self[Context.getSetKeysCache[i]];

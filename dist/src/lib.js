@@ -21,9 +21,9 @@ exports.arrAssignArrayLikeSingle = function (target, source) {
     return target;
 };
 exports.arrCopySingle = function (source, ctx) {
-    var i, l, target = ctx || [];
-    for (i = 0, l = source.length; i < l; i++) {
-        Array.prototype.push.call(target, source[i]);
+    var i, l, target = ctx || new Array(source.length);
+    for (i = 0, l = ctx ? ctx.length = source.length : source.length; i < l; i++) {
+        target[i] = source[i];
     }
     return target;
 };
@@ -97,15 +97,8 @@ exports.objPatchCompare = function (target, source) {
     }
     return patch;
 };
-var substituteArrCopy = true;
 exports.arrObjClone = function (source) {
-    if (source instanceof Array) {
-        return substituteArrCopy ? exports.arrAssignArrayLikeSingle([], source) : exports.arrCopySingle(source);
-    }
-    return exports.objCopySingle(source);
-};
-exports.setSubstituteArrCopy = function (value) {
-    substituteArrCopy = value === true;
+    return source instanceof Array ? exports.arrCopySingle(source) : exports.objCopySingle(source);
 };
 var Context;
 (function (Context) {

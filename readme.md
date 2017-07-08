@@ -140,9 +140,7 @@ obj.all('a', 2, 'b', 2); // new Obj = {a: 2, b: 2}
 
 ## Arr
 
-Arr provides immutable analogs of the common Array methods.
-
-The result of calling of these methods is a tuple with the reference to the new Arr and the result of operation.
+Arr provides immutable analogs of the common Array methods. The result of calling some of these methods is a tuple with the reference to the new Arr and the result of operation.
 
 ```javascript
 let arr = Arr([0, 1, 2]);
@@ -152,12 +150,13 @@ arr = arr.pop(); // [new Arr([0, 1]), 2]
 
 Methods:
 
-* **deleteIndex** - deletes the provided position
-* **insertIndex** - inserts value in the provided position
-* **pop** - like Array.pop 
-* **push** - like Array.push 
-* **shift** - like Array.shift
-* **unshift** - like Array.unshift
+* **deleteIndex** - deletes the provided position, returns copy
+* **insertIndex** - inserts value in the provided position, returns copy
+* **pop** - like Array.pop, returns [copy, popped element]
+* **push** - like Array.push, returns [copy, new length]
+* **shift** - like Array.shift, returns [copy, shifted element]
+* **slice** - like Array.slice, returns new ArrCompromise
+* **unshift** - like Array.unshift, returns [copy, unshifted element]
 
 ## Batch
 
@@ -213,7 +212,7 @@ Ops. per second: 10193679.91845056
 Time per single op.: 0.0000981 ms
 
 ------------------------------
-Arr (10 elements, depth 0) set existing index with new value (substitute array copy)
+Arr (10 elements, depth 0) set existing index with new value (substitute array copying)
 
 Total ops.: 10000000
 Time spent: 5292 ms
@@ -221,7 +220,7 @@ Ops. per second: 1889644.746787604
 Time per single op.: 0.0005292 ms
 
 ------------------------------
-Arr (10 elements, depth 4) set existing index with new value (substitute array copy)
+Arr (10 elements, depth 4) set existing index with new value (substitute array copying)
 
 Total ops.: 10000000
 Time spent: 16730 ms
