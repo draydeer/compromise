@@ -28,7 +28,7 @@ exports.objSetInContextPatch = function (key, val) {
     var i, l;
     for (i = 0, l = lib_1.Context.getSetKeysCache.length - 1; i < l; i++) {
         var v = self[lib_1.Context.getSetKeysCache[i]];
-        self = self[lib_1.Context.getSetKeysCache[i]] = (v && typeof v === "object") ? lib_1.arrObjClone(v) : v;
+        self = self[lib_1.Context.getSetKeysCache[i]] = (v && typeof v === "object") ? lib_1.arrObjClone(v) : {};
     }
     self[lib_1.Context.getSetKeysCache[i]] = val;
     lib_1.Context.getSetKeysCache = null;
@@ -65,7 +65,7 @@ exports.objAll = function (ctx, a, b, c, d, e, f, g, h) {
                 }
             }
             else {
-                self = self[lib_1.Context.getSetKeysCache[j]] = v;
+                self = self[lib_1.Context.getSetKeysCache[j]] = {};
             }
         }
         self[lib_1.Context.getSetKeysCache[j]] = arguments[i + 1];
@@ -104,7 +104,7 @@ exports.objAllPatch = function (ctx, a, b, c, d, e, f, g, h) {
                 }
             }
             else {
-                self = self[lib_1.Context.getSetKeysCache[j]] = v;
+                self = self[lib_1.Context.getSetKeysCache[j]] = {};
             }
         }
         self[lib_1.Context.getSetKeysCache[j]] = arguments[i + 1];
@@ -160,11 +160,11 @@ ObjCompromise.prototype = lib_1.objAssignSingle(new ObjCompromiseProto(), {
                         copySet.add(self);
                     }
                     else {
-                        self = self[lib_1.Context.getSetKeysCache[j]] = {};
+                        self = self[lib_1.Context.getSetKeysCache[j]] = v;
                     }
                 }
                 else {
-                    self = self[lib_1.Context.getSetKeysCache[j]] = v;
+                    self = self[lib_1.Context.getSetKeysCache[j]] = {};
                 }
             }
             self[lib_1.Context.getSetKeysCache[j]] = arguments[i + 1];
