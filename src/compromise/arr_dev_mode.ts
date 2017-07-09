@@ -136,7 +136,9 @@ export const arrAllPatch = function (ctx, a?, b?, c?, d?, e?, f?, g?, h?) {
             self = root;
         }
 
-        self[Context.getSetKeysCache[0]] = ctx[Context.getSetKeysCache[0]];
+        if (false === Context.getSetKeysCache[0] in self) {
+            self[Context.getSetKeysCache[0]] = ctx[Context.getSetKeysCache[0]];
+        }
 
         for (j = 0, m = Context.getSetKeysCache.length - 1; j < m; j ++) {
             const v = self[Context.getSetKeysCache[j]];

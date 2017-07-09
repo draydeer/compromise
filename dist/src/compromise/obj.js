@@ -91,7 +91,9 @@ exports.objAllPatch = function (ctx, a, b, c, d, e, f, g, h) {
         else {
             self = root;
         }
-        self[lib_1.Context.getSetKeysCache[0]] = ctx[lib_1.Context.getSetKeysCache[0]];
+        if (false === lib_1.Context.getSetKeysCache[0] in self) {
+            self[lib_1.Context.getSetKeysCache[0]] = ctx[lib_1.Context.getSetKeysCache[0]];
+        }
         for (j = 0, m = lib_1.Context.getSetKeysCache.length - 1; j < m; j++) {
             var v = self[lib_1.Context.getSetKeysCache[j]];
             if (v && typeof v === "object") {
