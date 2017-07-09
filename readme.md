@@ -192,7 +192,7 @@ arr = arr.batch((mutable1) {
 
 ## Development mode
 
-In the development mode all Compromise entities will be frozen to avoid bugs of development. To activate development mode set env variable NODE_ENV=dev or set window.COMPROMISE_ENV=dev.
+In the development mode all Compromise entities will be frozen to avoid errors during development process. To activate development mode set env variable NODE_ENV=dev or set window.COMPROMISE_ENV=dev.
 
 ## Benchmarks
 
