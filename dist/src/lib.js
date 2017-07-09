@@ -116,21 +116,25 @@ function arrObjFreeze(source) {
         var i = void 0, l = void 0, k = void 0, keys = Object.keys(source), v = void 0;
         for (i = 0, l = keys.length, k = keys[0]; i < l; i++, k = keys[i]) {
             v = source[k];
-            if (v && typeof v === 'object') {
-                source[k] = arrObjFreeze(v);
+            if (v && typeof v === 'object' && false === Object.isFrozen(v)) {
+                arrObjFreeze(v);
             }
         }
-        Object.freeze(source);
+        if (false === Object.isFrozen(source)) {
+            Object.freeze(source);
+        }
     }
     else if (source && typeof source === 'object') {
         var i = void 0, l = void 0, v = void 0;
         for (i = 0, l = source.length; i < l; i++) {
             v = source[i];
-            if (v && typeof v === 'object') {
-                source[i] = arrObjFreeze(v);
+            if (v && typeof v === 'object' && false === Object.isFrozen(v)) {
+                arrObjFreeze(v);
             }
         }
-        Object.freeze(source);
+        if (false === Object.isFrozen(source)) {
+            Object.freeze(source);
+        }
     }
     return source;
 }

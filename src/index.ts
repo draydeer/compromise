@@ -35,7 +35,7 @@ export const set = function (target: any, key: string, val: any) {
     return target instanceof Array ? arrSetInContext.call(target, key, val) : objSetInContext.call(target, key, val);
 };
 
-export const all = function (target: any) {
+export const all = function (target: any, a?, b?, c?, d?, e?, f?, g?, h?) {
     return target instanceof Array ? arrAll.apply(null, arguments) : objAll.apply(null, arguments)
 };
 
@@ -47,7 +47,7 @@ export const setPatch = function (target: any, key: string, val: any) {
     return objSetInContextPatch.call(target, key, val);
 };
 
-export const allPatch = function (target: any) {
+export const allPatch = function (target: any, a?, b?, c?, d?, e?, f?, g?, h?) {
     return objAllPatch.apply(null, arguments)
 };
 

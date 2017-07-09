@@ -85,7 +85,7 @@ export const arrAll = function (ctx, a?, b?, c?, d?, e?, f?, g?, h?) {
         }
 
         if (root === ctx) {
-            self = root = new ArrCompromise(ctx);
+            self = root = arrCopySingle(ctx);
         } else {
             self = root;
         }
@@ -99,7 +99,7 @@ export const arrAll = function (ctx, a?, b?, c?, d?, e?, f?, g?, h?) {
 
                     copySet.add(self);
                 } else {
-                    self = self[Context.getSetKeysCache[j]] = v;
+                    self = v;
                 }
             } else {
                 self = self[Context.getSetKeysCache[j]] = {};
@@ -131,10 +131,12 @@ export const arrAllPatch = function (ctx, a?, b?, c?, d?, e?, f?, g?, h?) {
         }
 
         if (root === ctx) {
-            self = root = {[Context.getSetKeysCache[0]]: ctx[Context.getSetKeysCache[0]]};
+            self = root = {};
         } else {
             self = root;
         }
+
+        self[Context.getSetKeysCache[0]] = ctx[Context.getSetKeysCache[0]];
 
         for (j = 0, m = Context.getSetKeysCache.length - 1; j < m; j ++) {
             const v = self[Context.getSetKeysCache[j]];
@@ -145,7 +147,7 @@ export const arrAllPatch = function (ctx, a?, b?, c?, d?, e?, f?, g?, h?) {
 
                     copySet.add(self);
                 } else {
-                    self = self[Context.getSetKeysCache[j]] = v;
+                    self = v;
                 }
             } else {
                 self = self[Context.getSetKeysCache[j]] = {};
@@ -211,7 +213,7 @@ ArrCompromise.prototype = objAssignSingle(new ArrCompromiseProto(), {
 
                         copySet.add(self);
                     } else {
-                        self = self[Context.getSetKeysCache[j]] = v;
+                        self = v;
                     }
                 } else {
                     self = self[Context.getSetKeysCache[j]] = {};

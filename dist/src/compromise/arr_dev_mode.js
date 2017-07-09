@@ -48,7 +48,7 @@ exports.arrAll = function (ctx, a, b, c, d, e, f, g, h) {
             continue;
         }
         if (root === ctx) {
-            self = root = new ArrCompromise(ctx);
+            self = root = lib_1.arrCopySingle(ctx);
         }
         else {
             self = root;
@@ -61,7 +61,7 @@ exports.arrAll = function (ctx, a, b, c, d, e, f, g, h) {
                     copySet.add(self);
                 }
                 else {
-                    self = self[lib_1.Context.getSetKeysCache[j]] = v;
+                    self = v;
                 }
             }
             else {
@@ -86,11 +86,12 @@ exports.arrAllPatch = function (ctx, a, b, c, d, e, f, g, h) {
             continue;
         }
         if (root === ctx) {
-            self = root = (_a = {}, _a[lib_1.Context.getSetKeysCache[0]] = ctx[lib_1.Context.getSetKeysCache[0]], _a);
+            self = root = {};
         }
         else {
             self = root;
         }
+        self[lib_1.Context.getSetKeysCache[0]] = ctx[lib_1.Context.getSetKeysCache[0]];
         for (j = 0, m = lib_1.Context.getSetKeysCache.length - 1; j < m; j++) {
             var v = self[lib_1.Context.getSetKeysCache[j]];
             if (v && typeof v === "object") {
@@ -99,7 +100,7 @@ exports.arrAllPatch = function (ctx, a, b, c, d, e, f, g, h) {
                     copySet.add(self);
                 }
                 else {
-                    self = self[lib_1.Context.getSetKeysCache[j]] = v;
+                    self = v;
                 }
             }
             else {
@@ -110,7 +111,6 @@ exports.arrAllPatch = function (ctx, a, b, c, d, e, f, g, h) {
     }
     lib_1.Context.getSetKeysCache = null;
     return root;
-    var _a;
 };
 var mutables = new Array(32);
 var mutableCurrent = false;

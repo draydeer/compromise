@@ -29,7 +29,7 @@ exports.get = function (target, key, def) {
 exports.set = function (target, key, val) {
     return target instanceof Array ? arrSetInContext.call(target, key, val) : objSetInContext.call(target, key, val);
 };
-exports.all = function (target) {
+exports.all = function (target, a, b, c, d, e, f, g, h) {
     return target instanceof Array ? arrAll.apply(null, arguments) : objAll.apply(null, arguments);
 };
 exports.getPatch = function (target, key, def) {
@@ -38,7 +38,7 @@ exports.getPatch = function (target, key, def) {
 exports.setPatch = function (target, key, val) {
     return objSetInContextPatch.call(target, key, val);
 };
-exports.allPatch = function (target) {
+exports.allPatch = function (target, a, b, c, d, e, f, g, h) {
     return objAllPatch.apply(null, arguments);
 };
 exports.allPatchCompare = function (target, source) {

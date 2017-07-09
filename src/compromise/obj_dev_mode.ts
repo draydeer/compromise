@@ -85,7 +85,7 @@ export const objAll = function (ctx, a?, b?, c?, d?, e?, f?, g?, h?) {
         }
 
         if (root === ctx) {
-            self = root = new ObjCompromise({[Context.getSetKeysCache[0]]: ctx[Context.getSetKeysCache[0]]});
+            self = root = objCopySingle(ctx);
         } else {
             self = root;
         }
@@ -99,7 +99,7 @@ export const objAll = function (ctx, a?, b?, c?, d?, e?, f?, g?, h?) {
 
                     copySet.add(self);
                 } else {
-                    self = self[Context.getSetKeysCache[j]] = v;
+                    self = v;
                 }
             } else {
                 self = self[Context.getSetKeysCache[j]] = {};
@@ -136,6 +136,8 @@ export const objAllPatch = function (ctx, a?, b?, c?, d?, e?, f?, g?, h?) {
             self = root;
         }
 
+        self[Context.getSetKeysCache[0]] = ctx[Context.getSetKeysCache[0]];
+
         for (j = 0, m = Context.getSetKeysCache.length - 1; j < m; j ++) {
             const v = self[Context.getSetKeysCache[j]];
 
@@ -145,7 +147,7 @@ export const objAllPatch = function (ctx, a?, b?, c?, d?, e?, f?, g?, h?) {
 
                     copySet.add(self);
                 } else {
-                    self = self[Context.getSetKeysCache[j]] = v;
+                    self = v;
                 }
             } else {
                 self = self[Context.getSetKeysCache[j]] = {};
@@ -216,7 +218,7 @@ ObjCompromise.prototype = objAssignSingle(new ObjCompromiseProto(), {
 
                         copySet.add(self);
                     } else {
-                        self = self[Context.getSetKeysCache[j]] = v;
+                        self = v;
                     }
                 } else {
                     self = self[Context.getSetKeysCache[j]] = {};
