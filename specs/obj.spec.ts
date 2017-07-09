@@ -1,5 +1,5 @@
-import {isArr, Arr} from "../src/compromise/arr";
-import {isObj, Obj} from "../src/compromise/obj";
+import {isArr, Arr} from "../src";
+import {isObj, Obj} from "../src";
 
 describe('Obj', () => {
     it('should be created by factory from object then be instance of Obj', () => {

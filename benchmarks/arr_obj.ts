@@ -1,5 +1,4 @@
 import {
-    setSubstituteArrCopy,
     arrMerge,
     arrAssignArrayLike,
     arrAssignArrayLikeSingle,
@@ -8,12 +7,10 @@ import {
 } from "../src/lib";
 import {
     Arr
-} from "../src/compromise/arr";
+} from "../src";
 import {
     Obj
-} from "../src/compromise/obj";
-
-setSubstituteArrCopy();
+} from "../src";
 
 let time, timeSpentNew, timeSpentOld;
 

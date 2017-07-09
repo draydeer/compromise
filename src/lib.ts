@@ -1,4 +1,4 @@
-export let arrAssignArrayLike = function (target, a?, b?, c?, d?, e?, f?, g?, h?): any {
+export function arrAssignArrayLike(target, a?, b?, c?, d?, e?, f?, g?, h?): any {
     let i, j, l, m, length;
 
     for (i = 1, l = arguments.length, length = 0; i < l; i ++) {
@@ -14,9 +14,9 @@ export let arrAssignArrayLike = function (target, a?, b?, c?, d?, e?, f?, g?, h?
     target.length = length;
 
     return target;
-};
+}
 
-export let arrAssignArrayLikeSingle = function (target, source) {
+export function arrAssignArrayLikeSingle(target, source) {
     let i, l;
 
     for (i = 0, l = target.length = source.length; i < l; i ++) {
@@ -24,9 +24,9 @@ export let arrAssignArrayLikeSingle = function (target, source) {
     }
 
     return target;
-};
+}
 
-export let arrCopySingle = function (source, ctx?): any {
+export function arrCopySingle(source, ctx?): any {
     let i, l, target = ctx || new Array(source.length);
 
     for (i = 0, l = ctx ? ctx.length = source.length : source.length; i < l; i ++) {
@@ -34,9 +34,9 @@ export let arrCopySingle = function (source, ctx?): any {
     }
 
     return target;
-};
+}
 
-export let arrMerge = function (a?, b?, c?, d?, e?, f?, g?, h?): any {
+export function arrMerge(a?, b?, c?, d?, e?, f?, g?, h?): any {
     let i, j, l, m, target = [];
 
     for (i = 0, l = arguments.length; i < l; i ++) {
@@ -50,9 +50,9 @@ export let arrMerge = function (a?, b?, c?, d?, e?, f?, g?, h?): any {
     }
 
     return target;
-};
+}
 
-export let arrPatchCompare = function (target, source): any {
+export function arrPatchCompare(target, source): any {
     let i, l, patch = {};
 
     for (i = 0, l = source.length; i <= l; i ++) {
@@ -62,9 +62,9 @@ export let arrPatchCompare = function (target, source): any {
     }
 
     return patch;
-};
+}
 
-export let objAssign = function (target, a?, b?, c?, d?, e?, f?, g?, h?): any {
+export function objAssign(target, a?, b?, c?, d?, e?, f?, g?, h?): any {
     let i, j, k, l, m;
 
     for (i = 1, l = arguments.length; i < l; i ++) {
@@ -80,9 +80,9 @@ export let objAssign = function (target, a?, b?, c?, d?, e?, f?, g?, h?): any {
     }
 
     return target;
-};
+}
 
-export let objAssignSingle = function (target, source) {
+export function objAssignSingle(target, source) {
     let i, l, k, keys = Object.keys(source);
 
     for (i = 1, k = keys[0], l = keys.length; i <= l; k = keys[i ++]) {
@@ -90,9 +90,9 @@ export let objAssignSingle = function (target, source) {
     }
 
     return target;
-};
+}
 
-export let objCopySingle = function (source, ctx?) {
+export function objCopySingle(source, ctx?) {
     let i, l, k, keys = Object.keys(source), target = ctx || {};
 
     for (i = 1, k = keys[0], l = keys.length; i <= l; k = keys[i ++]) {
@@ -100,9 +100,9 @@ export let objCopySingle = function (source, ctx?) {
     }
 
     return target;
-};
+}
 
-export let objMerge = function (a?, b?, c?, d?, e?, f?, g?, h?): any {
+export function objMerge(a?, b?, c?, d?, e?, f?, g?, h?): any {
     let i, j, l, k, m, target = {};
 
     for (i = 0, l = arguments.length; i < l; i ++) {
@@ -118,9 +118,9 @@ export let objMerge = function (a?, b?, c?, d?, e?, f?, g?, h?): any {
     }
 
     return target;
-};
+}
 
-export let objPatchCompare = function (target, source): any {
+export function objPatchCompare(target, source): any {
     let i, l, k, keys = Object.keys(source), patch = {};
 
     for (i = 1, k = keys[0], l = keys.length; i <= l; k = keys[i ++]) {
@@ -130,19 +130,50 @@ export let objPatchCompare = function (target, source): any {
     }
 
     return patch;
-};
+}
 
-export let arrObjClone = function (source: any): any {
+export function arrObjClone(source: any): any {
     return source instanceof Array ? arrCopySingle(source) : objCopySingle(source);
-};
+}
+
+export function arrObjFreeze(source: any): any {
+    if (Array.isArray(source)) {
+        let i, l, k, keys = Object.keys(source), v;
+
+        for (i = 0, l = keys.length, k = keys[0]; i < l; i ++, k = keys[i]) {
+            v = source[k];
+
+            if (v && typeof v === 'object') {
+                source[k] = arrObjFreeze(v);
+            }
+        }
+
+        Object.freeze(source);
+    } else if (source && typeof source === 'object') {
+        let i, l, v;
+
+        for (i = 0, l = source.length; i < l; i ++) {
+            v = source[i];
+
+            if (v && typeof v === 'object') {
+                source[i] = arrObjFreeze(v);
+            }
+        }
+
+        Object.freeze(source);
+    }
+
+    return source;
+}
 
 export module Context {
     export let getSetKeysCache = [];
+    export let isDevMode = process ? process.env.NODE_ENV === 'dev' : window['COMPROMISE_ENV'] === true;
 }
 
 export type TKey = string|(number|string)[];
 
-export let anyGetInContext = function (key: TKey, def?: any) {
+export function anyGetInContext(key: TKey, def?: any) {
     let self = this;
     let keys = Context.getSetKeysCache = key instanceof Array ? key : (<string> key).split(".");
     let i, l;
@@ -158,4 +189,4 @@ export let anyGetInContext = function (key: TKey, def?: any) {
     }
 
     return keys[i] in self ? self[keys[i]] : def;
-};
+}

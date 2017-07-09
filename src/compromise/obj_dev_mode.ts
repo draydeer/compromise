@@ -162,11 +162,16 @@ export const objAllPatch = function (ctx, a?, b?, c?, d?, e?, f?, g?, h?) {
 
 let mutables = new Array(32);
 let mutableCurrent = false;
+let mutableDevMode = Context.isDevMode;
 let mutableIndex = 0;
 
-export function ObjCompromise<T>(obj?: any) {
+export function ObjCompromise<T>(obj?: any, noFreeze?: boolean) {
     if (obj) {
         <TObj<T>> objCopySingle(obj, this);
+    }
+
+    if (true !== noFreeze) {
+        arrObjFreeze(this);
     }
 }
 
@@ -194,9 +199,9 @@ ObjCompromise.prototype = objAssignSingle(new ObjCompromiseProto(), {
 
             if (root === this) {
                 if (mutableCurrent === true) {
-                    self = root = mutableCurrent = new ObjCompromise(this);
+                    self = root = mutableCurrent = new ObjCompromise(this, true);
                 } else {
-                    self = root = mutableCurrent || new ObjCompromise(this);
+                    self = root = mutableCurrent || new ObjCompromise(this, true);
                 }
             } else {
                 self = root;
@@ -221,6 +226,10 @@ ObjCompromise.prototype = objAssignSingle(new ObjCompromiseProto(), {
             self[Context.getSetKeysCache[j]] = arguments[i + 1];
         }
 
+        if (! mutableCurrent) {
+            root.freeze();
+        }
+
         Context.getSetKeysCache = null;
 
         return root;
@@ -235,9 +244,9 @@ ObjCompromise.prototype = objAssignSingle(new ObjCompromiseProto(), {
         let i, l;
 
         if (mutableCurrent === true) {
-            self = root = mutableCurrent = new ObjCompromise(this);
+            self = root = mutableCurrent = new ObjCompromise(this, true);
         } else {
-            self = root = mutableCurrent || new ObjCompromise(this);
+            self = root = mutableCurrent || new ObjCompromise(this, true);
         }
 
         for (i = 0, l = Context.getSetKeysCache.length - 1; i < l; i ++) {
@@ -248,18 +257,30 @@ ObjCompromise.prototype = objAssignSingle(new ObjCompromiseProto(), {
 
         self[Context.getSetKeysCache[i]] = val;
 
+        if (! mutableCurrent) {
+            root.freeze();
+        }
+
         Context.getSetKeysCache = null;
 
         return root;
     },
     batch: function (callback) {
         mutables[++ mutableIndex] = mutableCurrent;
-
         mutableCurrent = true;
+        mutableDevMode = false;
 
         let result = callback(this);
 
         mutableCurrent = mutables[-- mutableIndex];
+
+        if (mutableIndex === 0) {
+            mutableDevMode = Context.isDevMode;
+
+            if (result.freeze) {
+                result.freeze();
+            }
+        }
 
         return result;
     },

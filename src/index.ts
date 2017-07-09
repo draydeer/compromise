@@ -1,26 +1,29 @@
 import {
+    Context,
     anyGetInContext,
     arrPatchCompare,
     objPatchCompare
 } from "./lib";
-import {
-    Arr,
-    ArrCompromise,
-    arrAll,
-    arrAllPatch,
-    arrSetInContext,
-    arrSetInContextPatch,
-    isArr
-} from "./compromise/arr";
-import {
-    Obj,
-    ObjCompromise,
-    objAll,
-    objAllPatch,
-    objSetInContext,
-    objSetInContextPatch,
-    isObj
-} from "./compromise/obj";
+
+let ArrImport = Context.isDevMode ? require('./compromise/arr_dev_mode') : require('./compromise/arr');
+
+let ObjImport = Context.isDevMode ? require('./compromise/obj_dev_mode') : require('./compromise/obj');
+
+const Arr = ArrImport.Arr;
+const ArrCompromise = ArrImport.ArrCompromise;
+const arrAll = ArrImport.arrAll;
+const arrAllPatch = ArrImport.arrAllPatch;
+const arrSetInContext = ArrImport.arrSetInContext;
+const arrSetInContextPatch = ArrImport.arrSetInContextPatch;
+const isArr = ArrImport.isArr;
+
+const Obj = ObjImport.Obj;
+const ObjCompromise = ObjImport.ObjCompromise;
+const objAll = ObjImport.objAll;
+const objAllPatch = ObjImport.objAllPatch;
+const objSetInContext = ObjImport.objSetInContext;
+const objSetInContextPatch = ObjImport.objSetInContextPatch;
+const isObj = ObjImport.isObj;
 
 export { Arr, ArrCompromise, isArr, Obj, ObjCompromise, isObj };
 

@@ -1,9 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var lib_1 = require("../src/lib");
-var arr_1 = require("../src/compromise/arr");
-var obj_1 = require("../src/compromise/obj");
-lib_1.setSubstituteArrCopy();
+var src_1 = require("../src");
+var src_2 = require("../src");
 var time, timeSpentNew, timeSpentOld;
 function percent() {
     console.log('==============================');
@@ -31,8 +29,8 @@ function stop(title, ops) {
     console.log('Time per single op.: ' + (timeSpentNew / ops) + ' ms');
     console.log();
 }
-var a = obj_1.Obj({ a: 0, b: { b0: 1, b1: { b10: 1, b11: { b110: 1, b111: 2 } } }, c: 2, d: 3, e: 4, f: 5, g: 6, h: 7, i: 8, j: 9 });
-var b = arr_1.Arr([0, { b0: 1, b1: { b10: 1, b11: { b110: 1, b111: 2 } } }, 2, 3, 4, 5, 6, 7, 8, 9]);
+var a = src_2.Obj({ a: 0, b: { b0: 1, b1: { b10: 1, b11: { b110: 1, b111: 2 } } }, c: 2, d: 3, e: 4, f: 5, g: 6, h: 7, i: 8, j: 9 });
+var b = src_1.Arr([0, { b0: 1, b1: { b10: 1, b11: { b110: 1, b111: 2 } } }, 2, 3, 4, 5, 6, 7, 8, 9]);
 // Arr (10 elements, depth 0) get existing index
 start();
 for (var i = 0; i < 10000000; i++) {

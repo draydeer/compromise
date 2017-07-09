@@ -114,10 +114,14 @@ exports.objAllPatch = function (ctx, a, b, c, d, e, f, g, h) {
 };
 var mutables = new Array(32);
 var mutableCurrent = false;
+var mutableDevMode = lib_1.Context.isDevMode;
 var mutableIndex = 0;
-function ObjCompromise(obj) {
+function ObjCompromise(obj, noFreeze) {
     if (obj) {
         lib_1.objCopySingle(obj, this);
+    }
+    if (true !== noFreeze) {
+        lib_1.arrObjFreeze(this);
     }
 }
 exports.ObjCompromise = ObjCompromise;
@@ -139,10 +143,10 @@ ObjCompromise.prototype = lib_1.objAssignSingle(new ObjCompromiseProto(), {
             }
             if (root === this) {
                 if (mutableCurrent === true) {
-                    self = root = mutableCurrent = new ObjCompromise(this);
+                    self = root = mutableCurrent = new ObjCompromise(this, true);
                 }
                 else {
-                    self = root = mutableCurrent || new ObjCompromise(this);
+                    self = root = mutableCurrent || new ObjCompromise(this, true);
                 }
             }
             else {
@@ -165,6 +169,9 @@ ObjCompromise.prototype = lib_1.objAssignSingle(new ObjCompromiseProto(), {
             }
             self[lib_1.Context.getSetKeysCache[j]] = arguments[i + 1];
         }
+        if (!mutableCurrent) {
+            root.freeze();
+        }
         lib_1.Context.getSetKeysCache = null;
         return root;
     },
@@ -176,24 +183,34 @@ ObjCompromise.prototype = lib_1.objAssignSingle(new ObjCompromiseProto(), {
         var root, self;
         var i, l;
         if (mutableCurrent === true) {
-            self = root = mutableCurrent = new ObjCompromise(this);
+            self = root = mutableCurrent = new ObjCompromise(this, true);
         }
         else {
-            self = root = mutableCurrent || new ObjCompromise(this);
+            self = root = mutableCurrent || new ObjCompromise(this, true);
         }
         for (i = 0, l = lib_1.Context.getSetKeysCache.length - 1; i < l; i++) {
             var v = self[lib_1.Context.getSetKeysCache[i]];
             self = self[lib_1.Context.getSetKeysCache[i]] = (v && typeof v === "object") ? lib_1.arrObjClone(v) : {};
         }
         self[lib_1.Context.getSetKeysCache[i]] = val;
+        if (!mutableCurrent) {
+            root.freeze();
+        }
         lib_1.Context.getSetKeysCache = null;
         return root;
     },
     batch: function (callback) {
         mutables[++mutableIndex] = mutableCurrent;
         mutableCurrent = true;
+        mutableDevMode = false;
         var result = callback(this);
         mutableCurrent = mutables[--mutableIndex];
+        if (mutableIndex === 0) {
+            mutableDevMode = lib_1.Context.isDevMode;
+            if (result.freeze) {
+                result.freeze();
+            }
+        }
         return result;
     },
     freeze: function () { return lib_1.arrObjFreeze(_this); },

@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.arrAssignArrayLike = function (target, a, b, c, d, e, f, g, h) {
+function arrAssignArrayLike(target, a, b, c, d, e, f, g, h) {
     var i, j, l, m, length;
     for (i = 1, l = arguments.length, length = 0; i < l; i++) {
         var argv = arguments[i];
@@ -12,22 +12,25 @@ exports.arrAssignArrayLike = function (target, a, b, c, d, e, f, g, h) {
     }
     target.length = length;
     return target;
-};
-exports.arrAssignArrayLikeSingle = function (target, source) {
+}
+exports.arrAssignArrayLike = arrAssignArrayLike;
+function arrAssignArrayLikeSingle(target, source) {
     var i, l;
     for (i = 0, l = target.length = source.length; i < l; i++) {
         target[i] = source[i];
     }
     return target;
-};
-exports.arrCopySingle = function (source, ctx) {
+}
+exports.arrAssignArrayLikeSingle = arrAssignArrayLikeSingle;
+function arrCopySingle(source, ctx) {
     var i, l, target = ctx || new Array(source.length);
     for (i = 0, l = ctx ? ctx.length = source.length : source.length; i < l; i++) {
         target[i] = source[i];
     }
     return target;
-};
-exports.arrMerge = function (a, b, c, d, e, f, g, h) {
+}
+exports.arrCopySingle = arrCopySingle;
+function arrMerge(a, b, c, d, e, f, g, h) {
     var i, j, l, m, target = [];
     for (i = 0, l = arguments.length; i < l; i++) {
         var argv = arguments[i];
@@ -38,17 +41,19 @@ exports.arrMerge = function (a, b, c, d, e, f, g, h) {
         }
     }
     return target;
-};
-exports.arrPatchCompare = function (target, source) {
+}
+exports.arrMerge = arrMerge;
+function arrPatchCompare(target, source) {
     var i, l, patch = {};
     for (i = 0, l = source.length; i <= l; i++) {
         if (source[i] !== target[i]) {
-            patch[i] = exports.arrObjClone(source[i]);
+            patch[i] = arrObjClone(source[i]);
         }
     }
     return patch;
-};
-exports.objAssign = function (target, a, b, c, d, e, f, g, h) {
+}
+exports.arrPatchCompare = arrPatchCompare;
+function objAssign(target, a, b, c, d, e, f, g, h) {
     var i, j, k, l, m;
     for (i = 1, l = arguments.length; i < l; i++) {
         var argv = arguments[i];
@@ -60,22 +65,25 @@ exports.objAssign = function (target, a, b, c, d, e, f, g, h) {
         }
     }
     return target;
-};
-exports.objAssignSingle = function (target, source) {
+}
+exports.objAssign = objAssign;
+function objAssignSingle(target, source) {
     var i, l, k, keys = Object.keys(source);
     for (i = 1, k = keys[0], l = keys.length; i <= l; k = keys[i++]) {
         target[k] = source[k];
     }
     return target;
-};
-exports.objCopySingle = function (source, ctx) {
+}
+exports.objAssignSingle = objAssignSingle;
+function objCopySingle(source, ctx) {
     var i, l, k, keys = Object.keys(source), target = ctx || {};
     for (i = 1, k = keys[0], l = keys.length; i <= l; k = keys[i++]) {
         target[k] = source[k];
     }
     return target;
-};
-exports.objMerge = function (a, b, c, d, e, f, g, h) {
+}
+exports.objCopySingle = objCopySingle;
+function objMerge(a, b, c, d, e, f, g, h) {
     var i, j, l, k, m, target = {};
     for (i = 0, l = arguments.length; i < l; i++) {
         var argv = arguments[i];
@@ -87,24 +95,52 @@ exports.objMerge = function (a, b, c, d, e, f, g, h) {
         }
     }
     return target;
-};
-exports.objPatchCompare = function (target, source) {
+}
+exports.objMerge = objMerge;
+function objPatchCompare(target, source) {
     var i, l, k, keys = Object.keys(source), patch = {};
     for (i = 1, k = keys[0], l = keys.length; i <= l; k = keys[i++]) {
         if (source[k] !== target[k]) {
-            patch[k] = exports.arrObjClone(source[k]);
+            patch[k] = arrObjClone(source[k]);
         }
     }
     return patch;
-};
-exports.arrObjClone = function (source) {
-    return source instanceof Array ? exports.arrCopySingle(source) : exports.objCopySingle(source);
-};
+}
+exports.objPatchCompare = objPatchCompare;
+function arrObjClone(source) {
+    return source instanceof Array ? arrCopySingle(source) : objCopySingle(source);
+}
+exports.arrObjClone = arrObjClone;
+function arrObjFreeze(source) {
+    if (Array.isArray(source)) {
+        var i = void 0, l = void 0, k = void 0, keys = Object.keys(source), v = void 0;
+        for (i = 0, l = keys.length, k = keys[0]; i < l; i++, k = keys[i]) {
+            v = source[k];
+            if (v && typeof v === 'object') {
+                source[k] = arrObjFreeze(v);
+            }
+        }
+        Object.freeze(source);
+    }
+    else if (source && typeof source === 'object') {
+        var i = void 0, l = void 0, v = void 0;
+        for (i = 0, l = source.length; i < l; i++) {
+            v = source[i];
+            if (v && typeof v === 'object') {
+                source[i] = arrObjFreeze(v);
+            }
+        }
+        Object.freeze(source);
+    }
+    return source;
+}
+exports.arrObjFreeze = arrObjFreeze;
 var Context;
 (function (Context) {
     Context.getSetKeysCache = [];
+    Context.isDevMode = process ? process.env.NODE_ENV === 'dev' : window['COMPROMISE_ENV'] === true;
 })(Context = exports.Context || (exports.Context = {}));
-exports.anyGetInContext = function (key, def) {
+function anyGetInContext(key, def) {
     var self = this;
     var keys = Context.getSetKeysCache = key instanceof Array ? key : key.split(".");
     var i, l;
@@ -118,4 +154,5 @@ exports.anyGetInContext = function (key, def) {
         }
     }
     return keys[i] in self ? self[keys[i]] : def;
-};
+}
+exports.anyGetInContext = anyGetInContext;

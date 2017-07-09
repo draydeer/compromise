@@ -1,5 +1,9 @@
-import { Arr, ArrCompromise, isArr } from "./compromise/arr";
-import { Obj, ObjCompromise, isObj } from "./compromise/obj";
+declare const Arr: any;
+declare const ArrCompromise: any;
+declare const isArr: any;
+declare const Obj: any;
+declare const ObjCompromise: any;
+declare const isObj: any;
 export { Arr, ArrCompromise, isArr, Obj, ObjCompromise, isObj };
 export declare const get: (target: any, key: string, def?: any) => any;
 export declare const set: (target: any, key: string, val: any) => any;

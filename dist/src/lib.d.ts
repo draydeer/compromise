@@ -1,16 +1,18 @@
-export declare const arrAssignArrayLike: (target: any, a?: any, b?: any, c?: any, d?: any, e?: any, f?: any, g?: any, h?: any) => any;
-export declare const arrAssignArrayLikeSingle: (target: any, source: any) => any;
-export declare const arrCopySingle: (source: any, ctx?: any) => any;
-export declare const arrMerge: (a?: any, b?: any, c?: any, d?: any, e?: any, f?: any, g?: any, h?: any) => any;
-export declare const arrPatchCompare: (target: any, source: any) => any;
-export declare const objAssign: (target: any, a?: any, b?: any, c?: any, d?: any, e?: any, f?: any, g?: any, h?: any) => any;
-export declare const objAssignSingle: (target: any, source: any) => any;
-export declare const objCopySingle: (source: any, ctx?: any) => any;
-export declare const objMerge: (a?: any, b?: any, c?: any, d?: any, e?: any, f?: any, g?: any, h?: any) => any;
-export declare const objPatchCompare: (target: any, source: any) => any;
-export declare const arrObjClone: (source: any) => any;
+export declare function arrAssignArrayLike(target: any, a?: any, b?: any, c?: any, d?: any, e?: any, f?: any, g?: any, h?: any): any;
+export declare function arrAssignArrayLikeSingle(target: any, source: any): any;
+export declare function arrCopySingle(source: any, ctx?: any): any;
+export declare function arrMerge(a?: any, b?: any, c?: any, d?: any, e?: any, f?: any, g?: any, h?: any): any;
+export declare function arrPatchCompare(target: any, source: any): any;
+export declare function objAssign(target: any, a?: any, b?: any, c?: any, d?: any, e?: any, f?: any, g?: any, h?: any): any;
+export declare function objAssignSingle(target: any, source: any): any;
+export declare function objCopySingle(source: any, ctx?: any): any;
+export declare function objMerge(a?: any, b?: any, c?: any, d?: any, e?: any, f?: any, g?: any, h?: any): any;
+export declare function objPatchCompare(target: any, source: any): any;
+export declare function arrObjClone(source: any): any;
+export declare function arrObjFreeze(source: any): any;
 export declare module Context {
     let getSetKeysCache: any[];
+    let isDevMode: boolean;
 }
 export declare type TKey = string | (number | string)[];
-export declare const anyGetInContext: (key: TKey, def?: any) => any;
+export declare function anyGetInContext(key: TKey, def?: any): any;
