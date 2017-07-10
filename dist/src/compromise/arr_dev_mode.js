@@ -1,16 +1,15 @@
 "use strict";
-var _this = this;
 Object.defineProperty(exports, "__esModule", { value: true });
 var lib_1 = require("../lib");
 exports.Arr = function (value) {
     return new ArrCompromise(value);
 };
 var copySet = new Set();
-exports.arrSetInContext = function (key, val) {
-    if (lib_1.anyGetInContext.call(this, key) === val) {
-        return this;
+function arrSet(ctx, key, val) {
+    if (lib_1.anyGetInContext.call(ctx, key) === val) {
+        return ctx;
     }
-    var root, self = root = lib_1.arrCopySingle(this);
+    var root, self = root = lib_1.arrCopySingle(ctx);
     var i, l;
     for (i = 0, l = lib_1.Context.getSetKeysCache.length - 1; i < l; i++) {
         var v = self[lib_1.Context.getSetKeysCache[i]];
@@ -19,12 +18,13 @@ exports.arrSetInContext = function (key, val) {
     self[lib_1.Context.getSetKeysCache[i]] = val;
     lib_1.Context.getSetKeysCache = null;
     return root;
-};
-exports.arrSetInContextPatch = function (key, val) {
-    if (lib_1.anyGetInContext.call(this, key) === val) {
+}
+exports.arrSet = arrSet;
+function arrSetPatch(ctx, key, val) {
+    if (lib_1.anyGetInContext.call(ctx, key) === val) {
         return {};
     }
-    var root, self = root = (_a = {}, _a[lib_1.Context.getSetKeysCache[0]] = this[lib_1.Context.getSetKeysCache[0]], _a);
+    var root, self = root = (_a = {}, _a[lib_1.Context.getSetKeysCache[0]] = ctx[lib_1.Context.getSetKeysCache[0]], _a);
     var i, l;
     for (i = 0, l = lib_1.Context.getSetKeysCache.length - 1; i < l; i++) {
         var v = self[lib_1.Context.getSetKeysCache[i]];
@@ -34,10 +34,11 @@ exports.arrSetInContextPatch = function (key, val) {
     lib_1.Context.getSetKeysCache = null;
     return root;
     var _a;
-};
-exports.arrAll = function (ctx, a, b, c, d, e, f, g, h) {
+}
+exports.arrSetPatch = arrSetPatch;
+function arrAll(ctx, a, b, c, d, e, f, g, h) {
     if (arguments.length < 4) {
-        return ArrCompromise.prototype.set.call(ctx, a, b);
+        return arrSet(ctx, a, b);
     }
     var root = ctx;
     var self;
@@ -72,10 +73,11 @@ exports.arrAll = function (ctx, a, b, c, d, e, f, g, h) {
     }
     lib_1.Context.getSetKeysCache = null;
     return root;
-};
-exports.arrAllPatch = function (ctx, a, b, c, d, e, f, g, h) {
+}
+exports.arrAll = arrAll;
+function arrAllPatch(ctx, a, b, c, d, e, f, g, h) {
     if (arguments.length < 4) {
-        return exports.arrSetInContextPatch.call(ctx, a, b);
+        return arrSetPatch(ctx, a, b);
     }
     var root = {};
     var self;
@@ -85,12 +87,7 @@ exports.arrAllPatch = function (ctx, a, b, c, d, e, f, g, h) {
         if (lib_1.anyGetInContext.call(ctx, arguments[i]) === arguments[i + 1]) {
             continue;
         }
-        if (root === ctx) {
-            self = root = {};
-        }
-        else {
-            self = root;
-        }
+        self = root;
         if (false === lib_1.Context.getSetKeysCache[0] in self) {
             self[lib_1.Context.getSetKeysCache[0]] = ctx[lib_1.Context.getSetKeysCache[0]];
         }
@@ -113,7 +110,8 @@ exports.arrAllPatch = function (ctx, a, b, c, d, e, f, g, h) {
     }
     lib_1.Context.getSetKeysCache = null;
     return root;
-};
+}
+exports.arrAllPatch = arrAllPatch;
 var mutables = new Array(32);
 var mutableCurrent = false;
 var mutableDevMode = lib_1.Context.isDevMode;
@@ -133,7 +131,7 @@ ArrCompromise.prototype = lib_1.objAssignSingle(new ArrCompromiseProto(), {
     constructor: Array.prototype.constructor,
     all: function (a, b, c, d, e, f, g, h) {
         if (arguments.length < 3) {
-            return ArrCompromise.prototype.set.call(this, a, b);
+            return this.set(a, b);
         }
         var root = this;
         var self;
@@ -215,7 +213,9 @@ ArrCompromise.prototype = lib_1.objAssignSingle(new ArrCompromiseProto(), {
         }
         return result;
     },
-    freeze: function () { return lib_1.arrObjFreeze(_this); },
+    freeze: function () {
+        return lib_1.arrObjFreeze(this);
+    },
     deleteIndex: function (index) {
         if (index !== void 0 && index < this.length && index > -1) {
             if (mutableCurrent) {
@@ -292,7 +292,7 @@ ArrCompromise.prototype = lib_1.objAssignSingle(new ArrCompromiseProto(), {
         return [copy, result];
     },
     slice: function (begin, end) {
-        return new ArrCompromise(this.slice(begin, end));
+        return new ArrCompromise(Array.prototype.slice.call(this, begin, end));
     },
     shift: function () {
         if (mutableCurrent) {
@@ -309,14 +309,7 @@ ArrCompromise.prototype = lib_1.objAssignSingle(new ArrCompromiseProto(), {
         return [copy, result];
     },
     toJSON: function () {
-        var i, l, json = '[';
-        for (i = 0, l = this.length; i < l; i++) {
-            json += JSON.stringify(this[i]);
-            if (i < l - 1) {
-                json += ',';
-            }
-        }
-        return json + ']';
+        return Array.prototype.constructor.apply(this, this);
     },
     unshift: function (a, b, c, d, e, f, g, h) {
         if (mutableCurrent) {

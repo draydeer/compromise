@@ -1,16 +1,15 @@
 "use strict";
-var _this = this;
 Object.defineProperty(exports, "__esModule", { value: true });
 var lib_1 = require("../lib");
 exports.Obj = function (value) {
     return new ObjCompromise(value);
 };
 var copySet = new Set();
-exports.objSetInContext = function (key, val) {
-    if (lib_1.anyGetInContext.call(this, key) === val) {
-        return this;
+function objSet(ctx, key, val) {
+    if (lib_1.anyGetInContext.call(ctx, key) === val) {
+        return ctx;
     }
-    var root, self = root = lib_1.objCopySingle(this);
+    var root, self = root = lib_1.objCopySingle(ctx);
     var i, l;
     for (i = 0, l = lib_1.Context.getSetKeysCache.length - 1; i < l; i++) {
         var v = self[lib_1.Context.getSetKeysCache[i]];
@@ -19,12 +18,13 @@ exports.objSetInContext = function (key, val) {
     self[lib_1.Context.getSetKeysCache[i]] = val;
     lib_1.Context.getSetKeysCache = null;
     return root;
-};
-exports.objSetInContextPatch = function (key, val) {
-    if (lib_1.anyGetInContext.call(this, key) === val) {
+}
+exports.objSet = objSet;
+function objSetPatch(ctx, key, val) {
+    if (lib_1.anyGetInContext.call(ctx, key) === val) {
         return {};
     }
-    var root, self = root = (_a = {}, _a[lib_1.Context.getSetKeysCache[0]] = this[lib_1.Context.getSetKeysCache[0]], _a);
+    var root, self = root = (_a = {}, _a[lib_1.Context.getSetKeysCache[0]] = ctx[lib_1.Context.getSetKeysCache[0]], _a);
     var i, l;
     for (i = 0, l = lib_1.Context.getSetKeysCache.length - 1; i < l; i++) {
         var v = self[lib_1.Context.getSetKeysCache[i]];
@@ -34,10 +34,11 @@ exports.objSetInContextPatch = function (key, val) {
     lib_1.Context.getSetKeysCache = null;
     return root;
     var _a;
-};
-exports.objAll = function (ctx, a, b, c, d, e, f, g, h) {
+}
+exports.objSetPatch = objSetPatch;
+function objAll(ctx, a, b, c, d, e, f, g, h) {
     if (arguments.length < 4) {
-        return ObjCompromise.prototype.set.call(ctx, a, b);
+        return objSet(ctx, a, b);
     }
     var root = ctx;
     var self;
@@ -72,10 +73,11 @@ exports.objAll = function (ctx, a, b, c, d, e, f, g, h) {
     }
     lib_1.Context.getSetKeysCache = null;
     return root;
-};
-exports.objAllPatch = function (ctx, a, b, c, d, e, f, g, h) {
+}
+exports.objAll = objAll;
+function objAllPatch(ctx, a, b, c, d, e, f, g, h) {
     if (arguments.length < 4) {
-        return exports.objSetInContextPatch.call(ctx, a, b);
+        return objSetPatch(ctx, a, b);
     }
     var root = {};
     var self;
@@ -85,12 +87,7 @@ exports.objAllPatch = function (ctx, a, b, c, d, e, f, g, h) {
         if (lib_1.anyGetInContext.call(ctx, arguments[i]) === arguments[i + 1]) {
             continue;
         }
-        if (root === ctx) {
-            self = root = {};
-        }
-        else {
-            self = root;
-        }
+        self = root;
         if (false === lib_1.Context.getSetKeysCache[0] in self) {
             self[lib_1.Context.getSetKeysCache[0]] = ctx[lib_1.Context.getSetKeysCache[0]];
         }
@@ -113,7 +110,8 @@ exports.objAllPatch = function (ctx, a, b, c, d, e, f, g, h) {
     }
     lib_1.Context.getSetKeysCache = null;
     return root;
-};
+}
+exports.objAllPatch = objAllPatch;
 var mutables = new Array(32);
 var mutableCurrent = false;
 var mutableDevMode = lib_1.Context.isDevMode;
@@ -215,7 +213,9 @@ ObjCompromise.prototype = lib_1.objAssignSingle(new ObjCompromiseProto(), {
         }
         return result;
     },
-    freeze: function () { return lib_1.arrObjFreeze(_this); },
+    freeze: function () {
+        return lib_1.arrObjFreeze(this);
+    },
     isObj: function (val) { return val instanceof ObjCompromise; },
 });
 exports.isObj = ObjCompromise.prototype.isObj;

@@ -26,12 +26,12 @@ export const Obj = function<T> (value: any): TObj<T> {
 
 let copySet = new Set();
 
-export const objSetInContext = function (key: TKey, val: any) {
-    if (anyGetInContext.call(this, key) === val) {
-        return this;
+export function objSet(ctx: any, key: TKey, val: any) {
+    if (anyGetInContext.call(ctx, key) === val) {
+        return ctx;
     }
 
-    let root, self = root = objCopySingle(this);
+    let root, self = root = objCopySingle(ctx);
     let i, l;
 
     for (i = 0, l = Context.getSetKeysCache.length - 1; i < l; i ++) {
@@ -45,14 +45,14 @@ export const objSetInContext = function (key: TKey, val: any) {
     Context.getSetKeysCache = null;
 
     return root;
-};
+}
 
-export const objSetInContextPatch = function (key: TKey, val: any) {
+export function objSetPatch(ctx: any, key: TKey, val: any) {
     if (anyGetInContext.call(this, key) === val) {
         return {};
     }
 
-    let root, self = root = {[Context.getSetKeysCache[0]]: this[Context.getSetKeysCache[0]]};
+    let root, self = root = {[Context.getSetKeysCache[0]]: ctx[Context.getSetKeysCache[0]]};
     let i, l;
 
     for (i = 0, l = Context.getSetKeysCache.length - 1; i < l; i ++) {
@@ -66,11 +66,11 @@ export const objSetInContextPatch = function (key: TKey, val: any) {
     Context.getSetKeysCache = null;
 
     return root;
-};
+}
 
-export const objAll = function (ctx, a?, b?, c?, d?, e?, f?, g?, h?) {
+export function objAll(ctx, a?, b?, c?, d?, e?, f?, g?, h?) {
     if (arguments.length < 4) {
-        return ObjCompromise.prototype.set.call(ctx, a, b);
+        return objSet(ctx, a, b);
     }
 
     let root = ctx;
@@ -112,11 +112,11 @@ export const objAll = function (ctx, a?, b?, c?, d?, e?, f?, g?, h?) {
     Context.getSetKeysCache = null;
 
     return root;
-};
+}
 
-export const objAllPatch = function (ctx, a?, b?, c?, d?, e?, f?, g?, h?) {
+export function objAllPatch(ctx, a?, b?, c?, d?, e?, f?, g?, h?) {
     if (arguments.length < 4) {
-        return objSetInContextPatch.call(ctx, a, b);
+        return objSetPatch(ctx, a, b);
     }
 
     let root = {};
@@ -130,11 +130,7 @@ export const objAllPatch = function (ctx, a?, b?, c?, d?, e?, f?, g?, h?) {
             continue;
         }
 
-        if (root === ctx) {
-            self = root = {};
-        } else {
-            self = root;
-        }
+        self = root;
 
         if (false === Context.getSetKeysCache[0] in self) {
             self[Context.getSetKeysCache[0]] = ctx[Context.getSetKeysCache[0]];
@@ -162,7 +158,7 @@ export const objAllPatch = function (ctx, a?, b?, c?, d?, e?, f?, g?, h?) {
     Context.getSetKeysCache = null;
 
     return root;
-};
+}
 
 let mutables = new Array(32);
 let mutableCurrent = false;
@@ -267,7 +263,9 @@ ObjCompromise.prototype = objAssignSingle(new ObjCompromiseProto(), {
 
         return result;
     },
-    freeze: () => arrObjFreeze(this),
+    freeze: function() {
+        return arrObjFreeze(this);
+    },
     isObj: (val: any): boolean => val instanceof ObjCompromise,
 });
 

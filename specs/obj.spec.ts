@@ -1,68 +1,129 @@
-import {isArr, Arr} from "../src";
-import {isObj, Obj} from "../src";
+import {objSet, objSetPatch, objAll, objAllPatch} from "../src";
 
-describe('Obj', () => {
-    it('should be created by factory from object then be instance of Obj', () => {
-        const obj = Obj({a: 1, b: {a: 1}});
+describe('objSet', () => {
+    it('should not set same value then return same entity', () => {
+        const obj = [1, {a: 1}, 3, 4, 5];
+        const ob2 = objSet(obj, [1, 'a'], 1);
 
-        expect(isObj(obj)).toBeTruthy();
-        expect(isObj({})).toBeFalsy();
-        expect(obj instanceof Array).toBeFalsy();
-        expect(obj instanceof Object).toBeTruthy();
-    });
-
-    it('should get value by key or return default', () => {
-        const obj = Obj({a: 1, b: {a: 2}});
-
-        expect(obj.get('a')).toBe(1);
-        expect(obj.get('a', 2)).toBe(1);
-        expect(obj.get('c', 2)).toBe(2);
-        expect(obj.get('b.a')).toBe(2);
-        expect(obj.get('b.a', 3)).toBe(2);
-        expect(obj.get('b.c', 2)).toBe(2);
-    });
-
-    it('should set old value and return same instance of Obj', () => {
-        const obj: any = Obj({a: 1, b: {a: 2}});
-        const ob2: any = obj.set('a', 1);
-        const ob3: any = obj.set('b.a', 2);
-
+        expect(obj).toEqual([1, {a: 1}, 3, 4, 5]);
         expect(ob2).toBe(obj);
-        expect(ob3).toBe(obj);
+        expect(ob2.length).toBe(5);
+        expect(ob2).toEqual([1, {a: 1}, 3, 4, 5]);
     });
 
-    it('should set new value and return new instance of Obj', () => {
-        const obj: any = Obj({a: 1, b: {a: 2}});
-        const ob2: any = obj.set('a', 2);
-        const ob3: any = obj.set('b.a', 3);
+    it('should set new value then return new entity', () => {
+        const obj = [1, {a: 1}, 3, 4, 5];
+        const ob2 = objSet(obj, [1, 'a'], 2);
 
+        expect(obj).toEqual([1, {a: 1}, 3, 4, 5]);
         expect(ob2).not.toBe(obj);
-        expect(ob3).not.toBe(obj);
-        expect(obj.a).toBe(1);
-        expect(ob2.a).toBe(2);
-        expect(obj.b).toBe(ob2.b);
-        expect(obj.b).not.toBe(ob3[1]);
+        expect(ob2.length).toBe(undefined);
+        expect(ob2).toEqual([1, {a: 2}, 3, 4, 5]);
     });
 
-    it('should process nested batch operations', () => {
-        const arr: any = Obj({a: 1, b: {a: 2}});
+    it('should set new value by not existing patch then return new entity', () => {
+        const obj = [1, {a: 1}, 3, 4, 5];
+        const ob2 = objSet(obj, [1, 'a', 'b'], 2);
 
-        const ar2: any = arr.batch((mutable1) => {
-            const ar3: any = mutable1.batch((mutable2) => {
-                mutable2 = mutable2.set(['a'], 3);
+        expect(obj).toEqual([1, {a: 1}, 3, 4, 5]);
+        expect(ob2).not.toBe(obj);
+        expect(ob2.length).toBe(undefined);
+        expect(ob2).toEqual([1, {a: {b: 2}}, 3, 4, 5]);
+    });
+});
 
-                expect(mutable2).not.toBe(arr);
-                expect(mutable2).not.toBe(ar2);
+describe('objSetPatch', () => {
+    it('should generate patch on same value then return empty patch', () => {
+        const obj = [1, {a: 1, b: 2}, 3, 4, 5];
+        const ob2 = objSetPatch(obj, [1, 'a'], 1);
 
-                return mutable2;
-            });
+        expect(obj).toEqual([1, {a: 1, b: 2}, 3, 4, 5]);
+        expect(ob2).toEqual({});
+    });
 
-            mutable1 = mutable1.set(['a'], 2);
+    it('should generate patch on new value then return patch', () => {
+        const obj = [1, {a: 1, b: 2}, 3, 4, 5];
+        const ob2 = objSetPatch(obj, [1, 'a'], 2);
 
-            expect(mutable1).not.toBe(arr);
-            expect(mutable1).not.toBe(ar3);
+        expect(obj).toEqual([1, {a: 1, b: 2}, 3, 4, 5]);
+        expect(ob2).toEqual({'1': {a: 2, b: 2}});
+    });
 
-            return mutable1;
-        });
+    it('should generate patch on new value by not existing patch then return patch', () => {
+        const obj = [1, {a: 1, b: 2}, 3, 4, 5];
+        const ob2 = objSetPatch(obj, [1, 'a', 'b'], 2);
+
+        expect(obj).toEqual([1, {a: 1, b: 2}, 3, 4, 5]);
+        expect(ob2).toEqual({'1': {a: {b: 2}, b: 2}});
+    });
+});
+
+describe('objAll', () => {
+    it('should not set same values then return same entity', () => {
+        const obj = [1, {a: 1, b: 2}, 3, 4, 5];
+        const ob2 = objAll(obj, [1, 'a'], 1, [2], 3);
+
+        expect(obj).toEqual([1, {a: 1, b: 2}, 3, 4, 5]);
+        expect(ob2).toBe(obj);
+        expect(ob2.length).toBe(5);
+        expect(ob2).toEqual([1, {a: 1, b: 2}, 3, 4, 5]);
+    });
+
+    it('should set new values then return new entity', () => {
+        const obj = [1, {a: 1, b: 2}, 3, 4, 5];
+        const ob2 = objAll(obj, [1, 'a'], 2, [1, 'b'], 3, [2], 4);
+
+        expect(obj).toEqual([1, {a: 1, b: 2}, 3, 4, 5]);
+        expect(ob2).not.toBe(obj);
+        expect(ob2.length).toBe(undefined);
+        expect(ob2).toEqual([1, {a: 2, b: 3}, 4, 4, 5]);
+    });
+
+    it('should set new values by not existing path then return new entity', () => {
+        const obj = [1, {a: 1, b: 2}, 3, 4, 5];
+        const ob2 = objAll(obj, [1, 'a'], 2, [1, 'b'], 3, [1, 'c', 'd'], 4, [2], 4);
+
+        expect(obj).toEqual([1, {a: 1, b: 2}, 3, 4, 5]);
+        expect(ob2).not.toBe(obj);
+        expect(ob2.length).toBe(undefined);
+        expect(ob2).toEqual([1, {a: 2, b: 3, c: {d: 4}}, 4, 4, 5]);
+
+        const ob3 = objAll(obj, [1, 'a'], 2);
+
+        expect(obj).toEqual([1, {a: 1, b: 2}, 3, 4, 5]);
+        expect(ob3).not.toBe(obj);
+        expect(ob3.length).toBe(undefined);
+        expect(ob3).toEqual([1, {a: 2, b: 2}, 3, 4, 5]);
+    });
+});
+
+describe('objAllPatch', () => {
+    it('should generate patch on same values then return empty patch', () => {
+        const obj = [1, {a: 1, b: 2}, 3, 4, 5];
+        const ob2 = objAllPatch(obj, [1, 'a'], 1, [2], 3);
+
+        expect(obj).toEqual([1, {a: 1, b: 2}, 3, 4, 5]);
+        expect(ob2).toEqual({});
+    });
+
+    it('should generate patch on new values then return patch', () => {
+        const obj = [1, {a: 1, b: 2}, 3, 4, 5];
+        const ob2 = objAllPatch(obj, [1, 'a'], 2, [1, 'b'], 3, [2], 4);
+
+        expect(obj).toEqual([1, {a: 1, b: 2}, 3, 4, 5]);
+        expect(ob2).toEqual({'1': {a: 2, b: 3}, '2': 4});
+
+        const ob3 = objAllPatch(obj, [1, 'a'], 2);
+
+        expect(obj).toEqual([1, {a: 1, b: 2}, 3, 4, 5]);
+        expect(ob3).toEqual({'1': {a: 2, b: 2}});
+    });
+
+    it('should generate patch on new values by not existing path then return patch', () => {
+        const obj = [1, {a: 1, b: 2}, 3, 4, 5];
+        const ob2 = objAllPatch(obj, [1, 'a'], 2, [1, 'b'], 3, [1, 'c', 'd'], 4, [2], 4);
+
+        expect(obj).toEqual([1, {a: 1, b: 2}, 3, 4, 5]);
+        expect(ob2).toEqual({'1': {a: 2, b: 3, c: {d: 4}}, '2': 4});
     });
 });

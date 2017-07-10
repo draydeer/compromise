@@ -1,6 +1,6 @@
 # Compromise
 
-A small library of simple immutable data structures like Array and Object. For big data structures using of [immutable.js](https://github.com/facebook/immutable-js/) will be a better way.
+A small library of simple immutable data structures like Array and Object. For big data structures using of [Immutable.js](https://github.com/facebook/immutable-js/) will be a better way.
 
 ## Global methods
 
@@ -69,7 +69,7 @@ let obj = {
 
 obj === all(obj, 'a.b', 1, 'c', 2); // true
 
-obj === all(obj, 'a.b', 2, 'c', 3); // false, result of operation = {a: {b: 2}, c: 3} 
+obj === all(obj, ['a', 'b'], 2, ['c'], 3); // false, result of operation = {a: {b: 2}, c: 3} 
 ```
 
 *allPatch* - generates patch (differences) checking multiple keys which should be applied above the initial data.
@@ -106,7 +106,7 @@ allPatchCompare(obj, {c: 2}); // {}
 allPatchCompare(obj, {c: 3}); // {c: 3} 
 ```
 
-## Arr and Obj commons
+## ArrCompromise and ObjCompromise commons
 
 Initialize immutable Array or Object:
 
@@ -116,6 +116,16 @@ let arr = Arr([1, 2]);
 
 ```javascript
 let obj = Obj({a: 1});
+```
+
+or
+
+```javascript
+let arr = new ArrCompromise([1, 2]);
+```
+
+```javascript
+let obj = new ObjCompromise({a: 1});
 ```
 
 Structures provide methods with the same behavior, as well as the methods (*get*, *set* and *all*) described above:
@@ -138,9 +148,9 @@ let obj = Obj({a: 1});
 obj.all('a', 2, 'b', 2); // new Obj = {a: 2, b: 2}
 ```
 
-## Arr
+## ArrCompromise
 
-Arr provides immutable analogs of the common Array methods. The result of calling some of these methods is a tuple with the reference to the new Arr and the result of operation.
+ArrCompromise provides immutable analogs of the common Array methods. The result of calling some of these methods is a tuple with the reference to the new Arr and the result of operation.
 
 ```javascript
 let arr = Arr([0, 1, 2]);
@@ -192,7 +202,7 @@ arr = arr.batch((mutable1) {
 
 ## Development mode
 
-In the development mode all Compromise entities will be frozen to avoid errors during development process. To activate development mode set env variable NODE_ENV=dev or set window.COMPROMISE_ENV=dev.
+In the development mode all Compromise entities will be frozen to avoid bugs during development process. To activate development mode set env variable NODE_ENV=dev or set window.COMPROMISE_ENV=dev.
 
 ## Benchmarks
 

@@ -26,12 +26,12 @@ export const Arr = function<T> (value: any): TArr<T> {
 
 let copySet = new Set();
 
-export const arrSetInContext = function (key: TKey, val: any) {
-    if (anyGetInContext.call(this, key) === val) {
-        return this;
+export function arrSet(ctx: any, key: TKey, val: any) {
+    if (anyGetInContext.call(ctx, key) === val) {
+        return ctx;
     }
 
-    let root, self = root = arrCopySingle(this);
+    let root, self = root = arrCopySingle(ctx);
     let i, l;
 
     for (i = 0, l = Context.getSetKeysCache.length - 1; i < l; i ++) {
@@ -45,14 +45,14 @@ export const arrSetInContext = function (key: TKey, val: any) {
     Context.getSetKeysCache = null;
 
     return root;
-};
+}
 
-export const arrSetInContextPatch = function (key: TKey, val: any) {
-    if (anyGetInContext.call(this, key) === val) {
+export function arrSetPatch(ctx: any, key: TKey, val: any) {
+    if (anyGetInContext.call(ctx, key) === val) {
         return {};
     }
 
-    let root, self = root = {[Context.getSetKeysCache[0]]: this[Context.getSetKeysCache[0]]};
+    let root, self = root = {[Context.getSetKeysCache[0]]: ctx[Context.getSetKeysCache[0]]};
     let i, l;
 
     for (i = 0, l = Context.getSetKeysCache.length - 1; i < l; i ++) {
@@ -66,11 +66,11 @@ export const arrSetInContextPatch = function (key: TKey, val: any) {
     Context.getSetKeysCache = null;
 
     return root;
-};
+}
 
-export const arrAll = function (ctx, a?, b?, c?, d?, e?, f?, g?, h?) {
+export function arrAll(ctx, a?, b?, c?, d?, e?, f?, g?, h?) {
     if (arguments.length < 4) {
-        return ArrCompromise.prototype.set.call(ctx, a, b);
+        return arrSet(ctx, a, b);
     }
 
     let root = ctx;
@@ -112,11 +112,11 @@ export const arrAll = function (ctx, a?, b?, c?, d?, e?, f?, g?, h?) {
     Context.getSetKeysCache = null;
 
     return root;
-};
+}
 
-export const arrAllPatch = function (ctx, a?, b?, c?, d?, e?, f?, g?, h?) {
+export function arrAllPatch(ctx, a?, b?, c?, d?, e?, f?, g?, h?) {
     if (arguments.length < 4) {
-        return arrSetInContextPatch.call(ctx, a, b);
+        return arrSetPatch(ctx, a, b);
     }
 
     let root = {};
@@ -130,11 +130,7 @@ export const arrAllPatch = function (ctx, a?, b?, c?, d?, e?, f?, g?, h?) {
             continue;
         }
 
-        if (root === ctx) {
-            self = root = {};
-        } else {
-            self = root;
-        }
+        self = root;
 
         if (false === Context.getSetKeysCache[0] in self) {
             self[Context.getSetKeysCache[0]] = ctx[Context.getSetKeysCache[0]];
@@ -162,7 +158,7 @@ export const arrAllPatch = function (ctx, a?, b?, c?, d?, e?, f?, g?, h?) {
     Context.getSetKeysCache = null;
 
     return root;
-};
+}
 
 let mutables = new Array(32);
 let mutableCurrent = false;
@@ -182,7 +178,7 @@ ArrCompromise.prototype = objAssignSingle(new ArrCompromiseProto(), {
     constructor: Array.prototype.constructor,
     all: function (a?, b?, c?, d?, e?, f?, g?, h?) {
         if (arguments.length < 3) {
-            return ArrCompromise.prototype.set.call(this, a, b);
+            return this.set(a, b);
         }
 
         let root = this;
@@ -267,7 +263,9 @@ ArrCompromise.prototype = objAssignSingle(new ArrCompromiseProto(), {
 
         return result;
     },
-    freeze: () => arrObjFreeze(this),
+    freeze: function() {
+        return arrObjFreeze(this);
+    },
     deleteIndex: function (index) {
         if (index !== void 0 && index < this.length && index > - 1) {
             if (mutableCurrent) {
@@ -370,7 +368,7 @@ ArrCompromise.prototype = objAssignSingle(new ArrCompromiseProto(), {
         return [copy, result];
     },
     slice: function (begin, end) {
-        return new ArrCompromise(this.slice(begin, end));
+        return new ArrCompromise(Array.prototype.slice.call(this, begin, end));
     },
     shift: function () {
         if (mutableCurrent) {
@@ -388,17 +386,7 @@ ArrCompromise.prototype = objAssignSingle(new ArrCompromiseProto(), {
         return [copy, result];
     },
     toJSON: function () {
-        let i, l, json = '[';
-
-        for (i = 0, l = this.length; i < l; i ++) {
-            json += JSON.stringify(this[i]);
-
-            if (i < l - 1) {
-                json += ',';
-            }
-        }
-
-        return json + ']';
+        return Array.prototype.constructor.apply(this, this);
     },
     unshift: function (a?, b?, c?, d?, e?, f?, g?, h?) {
         if (mutableCurrent) {
