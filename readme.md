@@ -166,13 +166,13 @@ Methods:
 * **push** - like Array.push, returns [copy, new length]
 * **shift** - like Array.shift, returns [copy, shifted element]
 * **slice** - like Array.slice, returns new ArrCompromise
-* **unshift** - like Array.unshift, returns [copy, unshifted element]
+* **unshift** - like Array.unshift, returns [copy, new length]
 
 ## Batch
 
 To increase performance of the immutable operations these operations can be performed in a batch on the mutable copy of data.
 Operations are lazy and return the mutable copy of data only if it is necessary.
-After the mutable copy of data has been created all operations will work with this copy.
+After the mutable copy of data has been created all operations will work with it.
 
 ```javascript
 arr = Arr([1, 2, 3]);

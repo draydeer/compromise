@@ -48,7 +48,7 @@ export function objSet(ctx: any, key: TKey, val: any) {
 }
 
 export function objSetPatch(ctx: any, key: TKey, val: any) {
-    if (anyGetInContext.call(this, key) === val) {
+    if (anyGetInContext.call(ctx, key) === val) {
         return {};
     }
 

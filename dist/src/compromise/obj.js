@@ -21,7 +21,7 @@ function objSet(ctx, key, val) {
 }
 exports.objSet = objSet;
 function objSetPatch(ctx, key, val) {
-    if (lib_1.anyGetInContext.call(this, key) === val) {
+    if (lib_1.anyGetInContext.call(ctx, key) === val) {
         return {};
     }
     var root, self = root = (_a = {}, _a[lib_1.Context.getSetKeysCache[0]] = ctx[lib_1.Context.getSetKeysCache[0]], _a);
