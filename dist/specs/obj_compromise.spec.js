@@ -88,4 +88,12 @@ describe('Obj', function () {
             return mutable1;
         });
     });
+    it('should freeze deeply', function () {
+        var obj = src_1.Obj([1, { a: 2 }, 3, 4]);
+        obj.freeze();
+        function x() {
+            obj[1].a = 3;
+        }
+        expect(x).toThrow();
+    });
 });

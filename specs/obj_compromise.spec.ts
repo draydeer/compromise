@@ -126,4 +126,16 @@ describe('Obj', () => {
             return mutable1;
         });
     });
+
+    it('should freeze deeply', () => {
+        const obj: any = Obj([1, {a: 2}, 3, 4]);
+
+        obj.freeze();
+
+        function x() {
+            obj[1].a = 3;
+        }
+
+        expect(x).toThrow();
+    });
 });

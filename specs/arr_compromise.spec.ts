@@ -277,4 +277,16 @@ describe('ArrCompromise', () => {
             return mutable1;
         });
     });
+
+    it('should freeze deeply', () => {
+        const arr: any = Arr([1, {a: 2}, 3, 4]);
+
+        arr.freeze();
+
+        function x() {
+            arr[1].a = 3;
+        }
+
+        expect(x).toThrow();
+    });
 });

@@ -142,10 +142,10 @@ export function arrObjClone(source: any): any {
 
 export function arrObjFreeze(source: any): any {
     if (Array.isArray(source)) {
-        let i, l, k, keys = Object.keys(source), v;
+        let i, l, v;
 
-        for (i = 0, l = keys.length, k = keys[0]; i < l; i ++, k = keys[i]) {
-            v = source[k];
+        for (i = 0, l = source.length; i < l; i ++) {
+            v = source[i];
 
             if (v && typeof v === 'object' && false === Object.isFrozen(v)) {
                 arrObjFreeze(v);
@@ -156,10 +156,10 @@ export function arrObjFreeze(source: any): any {
             Object.freeze(source);
         }
     } else if (source && typeof source === 'object') {
-        let i, l, v;
+        let i, l, k, keys = Object.keys(source), v;
 
-        for (i = 0, l = source.length; i < l; i ++) {
-            v = source[i];
+        for (i = 0, l = keys.length, k = keys[0]; i < l; i ++, k = keys[i]) {
+            v = source[k];
 
             if (v && typeof v === 'object' && false === Object.isFrozen(v)) {
                 arrObjFreeze(v);
