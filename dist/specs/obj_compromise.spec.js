@@ -2,13 +2,17 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var src_1 = require("../src");
 describe('Obj', function () {
-    it('should be created by factory from objay then be instance of ObjCompromise', function () {
+    it('should be created by factory from array then be instance of ObjCompromise', function () {
         var obj = src_1.Obj([1]);
         expect(src_1.isObj(obj)).toBeTruthy();
         expect(src_1.isObj([])).toBeFalsy();
         expect(obj instanceof src_1.ObjCompromise).toBeTruthy();
         expect(obj instanceof Array).toBeFalsy();
         expect(obj instanceof Object).toBeTruthy();
+    });
+    it('should be constructed', function () {
+        expect(new src_1.ObjCompromise() instanceof src_1.ObjCompromise).toBeTruthy();
+        expect(new src_1.ObjCompromise([1]) instanceof src_1.ObjCompromise).toBeTruthy();
     });
     it('should get value by existing path', function () {
         var obj = src_1.Obj([1, { a: 2 }]);

@@ -40,11 +40,8 @@ exports.set = function (target, key, val) {
 exports.all = function (target, a, b, c, d, e, f, g, h) {
     return target instanceof Array ? arrAll.apply(null, arguments) : objAll.apply(null, arguments);
 };
-exports.getPatch = function (target, key, def) {
-    return lib_1.anyGetInContext.call(target, key, def);
-};
 exports.setPatch = function (target, key, val) {
-    return objSetPatch.call(target, key, val);
+    return objSetPatch(target, key, val);
 };
 exports.allPatch = function (target, a, b, c, d, e, f, g, h) {
     return objAllPatch.apply(null, arguments);

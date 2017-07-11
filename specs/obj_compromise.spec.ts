@@ -2,7 +2,7 @@ import {isArr, Arr, ArrCompromise} from "../src";
 import {isObj, Obj, ObjCompromise} from "../src";
 
 describe('Obj', () => {
-    it('should be created by factory from objay then be instance of ObjCompromise', () => {
+    it('should be created by factory from array then be instance of ObjCompromise', () => {
         const obj = Obj([1]);
 
         expect(isObj(obj)).toBeTruthy();
@@ -10,6 +10,11 @@ describe('Obj', () => {
         expect(obj instanceof ObjCompromise).toBeTruthy();
         expect(obj instanceof Array).toBeFalsy();
         expect(obj instanceof Object).toBeTruthy();
+    });
+
+    it('should be constructed', () => {
+        expect(new ObjCompromise() instanceof ObjCompromise).toBeTruthy();
+        expect(new ObjCompromise([1]) instanceof ObjCompromise).toBeTruthy();
     });
 
     it('should get value by existing path', () => {

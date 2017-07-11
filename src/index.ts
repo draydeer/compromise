@@ -1,5 +1,6 @@
 import {
     Context,
+    TKey,
     anyGetInContext,
     arrPatchCompare,
     objPatchCompare
@@ -42,11 +43,11 @@ export {
     isObj
 };
 
-export const get = function (target: any, key: string, def?: any) {
+export const get = function (target: any, key: TKey, def?: any) {
     return anyGetInContext.call(target, key, def);
 };
 
-export const set = function (target: any, key: string, val: any) {
+export const set = function (target: any, key: TKey, val: any) {
     return target instanceof Array ? arrSet(target, key, val) : objSet(target, key, val);
 };
 
@@ -54,12 +55,8 @@ export const all = function (target: any, a?, b?, c?, d?, e?, f?, g?, h?) {
     return target instanceof Array ? arrAll.apply(null, arguments) : objAll.apply(null, arguments)
 };
 
-export const getPatch = function (target: any, key: string, def?: any) {
-    return anyGetInContext.call(target, key, def);
-};
-
-export const setPatch = function (target: any, key: string, val: any) {
-    return objSetPatch.call(target, key, val);
+export const setPatch = function (target: any, key: TKey, val: any) {
+    return objSetPatch(target, key, val);
 };
 
 export const allPatch = function (target: any, a?, b?, c?, d?, e?, f?, g?, h?) {

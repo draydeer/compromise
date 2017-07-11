@@ -46,8 +46,9 @@ exports.arrMerge = arrMerge;
 function arrPatchCompare(target, source) {
     var i, l, patch = {};
     for (i = 0, l = source.length; i <= l; i++) {
-        if (source[i] !== target[i]) {
-            patch[i] = arrObjClone(source[i]);
+        var v = source[i];
+        if (v !== target[i]) {
+            patch[i] = v && typeof v === 'object' ? arrObjClone(source[i]) : v;
         }
     }
     return patch;
@@ -100,8 +101,9 @@ exports.objMerge = objMerge;
 function objPatchCompare(target, source) {
     var i, l, k, keys = Object.keys(source), patch = {};
     for (i = 1, k = keys[0], l = keys.length; i <= l; k = keys[i++]) {
-        if (source[k] !== target[k]) {
-            patch[k] = arrObjClone(source[k]);
+        var v = source[k];
+        if (v !== target[k]) {
+            patch[k] = v && typeof v === 'object' ? arrObjClone(source[k]) : v;
         }
     }
     return patch;

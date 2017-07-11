@@ -10,6 +10,10 @@ describe('ArrCompromise', function () {
         expect(arr instanceof Array).toBeTruthy();
         expect(arr instanceof Object).toBeTruthy();
     });
+    it('should be constructed', function () {
+        expect(new src_1.ArrCompromise() instanceof src_1.ArrCompromise).toBeTruthy();
+        expect(new src_1.ArrCompromise([1]) instanceof src_1.ArrCompromise).toBeTruthy();
+    });
     it('should get value by existing path', function () {
         var arr = src_1.Arr([1, { a: 2 }]);
         expect(arr.get('0', 2)).toBe(1);

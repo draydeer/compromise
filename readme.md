@@ -18,7 +18,7 @@ let obj = {
 
 get(obj, 'a.b', 3); // {b: 1}
 
-get(obj, 'b', 3); // 3
+get(obj, ['b'], 3); // 3
 ```
 
 *set* - sets value by path like 'a.b.c' or ['a', 'b', 'c'].
@@ -35,7 +35,7 @@ let obj = {
 
 obj === set(obj, 'a.b', 1); // true
 
-obj === set(obj, 'a.b', 2); // false, result of operation = {a: {b: 2}, c: 2} 
+obj === set(obj, ['a', 'b'], 2); // false, result of operation = {a: {b: 2}, c: 2} 
 ```
 
 *setPatch* - generates patch (difference) which should be applied above the initial data.
@@ -52,7 +52,7 @@ let obj = {
 
 setPatch(obj, 'a.b', 1); // {}
 
-setPatch(obj, 'a.b', 2); // {a: {b: 2}} 
+setPatch(obj, ['a', 'b'], 2); // {a: {b: 2}} 
 ```
 
 *all* - sets multiple values by paths like 'a.b.c' or ['a', 'b', 'c'].
@@ -86,7 +86,7 @@ let obj = {
 
 allPatch(obj, 'a.b', 1, 'c', 2); // {}
 
-allPatch(obj, 'a.b', 2, 'c', 3); // {a: {b: 2}, c: 3} 
+allPatch(obj, ['a', 'b'], 2, ['c'], 3); // {a: {b: 2}, c: 3} 
 ```
 
 *allPatchCompare* - generates patch (differences) checking source key in target which should be applied above the initial data.

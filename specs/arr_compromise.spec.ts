@@ -12,6 +12,11 @@ describe('ArrCompromise', () => {
         expect(arr instanceof Object).toBeTruthy();
     });
 
+    it('should be constructed', () => {
+        expect(new ArrCompromise() instanceof ArrCompromise).toBeTruthy();
+        expect(new ArrCompromise([1]) instanceof ArrCompromise).toBeTruthy();
+    });
+
     it('should get value by existing path', () => {
         const arr = Arr([1, {a: 2}]);
 
