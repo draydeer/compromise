@@ -5,6 +5,12 @@ import {
     arrPatchCompare,
     objPatchCompare
 } from "./lib";
+import {
+    IArr
+} from "./compromise/arr";
+import {
+    IObj
+} from "./compromise/obj";
 
 const ArrImport = Context.isDevMode ? require('./compromise/arr_dev_mode') : require('./compromise/arr');
 

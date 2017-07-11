@@ -87,6 +87,12 @@ describe('Obj', function () {
             expect(mutable1).not.toBe(ob3);
             return mutable1;
         });
+        expect(ob2).not.toBe(obj);
+        var ob3 = obj.batch(function (mutable1) {
+            mutable1 = mutable1.all([0], 2, [1, 'a', 3]);
+            return mutable1;
+        });
+        expect(ob3).not.toBe(obj);
     });
     it('should freeze deeply', function () {
         var obj = src_1.Obj([1, { a: 2 }, 3, 4]);

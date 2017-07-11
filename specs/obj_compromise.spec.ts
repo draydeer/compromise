@@ -125,6 +125,16 @@ describe('Obj', () => {
 
             return mutable1;
         });
+
+        expect(ob2).not.toBe(obj);
+
+        const ob3: any = obj.batch((mutable1) => {
+            mutable1 = mutable1.all([0], 2, [1, 'a', 3]);
+
+            return mutable1;
+        });
+
+        expect(ob3).not.toBe(obj);
     });
 
     it('should freeze deeply', () => {
