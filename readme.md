@@ -1,6 +1,10 @@
 # Invary
 
-A small library of simple immutable data structures like Array and Object. For big data structures using of [Immutable.js](https://github.com/facebook/immutable-js/) will be a better way.
+A small library of simple immutable data structures like Array and Object.
+
+The main goal of this library is to provide immutable data structures which principle of use is similar to Array and Object.
+This may be useful and convenient in case of small objects having 10-20 properties.
+For big data structures using of [Immutable.js](https://github.com/facebook/immutable-js/) will be a better way.
 
 ## Global methods
 
@@ -139,18 +143,18 @@ obj.get('b', 2); // 2
 ```javascript
 let obj = Obj({a: 1});
 
-obj.set('b', 2); // new Obj = {a: 1, b: 2}
+obj.set('b', 2); // new Obj({a: 1, b: 2})
 ```
 
 ```javascript
 let obj = Obj({a: 1});
 
-obj.all('a', 2, 'b', 2); // new Obj = {a: 2, b: 2}
+obj.all('a', 2, 'b', 2); // new Obj({a: 2, b: 2})
 ```
 
 ## ArrInvary
 
-ArrInvary provides immutable analogs of the common Array methods. The result of calling some of these methods is a tuple with the reference to the new Arr and the result of operation.
+ArrInvary provides immutable analogs of the common Array methods. The result of calling some of these methods is a tuple with the reference to the new ArrInvary and the result of operation.
 
 ```javascript
 let arr = Arr([0, 1, 2]);
@@ -208,7 +212,7 @@ In the development mode all Invary entities will be frozen to avoid bugs during 
 
 ```
 ------------------------------
-Arr (10 elements, depth 0) get existing index
+ArrInvary (10 elements, depth 0) get existing index
 
 Total ops.: 10000000
 Time spent: 524 ms
@@ -216,7 +220,7 @@ Ops. per second: 19083969.465648856
 Time per single op.: 0.0000524 ms
 
 ------------------------------
-Arr (10 elements, depth 4) get existing index
+ArrInvary (10 elements, depth 4) get existing index
 
 Total ops.: 10000000
 Time spent: 953 ms
@@ -224,7 +228,7 @@ Ops. per second: 10493179.433368312
 Time per single op.: 0.0000953 ms
 
 ------------------------------
-Arr (10 elements, depth 0) set existing index with same value
+ArrInvary (10 elements, depth 0) set existing index with same value
 
 Total ops.: 10000000
 Time spent: 596 ms
@@ -232,7 +236,7 @@ Ops. per second: 16778523.489932887
 Time per single op.: 0.0000596 ms
 
 ------------------------------
-Arr (10 elements, depth 4) set existing index with same value
+ArrInvary (10 elements, depth 4) set existing index with same value
 
 Total ops.: 10000000
 Time spent: 981 ms
@@ -240,7 +244,7 @@ Ops. per second: 10193679.91845056
 Time per single op.: 0.0000981 ms
 
 ------------------------------
-Arr (10 elements, depth 0) set existing index with new value (substitute array copying)
+ArrInvary (10 elements, depth 0) set existing index with new value (substitute array copying)
 
 Total ops.: 10000000
 Time spent: 5292 ms
@@ -248,7 +252,7 @@ Ops. per second: 1889644.746787604
 Time per single op.: 0.0005292 ms
 
 ------------------------------
-Arr (10 elements, depth 4) set existing index with new value (substitute array copying)
+ArrInvary (10 elements, depth 4) set existing index with new value (substitute array copying)
 
 Total ops.: 10000000
 Time spent: 16730 ms
@@ -256,7 +260,7 @@ Ops. per second: 597728.6312014345
 Time per single op.: 0.001673 ms
 
 ------------------------------
-Obj (10 props, depth 0) get existing key
+ObjInvary (10 props, depth 0) get existing key
 
 Total ops.: 10000000
 Time spent: 793 ms
@@ -264,7 +268,7 @@ Ops. per second: 12610340.479192939
 Time per single op.: 0.0000793 ms
 
 ------------------------------
-Obj (10 props, depth 4) get existing key
+ObjInvary (10 props, depth 4) get existing key
 
 Total ops.: 10000000
 Time spent: 1026 ms
@@ -272,7 +276,7 @@ Ops. per second: 9746588.693957115
 Time per single op.: 0.0001026 ms
 
 ------------------------------
-Obj (10 props, depth 0) set existing key with same value
+ObjInvary (10 props, depth 0) set existing key with same value
 
 Total ops.: 10000000
 Time spent: 793 ms
@@ -280,7 +284,7 @@ Ops. per second: 12610340.479192939
 Time per single op.: 0.0000793 ms
 
 ------------------------------
-Obj (10 props, depth 4) set existing key with same value
+ObjInvary (10 props, depth 4) set existing key with same value
 
 Total ops.: 10000000
 Time spent: 1009 ms
@@ -288,7 +292,7 @@ Ops. per second: 9910802.775024777
 Time per single op.: 0.0001009 ms
 
 ------------------------------
-Obj (10 props, depth 0) set existing key with new value
+ObjInvary (10 props, depth 0) set existing key with new value
 
 Total ops.: 10000000
 Time spent: 4497 ms
@@ -296,7 +300,7 @@ Ops. per second: 2223704.6920169
 Time per single op.: 0.0004497 ms
 
 ------------------------------
-Obj (10 props, depth 4) set existing key with new value
+ObjInvary (10 props, depth 4) set existing key with new value
 
 Total ops.: 10000000
 Time spent: 15411 ms
