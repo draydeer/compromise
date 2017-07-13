@@ -1,6 +1,6 @@
 {
   "name": "invary",
-  "description": "Invary - library of structures with immutable behaviours.",
+  "description": "A small library of simple immutable data structures like Array and Object.",
   "version": "1.0.1",
   "filename": "index.ts",
   "main": "./dist/src/index.js",
