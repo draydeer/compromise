@@ -176,7 +176,7 @@ export function arrObjFreeze(source: any): any {
 
 export module Context {
     export let getSetKeysCache = [];
-    export let isDevMode = process ? process.env.NODE_ENV === 'dev' : window['COMPROMISE_ENV'] === true;
+    export let isDevMode = process ? process.env.NODE_ENV === 'dev' : window['COMPROMISE_ENV'] === 'dev';
 }
 
 export type TKey = string|(number|string)[];
