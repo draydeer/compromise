@@ -220,7 +220,7 @@ arr = arr.batch((mutable1) {
 
 In the development mode all Invary entities will be frozen to avoid bugs during development process. To activate development mode set env variable NODE_ENV=dev or set window.COMPROMISE_ENV=dev.
 
-## Benchmarks (Intel Core i7, 4 cores, no HT, 16gb 1600mhz DDR3)
+## Benchmarks (Intel Core i7, 4 cores, disabled HT, 16gb 1600mhz DDR3)
 
 ```
 ------------------------------
