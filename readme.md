@@ -6,6 +6,18 @@ The main goal of this library is to provide immutable data structures which prin
 This may be useful and convenient in case of small objects having 10-20 properties.
 For big data structures using of [Immutable.js](https://github.com/facebook/immutable-js/) will be a better way.
 
+## Installation
+
+```sh
+$ npm install invary
+```
+
+## Running tests
+
+```sh
+$ npm test
+```
+
 ## Global methods
 
 *get* - gets value by path like 'a.b.c' or ['a', 'b', 'c'].
