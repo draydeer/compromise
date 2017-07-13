@@ -21,7 +21,7 @@ export interface IArr extends Array<any> {
 export type TArr<T> = IArr & T;
 
 export const Arr = function<T> (value: any): TArr<T> {
-    return new ArrCompromise<TArr<T>>(value);
+    return new ArrInvary<TArr<T>>(value);
 };
 
 let copySet = new Set();
@@ -164,17 +164,17 @@ let mutables = new Array(32);
 let mutableCurrent = false;
 let mutableIndex = 0;
 
-export function ArrCompromise<T>(arr?: any) {
+export function ArrInvary<T>(arr?: any) {
     if (arr) {
         <TArr<T>> arrCopySingle(arr, this);
     }
 }
 
-const ArrCompromiseProto = function () {};
+const ArrInvaryProto = function () {};
 
-ArrCompromiseProto.prototype = Array.prototype;
+ArrInvaryProto.prototype = Array.prototype;
 
-ArrCompromise.prototype = objAssignSingle(new ArrCompromiseProto(), {
+ArrInvary.prototype = objAssignSingle(new ArrInvaryProto(), {
     constructor: Array.prototype.constructor,
     all: function (a?, b?, c?, d?, e?, f?, g?, h?) {
         if (arguments.length < 3) {
@@ -194,9 +194,9 @@ ArrCompromise.prototype = objAssignSingle(new ArrCompromiseProto(), {
 
             if (root === this) {
                 if (mutableCurrent === true) {
-                    self = root = mutableCurrent = new ArrCompromise(this);
+                    self = root = mutableCurrent = new ArrInvary(this);
                 } else {
-                    self = root = mutableCurrent || new ArrCompromise(this);
+                    self = root = mutableCurrent || new ArrInvary(this);
                 }
             } else {
                 self = root;
@@ -235,9 +235,9 @@ ArrCompromise.prototype = objAssignSingle(new ArrCompromiseProto(), {
         let i, l;
 
         if (mutableCurrent === true) {
-            self = root = mutableCurrent = new ArrCompromise(this);
+            self = root = mutableCurrent = new ArrInvary(this);
         } else {
-            self = root = mutableCurrent || new ArrCompromise(this);
+            self = root = mutableCurrent || new ArrInvary(this);
         }
 
         for (i = 0, l = Context.getSetKeysCache.length - 1; i < l; i ++) {
@@ -272,7 +272,7 @@ ArrCompromise.prototype = objAssignSingle(new ArrCompromiseProto(), {
                 let i, l;
 
                 if (mutableCurrent === true) {
-                    mutableCurrent = new ArrCompromise(this);
+                    mutableCurrent = new ArrInvary(this);
                 }
 
                 mutableCurrent[index] = null;
@@ -286,7 +286,7 @@ ArrCompromise.prototype = objAssignSingle(new ArrCompromiseProto(), {
                 return mutableCurrent;
             }
 
-            let copy = new ArrCompromise(this), i, l;
+            let copy = new ArrInvary(this), i, l;
 
             copy[index] = null;
 
@@ -307,7 +307,7 @@ ArrCompromise.prototype = objAssignSingle(new ArrCompromiseProto(), {
                 let i, l;
 
                 if (mutableCurrent === true) {
-                    mutableCurrent = new ArrCompromise(this);
+                    mutableCurrent = new ArrInvary(this);
                 }
 
                 Array.prototype.push.call(mutableCurrent, null);
@@ -321,7 +321,7 @@ ArrCompromise.prototype = objAssignSingle(new ArrCompromiseProto(), {
                 return mutableCurrent;
             }
 
-            let copy = new ArrCompromise(this), i, l;
+            let copy = new ArrInvary(this), i, l;
 
             Array.prototype.push.call(copy, null);
 
@@ -336,17 +336,17 @@ ArrCompromise.prototype = objAssignSingle(new ArrCompromiseProto(), {
 
         return this;
     },
-    isArr: (val: any): boolean => val instanceof ArrCompromise,
+    isArr: (val: any): boolean => val instanceof ArrInvary,
     pop: function () {
         if (mutableCurrent) {
             if (mutableCurrent === true) {
-                mutableCurrent = new ArrCompromise(this);
+                mutableCurrent = new ArrInvary(this);
             }
 
             return [mutableCurrent, Array.prototype.pop.apply(mutableCurrent)];
         }
 
-        let copy = new ArrCompromise(this);
+        let copy = new ArrInvary(this);
 
         let result = Array.prototype.pop.apply(copy);
 
@@ -355,31 +355,31 @@ ArrCompromise.prototype = objAssignSingle(new ArrCompromiseProto(), {
     push: function (a?, b?, c?, d?, e?, f?, g?, h?) {
         if (mutableCurrent) {
             if (mutableCurrent === true) {
-                mutableCurrent = new ArrCompromise(this);
+                mutableCurrent = new ArrInvary(this);
             }
 
             return [mutableCurrent, Array.prototype.push.apply(mutableCurrent, arguments)];
         }
 
-        let copy = new ArrCompromise(this);
+        let copy = new ArrInvary(this);
 
         let result = Array.prototype.push.apply(copy, arguments);
 
         return [copy, result];
     },
     slice: function (begin, end) {
-        return new ArrCompromise(Array.prototype.slice.call(this, begin, end));
+        return new ArrInvary(Array.prototype.slice.call(this, begin, end));
     },
     shift: function () {
         if (mutableCurrent) {
             if (mutableCurrent === true) {
-                mutableCurrent = new ArrCompromise(this);
+                mutableCurrent = new ArrInvary(this);
             }
 
             return [mutableCurrent, Array.prototype.shift.apply(mutableCurrent)];
         }
 
-        let copy = new ArrCompromise(this);
+        let copy = new ArrInvary(this);
 
         let result = Array.prototype.shift.apply(copy);
 
@@ -391,13 +391,13 @@ ArrCompromise.prototype = objAssignSingle(new ArrCompromiseProto(), {
     unshift: function (a?, b?, c?, d?, e?, f?, g?, h?) {
         if (mutableCurrent) {
             if (mutableCurrent === true) {
-                mutableCurrent = new ArrCompromise(this);
+                mutableCurrent = new ArrInvary(this);
             }
 
             return [mutableCurrent, Array.prototype.unshift.apply(mutableCurrent, arguments)];
         }
 
-        let copy = new ArrCompromise(this);
+        let copy = new ArrInvary(this);
 
         let result = Array.prototype.unshift.apply(copy, arguments);
 
@@ -405,4 +405,4 @@ ArrCompromise.prototype = objAssignSingle(new ArrCompromiseProto(), {
     },
 });
 
-export const isArr = ArrCompromise.prototype.isArr;
+export const isArr = ArrInvary.prototype.isArr;

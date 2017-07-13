@@ -21,7 +21,7 @@ export interface IObj extends Object {
 export type TObj<T> = IObj & T;
 
 export const Obj = function<T> (value: any): TObj<T> {
-    return new ObjCompromise<TObj<T>>(value);
+    return new ObjInvary<TObj<T>>(value);
 };
 
 let copySet = new Set();
@@ -164,21 +164,21 @@ let mutables = new Array(32);
 let mutableCurrent = false;
 let mutableIndex = 0;
 
-export function ObjCompromise<T>(obj?: any) {
+export function ObjInvary<T>(obj?: any) {
     if (obj) {
         <TObj<T>> objCopySingle(obj, this);
     }
 }
 
-const ObjCompromiseProto = function () {};
+const ObjInvaryProto = function () {};
 
-ObjCompromiseProto.prototype = Object.prototype;
+ObjInvaryProto.prototype = Object.prototype;
 
-ObjCompromise.prototype = objAssignSingle(new ObjCompromiseProto(), {
+ObjInvary.prototype = objAssignSingle(new ObjInvaryProto(), {
     constructor: Object.prototype.constructor,
     all: function (a?, b?, c?, d?, e?, f?, g?, h?) {
         if (arguments.length < 3) {
-            return ObjCompromise.prototype.set.call(this, a, b);
+            return ObjInvary.prototype.set.call(this, a, b);
         }
 
         let root = this;
@@ -194,9 +194,9 @@ ObjCompromise.prototype = objAssignSingle(new ObjCompromiseProto(), {
 
             if (root === this) {
                 if (mutableCurrent === true) {
-                    self = root = mutableCurrent = new ObjCompromise(this);
+                    self = root = mutableCurrent = new ObjInvary(this);
                 } else {
-                    self = root = mutableCurrent || new ObjCompromise(this);
+                    self = root = mutableCurrent || new ObjInvary(this);
                 }
             } else {
                 self = root;
@@ -235,9 +235,9 @@ ObjCompromise.prototype = objAssignSingle(new ObjCompromiseProto(), {
         let i, l;
 
         if (mutableCurrent === true) {
-            self = root = mutableCurrent = new ObjCompromise(this);
+            self = root = mutableCurrent = new ObjInvary(this);
         } else {
-            self = root = mutableCurrent || new ObjCompromise(this);
+            self = root = mutableCurrent || new ObjInvary(this);
         }
 
         for (i = 0, l = Context.getSetKeysCache.length - 1; i < l; i ++) {
@@ -266,7 +266,7 @@ ObjCompromise.prototype = objAssignSingle(new ObjCompromiseProto(), {
     freeze: function() {
         return arrObjFreeze(this);
     },
-    isObj: (val: any): boolean => val instanceof ObjCompromise,
+    isObj: (val: any): boolean => val instanceof ObjInvary,
 });
 
-export const isObj = ObjCompromise.prototype.isObj;
+export const isObj = ObjInvary.prototype.isObj;

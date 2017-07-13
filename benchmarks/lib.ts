@@ -7,10 +7,10 @@ import {
 } from "../src/lib";
 import {
     Arr
-} from "../src/compromise/arr";
+} from "../src/invary/arr";
 import {
     Obj
-} from "../src/compromise/obj";
+} from "../src/invary/obj";
 
 let time, timeSpentNew, timeSpentOld;
 

@@ -1,20 +1,20 @@
-import {isArr, Arr, ArrCompromise} from "../src";
-import {isObj, Obj, ObjCompromise} from "../src";
+import {isArr, Arr, ArrInvary} from "../src";
+import {isObj, Obj, ObjInvary} from "../src";
 
-describe('ArrCompromise', () => {
-    it('should be created by factory from array then be instance of ArrCompromise', () => {
+describe('ArrInvary', () => {
+    it('should be created by factory from array then be instance of ArrInvary', () => {
         const arr = Arr([1]);
 
         expect(isArr(arr)).toBeTruthy();
         expect(isArr([])).toBeFalsy();
-        expect(arr instanceof ArrCompromise).toBeTruthy();
+        expect(arr instanceof ArrInvary).toBeTruthy();
         expect(arr instanceof Array).toBeTruthy();
         expect(arr instanceof Object).toBeTruthy();
     });
 
     it('should be constructed', () => {
-        expect(new ArrCompromise() instanceof ArrCompromise).toBeTruthy();
-        expect(new ArrCompromise([1]) instanceof ArrCompromise).toBeTruthy();
+        expect(new ArrInvary() instanceof ArrInvary).toBeTruthy();
+        expect(new ArrInvary([1]) instanceof ArrInvary).toBeTruthy();
     });
 
     it('should get value by existing path', () => {
@@ -31,7 +31,7 @@ describe('ArrCompromise', () => {
         expect(arr.get('1.b', 2)).toBe(2);
     });
 
-    it('should not set same value by existing path then return same instance of ArrCompromise', () => {
+    it('should not set same value by existing path then return same instance of ArrInvary', () => {
         const arr: any = Arr([1, {a: 2}]);
         const ar2: any = arr.set('0', 1);
         const ar3: any = arr.set('1.a', 2);
@@ -40,7 +40,7 @@ describe('ArrCompromise', () => {
         expect(ar3).toBe(arr);
     });
 
-    it('should set new value by existing path then return new instance of ArrCompromise', () => {
+    it('should set new value by existing path then return new instance of ArrInvary', () => {
         const arr: any = Arr([1, {a: 2}]);
         const ar2: any = arr.set('0', 2);
         const ar3: any = arr.set('1.a', 3);
@@ -53,7 +53,7 @@ describe('ArrCompromise', () => {
         expect(arr[1]).not.toBe(ar3[1]);
     });
 
-    it('should not set all same values by existing path then return same instance of ArrCompromise', () => {
+    it('should not set all same values by existing path then return same instance of ArrInvary', () => {
         const arr: any = Arr([1, {a: 2}]);
         const ar2: any = arr.all(
             '0', 1,
@@ -63,7 +63,7 @@ describe('ArrCompromise', () => {
         expect(ar2).toBe(arr);
     });
 
-    it('should set all new values by existing path then return new instance of ArrCompromise', () => {
+    it('should set all new values by existing path then return new instance of ArrInvary', () => {
         const arr: any = Arr([1, {a: 2, b: 2}]);
         const ar2: any = arr.all(
             '0', 2, '1.a', 3, '1.b', 3
@@ -84,7 +84,7 @@ describe('ArrCompromise', () => {
         expect(ar3).toEqual(Arr([2, {a: 2, b: 2}]));
     });
 
-    it('should set all new values by not existing path then return new instance of ArrCompromise', () => {
+    it('should set all new values by not existing path then return new instance of ArrInvary', () => {
         const arr: any = Arr([1, {a: 2, b: 2}]);
         const ar2: any = arr.all(
             '0', 2, '1.a', 3, '1.b.c', 3
@@ -105,7 +105,7 @@ describe('ArrCompromise', () => {
         expect(ar3).toEqual(Arr([1, {a: 2, b: {c: 3}}]));
     });
 
-    it('should delete element by index then return new instance of ArrCompromise', () => {
+    it('should delete element by index then return new instance of ArrInvary', () => {
         const arr: any = Arr([1, {a: 2}, 3, 4]);
         const ar2: any = arr.deleteIndex(1);
 
@@ -115,7 +115,7 @@ describe('ArrCompromise', () => {
         expect(ar2).toEqual(Arr([arr[0], arr[2], arr[3]]));
     });
 
-    it('should not delete element by not existing index then return same instance of ArrCompromise', () => {
+    it('should not delete element by not existing index then return same instance of ArrInvary', () => {
         const arr: any = Arr([1, {a: 2}, 3, 4]);
         const ar2: any = arr.deleteIndex(10);
 
@@ -128,7 +128,7 @@ describe('ArrCompromise', () => {
         expect(ar3).toBe(arr);
     });
 
-    it('should insert element by index then return new instance of ArrCompromise', () => {
+    it('should insert element by index then return new instance of ArrInvary', () => {
         const arr: any = Arr([1, {a: 2}, 3, 4]);
         const ar2: any = arr.insertIndex(1, 2);
 
@@ -138,7 +138,7 @@ describe('ArrCompromise', () => {
         expect(ar2).toEqual(Arr([arr[0], 2, arr[1], arr[2], arr[3]]));
     });
 
-    it('should not insert element by not existing index then return same instance of ArrCompromise', () => {
+    it('should not insert element by not existing index then return same instance of ArrInvary', () => {
         const arr: any = Arr([1, {a: 2}, 3, 4]);
         const ar2: any = arr.insertIndex(10, 2);
 
@@ -151,7 +151,7 @@ describe('ArrCompromise', () => {
         expect(ar3).toBe(arr);
     });
 
-    it('should push value then return new instance of ArrCompromise', () => {
+    it('should push value then return new instance of ArrInvary', () => {
         const arr: any = Arr([1, {a: 2}, 3, 4]);
         const [ar2, _] = arr.push(1);
 
@@ -161,7 +161,7 @@ describe('ArrCompromise', () => {
         expect(ar2[4]).toBe(1);
     });
 
-    it('should pop value then return new instance of ArrCompromise', () => {
+    it('should pop value then return new instance of ArrInvary', () => {
         const arr: any = Arr([1, {a: 2}, 3, 4]);
         const [ar2, _] = arr.pop();
 
@@ -171,7 +171,7 @@ describe('ArrCompromise', () => {
         expect(_).toBe(4);
     });
 
-    it('should shift value then return new instance of ArrCompromise', () => {
+    it('should shift value then return new instance of ArrInvary', () => {
         const arr: any = Arr([1, {a: 2}, 3, 4]);
         const [ar2, _] = arr.shift();
 
@@ -181,7 +181,7 @@ describe('ArrCompromise', () => {
         expect(_).toEqual(1);
     });
 
-    it('should unshift value then return new instance of ArrCompromise', () => {
+    it('should unshift value then return new instance of ArrInvary', () => {
         const arr: any = Arr([1, {a: 2}, 3, 4]);
         const [ar2, _] = arr.unshift(5, 5);
 
@@ -191,7 +191,7 @@ describe('ArrCompromise', () => {
         expect(_).toBe(6);
     });
 
-    it('should slice then return new instance of ArrCompromise', () => {
+    it('should slice then return new instance of ArrInvary', () => {
         const arr: any = Arr([1, {a: 2}, 3, 4]);
         const ar2 = arr.slice(1, 3);
 
@@ -206,7 +206,7 @@ describe('ArrCompromise', () => {
         expect(JSON.stringify(arr)).toBe('[1,{"a":2},3,4]');
     });
 
-    it('should process batch operations then return new instance of ArrCompromise', () => {
+    it('should process batch operations then return new instance of ArrInvary', () => {
         const arr: any = Arr([1, {a: 2}, 3, 4]);
 
         const ar2: any = arr.batch((mutable) => {
@@ -256,7 +256,7 @@ describe('ArrCompromise', () => {
         expect(ar2).not.toBe(arr);
     });
 
-    it('should process nested batch operations return new instance of ArrCompromise', () => {
+    it('should process nested batch operations return new instance of ArrInvary', () => {
         const arr: any = Arr([1, {a: 2}, 3, 4]);
 
         const ar2: any = arr.batch((mutable1) => {

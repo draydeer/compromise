@@ -1,20 +1,20 @@
-import {isArr, Arr, ArrCompromise} from "../src";
-import {isObj, Obj, ObjCompromise} from "../src";
+import {isArr, Arr, ArrInvary} from "../src";
+import {isObj, Obj, ObjInvary} from "../src";
 
 describe('Obj', () => {
-    it('should be created by factory from array then be instance of ObjCompromise', () => {
+    it('should be created by factory from array then be instance of ObjInvary', () => {
         const obj = Obj([1]);
 
         expect(isObj(obj)).toBeTruthy();
         expect(isObj([])).toBeFalsy();
-        expect(obj instanceof ObjCompromise).toBeTruthy();
+        expect(obj instanceof ObjInvary).toBeTruthy();
         expect(obj instanceof Array).toBeFalsy();
         expect(obj instanceof Object).toBeTruthy();
     });
 
     it('should be constructed', () => {
-        expect(new ObjCompromise() instanceof ObjCompromise).toBeTruthy();
-        expect(new ObjCompromise([1]) instanceof ObjCompromise).toBeTruthy();
+        expect(new ObjInvary() instanceof ObjInvary).toBeTruthy();
+        expect(new ObjInvary([1]) instanceof ObjInvary).toBeTruthy();
     });
 
     it('should get value by existing path', () => {
@@ -31,7 +31,7 @@ describe('Obj', () => {
         expect(obj.get('1.b', 2)).toBe(2);
     });
 
-    it('should not set same value by existing path then return same instance of ObjCompromise', () => {
+    it('should not set same value by existing path then return same instance of ObjInvary', () => {
         const obj: any = Obj([1, {a: 2}]);
         const ob2: any = obj.set('0', 1);
         const ob3: any = obj.set('1.a', 2);
@@ -40,7 +40,7 @@ describe('Obj', () => {
         expect(ob3).toBe(obj);
     });
 
-    it('should set new value by existing path then return new instance of ObjCompromise', () => {
+    it('should set new value by existing path then return new instance of ObjInvary', () => {
         const obj: any = Obj([1, {a: 2}]);
         const ob2: any = obj.set('0', 2);
         const ob3: any = obj.set('1.a', 3);
@@ -53,7 +53,7 @@ describe('Obj', () => {
         expect(obj[1]).not.toBe(ob3[1]);
     });
 
-    it('should not set all same values by existing path then return same instance of ObjCompromise', () => {
+    it('should not set all same values by existing path then return same instance of ObjInvary', () => {
         const obj: any = Obj([1, {a: 2}]);
         const ob2: any = obj.all(
             '0', 1,
@@ -63,7 +63,7 @@ describe('Obj', () => {
         expect(ob2).toBe(obj);
     });
 
-    it('should set all new values by existing path then return new instance of ObjCompromise', () => {
+    it('should set all new values by existing path then return new instance of ObjInvary', () => {
         const obj: any = Obj([1, {a: 2, b: 2}]);
         const ob2: any = obj.all(
             '0', 2, '1.a', 3, '1.b', 3
@@ -84,7 +84,7 @@ describe('Obj', () => {
         expect(ob3).toEqual(Obj([2, {a: 2, b: 2}]));
     });
 
-    it('should set all new values by not existing path then return new instance of ObjCompromise', () => {
+    it('should set all new values by not existing path then return new instance of ObjInvary', () => {
         const obj: any = Obj([1, {a: 2, b: 2}]);
         const ob2: any = obj.all(
             '0', 2, '1.a', 3, '1.b.c', 3

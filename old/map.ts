@@ -98,7 +98,7 @@ let hIndex = 0;
 /**
  *
  */
-class MapCompromise {
+class MapInvary {
 
     n: MapNode;
 
@@ -130,13 +130,13 @@ class MapCompromise {
         } while (true);
     }
 
-    public set(key: string, val: any): MapCompromise {
+    public set(key: string, val: any): MapInvary {
         if (this.get(key) === val) {
             return this;
         }
 
         let n: MapNode = this.n.clone();
-        let m: MapCompromise = new MapCompromise(n);
+        let m: MapInvary = new MapInvary(n);
 
         for (let i = 0; i < hIndex; i ++) {
             const ind = hCache[i];
@@ -150,9 +150,9 @@ class MapCompromise {
     }
 
     public isMap(val: any): boolean {
-        return val instanceof MapCompromise;
+        return val instanceof MapInvary;
     }
 
 }
 
-export const Map = (val?): MapCompromise => new MapCompromise(val);
+export const Map = (val?): MapInvary => new MapInvary(val);

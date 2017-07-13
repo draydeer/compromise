@@ -1,15 +1,15 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var lib_1 = require("../lib");
-exports.Arr = function (value) {
-    return new ArrCompromise(value);
+exports.Obj = function (value) {
+    return new ObjInvary(value);
 };
 var copySet = new Set();
-function arrSet(ctx, key, val) {
+function objSet(ctx, key, val) {
     if (lib_1.anyGetInContext.call(ctx, key) === val) {
         return ctx;
     }
-    var root, self = root = lib_1.arrCopySingle(ctx);
+    var root, self = root = lib_1.objCopySingle(ctx);
     var i, l;
     for (i = 0, l = lib_1.Context.getSetKeysCache.length - 1; i < l; i++) {
         var v = self[lib_1.Context.getSetKeysCache[i]];
@@ -19,8 +19,8 @@ function arrSet(ctx, key, val) {
     lib_1.Context.getSetKeysCache = null;
     return root;
 }
-exports.arrSet = arrSet;
-function arrSetPatch(ctx, key, val) {
+exports.objSet = objSet;
+function objSetPatch(ctx, key, val) {
     if (lib_1.anyGetInContext.call(ctx, key) === val) {
         return {};
     }
@@ -35,10 +35,10 @@ function arrSetPatch(ctx, key, val) {
     return root;
     var _a;
 }
-exports.arrSetPatch = arrSetPatch;
-function arrAll(ctx, a, b, c, d, e, f, g, h) {
+exports.objSetPatch = objSetPatch;
+function objAll(ctx, a, b, c, d, e, f, g, h) {
     if (arguments.length < 4) {
-        return arrSet(ctx, a, b);
+        return objSet(ctx, a, b);
     }
     var root = ctx;
     var self;
@@ -49,7 +49,7 @@ function arrAll(ctx, a, b, c, d, e, f, g, h) {
             continue;
         }
         if (root === ctx) {
-            self = root = lib_1.arrCopySingle(ctx);
+            self = root = lib_1.objCopySingle(ctx);
         }
         else {
             self = root;
@@ -74,10 +74,10 @@ function arrAll(ctx, a, b, c, d, e, f, g, h) {
     lib_1.Context.getSetKeysCache = null;
     return root;
 }
-exports.arrAll = arrAll;
-function arrAllPatch(ctx, a, b, c, d, e, f, g, h) {
+exports.objAll = objAll;
+function objAllPatch(ctx, a, b, c, d, e, f, g, h) {
     if (arguments.length < 4) {
-        return arrSetPatch(ctx, a, b);
+        return objSetPatch(ctx, a, b);
     }
     var root = {};
     var self;
@@ -111,23 +111,27 @@ function arrAllPatch(ctx, a, b, c, d, e, f, g, h) {
     lib_1.Context.getSetKeysCache = null;
     return root;
 }
-exports.arrAllPatch = arrAllPatch;
+exports.objAllPatch = objAllPatch;
 var mutables = new Array(32);
 var mutableCurrent = false;
+var mutableDevMode = lib_1.Context.isDevMode;
 var mutableIndex = 0;
-function ArrCompromise(arr) {
-    if (arr) {
-        lib_1.arrCopySingle(arr, this);
+function ObjInvary(obj, noFreeze) {
+    if (obj) {
+        lib_1.objCopySingle(obj, this);
+    }
+    if (true !== noFreeze) {
+        lib_1.arrObjFreeze(this);
     }
 }
-exports.ArrCompromise = ArrCompromise;
-var ArrCompromiseProto = function () { };
-ArrCompromiseProto.prototype = Array.prototype;
-ArrCompromise.prototype = lib_1.objAssignSingle(new ArrCompromiseProto(), {
-    constructor: Array.prototype.constructor,
+exports.ObjInvary = ObjInvary;
+var ObjInvaryProto = function () { };
+ObjInvaryProto.prototype = Object.prototype;
+ObjInvary.prototype = lib_1.objAssignSingle(new ObjInvaryProto(), {
+    constructor: Object.prototype.constructor,
     all: function (a, b, c, d, e, f, g, h) {
         if (arguments.length < 3) {
-            return this.set(a, b);
+            return ObjInvary.prototype.set.call(this, a, b);
         }
         var root = this;
         var self;
@@ -139,10 +143,10 @@ ArrCompromise.prototype = lib_1.objAssignSingle(new ArrCompromiseProto(), {
             }
             if (root === this) {
                 if (mutableCurrent === true) {
-                    self = root = mutableCurrent = new ArrCompromise(this);
+                    self = root = mutableCurrent = new ObjInvary(this, true);
                 }
                 else {
-                    self = root = mutableCurrent || new ArrCompromise(this);
+                    self = root = mutableCurrent || new ObjInvary(this, true);
                 }
             }
             else {
@@ -165,6 +169,9 @@ ArrCompromise.prototype = lib_1.objAssignSingle(new ArrCompromiseProto(), {
             }
             self[lib_1.Context.getSetKeysCache[j]] = arguments[i + 1];
         }
+        if (!mutableCurrent) {
+            root.freeze();
+        }
         lib_1.Context.getSetKeysCache = null;
         return root;
     },
@@ -176,127 +183,39 @@ ArrCompromise.prototype = lib_1.objAssignSingle(new ArrCompromiseProto(), {
         var root, self;
         var i, l;
         if (mutableCurrent === true) {
-            self = root = mutableCurrent = new ArrCompromise(this);
+            self = root = mutableCurrent = new ObjInvary(this, true);
         }
         else {
-            self = root = mutableCurrent || new ArrCompromise(this);
+            self = root = mutableCurrent || new ObjInvary(this, true);
         }
         for (i = 0, l = lib_1.Context.getSetKeysCache.length - 1; i < l; i++) {
             var v = self[lib_1.Context.getSetKeysCache[i]];
             self = self[lib_1.Context.getSetKeysCache[i]] = (v && typeof v === "object") ? lib_1.arrObjClone(v) : {};
         }
         self[lib_1.Context.getSetKeysCache[i]] = val;
+        if (!mutableCurrent) {
+            root.freeze();
+        }
         lib_1.Context.getSetKeysCache = null;
         return root;
     },
     batch: function (callback) {
         mutables[++mutableIndex] = mutableCurrent;
         mutableCurrent = true;
+        mutableDevMode = false;
         var result = callback(this);
         mutableCurrent = mutables[--mutableIndex];
+        if (mutableIndex === 0) {
+            mutableDevMode = lib_1.Context.isDevMode;
+            if (result.freeze) {
+                result.freeze();
+            }
+        }
         return result;
     },
     freeze: function () {
         return lib_1.arrObjFreeze(this);
     },
-    deleteIndex: function (index) {
-        if (index !== void 0 && index < this.length && index > -1) {
-            if (mutableCurrent) {
-                var i_1, l_1;
-                if (mutableCurrent === true) {
-                    mutableCurrent = new ArrCompromise(this);
-                }
-                mutableCurrent[index] = null;
-                for (i_1 = index, l_1 = this.length - 1; i_1 < l_1; i_1++) {
-                    mutableCurrent[i_1] = mutableCurrent[i_1 + 1];
-                }
-                Array.prototype.pop.call(mutableCurrent);
-                return mutableCurrent;
-            }
-            var copy = new ArrCompromise(this), i = void 0, l = void 0;
-            copy[index] = null;
-            for (i = index, l = this.length - 1; i < l; i++) {
-                copy[i] = copy[i + 1];
-            }
-            Array.prototype.pop.call(copy);
-            return copy;
-        }
-        return this;
-    },
-    insertIndex: function (index, value) {
-        if (index !== void 0 && index < this.length && index > -1) {
-            if (mutableCurrent) {
-                var i_2, l_2;
-                if (mutableCurrent === true) {
-                    mutableCurrent = new ArrCompromise(this);
-                }
-                Array.prototype.push.call(mutableCurrent, null);
-                for (i_2 = this.length - 1, l_2 = index; i_2 >= l_2; i_2--) {
-                    mutableCurrent[i_2 + 1] = mutableCurrent[i_2];
-                }
-                mutableCurrent[index] = value;
-                return mutableCurrent;
-            }
-            var copy = new ArrCompromise(this), i = void 0, l = void 0;
-            Array.prototype.push.call(copy, null);
-            for (i = this.length - 1, l = index; i >= l; i--) {
-                copy[i + 1] = copy[i];
-            }
-            copy[index] = value;
-            return copy;
-        }
-        return this;
-    },
-    isArr: function (val) { return val instanceof ArrCompromise; },
-    pop: function () {
-        if (mutableCurrent) {
-            if (mutableCurrent === true) {
-                mutableCurrent = new ArrCompromise(this);
-            }
-            return [mutableCurrent, Array.prototype.pop.apply(mutableCurrent)];
-        }
-        var copy = new ArrCompromise(this);
-        var result = Array.prototype.pop.apply(copy);
-        return [copy, result];
-    },
-    push: function (a, b, c, d, e, f, g, h) {
-        if (mutableCurrent) {
-            if (mutableCurrent === true) {
-                mutableCurrent = new ArrCompromise(this);
-            }
-            return [mutableCurrent, Array.prototype.push.apply(mutableCurrent, arguments)];
-        }
-        var copy = new ArrCompromise(this);
-        var result = Array.prototype.push.apply(copy, arguments);
-        return [copy, result];
-    },
-    slice: function (begin, end) {
-        return new ArrCompromise(Array.prototype.slice.call(this, begin, end));
-    },
-    shift: function () {
-        if (mutableCurrent) {
-            if (mutableCurrent === true) {
-                mutableCurrent = new ArrCompromise(this);
-            }
-            return [mutableCurrent, Array.prototype.shift.apply(mutableCurrent)];
-        }
-        var copy = new ArrCompromise(this);
-        var result = Array.prototype.shift.apply(copy);
-        return [copy, result];
-    },
-    toJSON: function () {
-        return Array.prototype.constructor.apply(this, this);
-    },
-    unshift: function (a, b, c, d, e, f, g, h) {
-        if (mutableCurrent) {
-            if (mutableCurrent === true) {
-                mutableCurrent = new ArrCompromise(this);
-            }
-            return [mutableCurrent, Array.prototype.unshift.apply(mutableCurrent, arguments)];
-        }
-        var copy = new ArrCompromise(this);
-        var result = Array.prototype.unshift.apply(copy, arguments);
-        return [copy, result];
-    },
+    isObj: function (val) { return val instanceof ObjInvary; },
 });
-exports.isArr = ArrCompromise.prototype.isArr;
+exports.isObj = ObjInvary.prototype.isObj;

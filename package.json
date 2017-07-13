@@ -1,13 +1,13 @@
 {
-  "name": "compromise",
-  "description": "Compromise - library of structures with immutable behaviours.",
+  "name": "invary",
+  "description": "Invary - library of structures with immutable behaviours.",
   "version": "1.0.1",
   "filename": "index.ts",
   "main": "./dist/src/index.js",
-  "homepage": "https://github.com/draydeer/compromise",
+  "homepage": "https://github.com/draydeer/invary",
   "repository": {
     "type": "git",
-    "url": "git://github.com/draydeer/compromise.git"
+    "url": "git://github.com/draydeer/invary.git"
   },
   "engines": {
     "node": ">= 0.9"

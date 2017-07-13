@@ -1,5 +1,5 @@
 
-import {Map} from "../src/compromise/map";
+import {Map} from "../src/invary/map";
 
 describe('Map', () => {
     it('', () => {

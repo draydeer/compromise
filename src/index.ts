@@ -7,25 +7,25 @@ import {
 } from "./lib";
 import {
     IArr
-} from "./compromise/arr";
+} from "./invary/arr";
 import {
     IObj
-} from "./compromise/obj";
+} from "./invary/obj";
 
-const ArrImport = Context.isDevMode ? require('./compromise/arr_dev_mode') : require('./compromise/arr');
+const ArrImport = Context.isDevMode ? require('./invary/arr_dev_mode') : require('./invary/arr');
 
 const Arr = ArrImport.Arr;
-const ArrCompromise = ArrImport.ArrCompromise;
+const ArrInvary = ArrImport.ArrInvary;
 const arrAll = ArrImport.arrAll;
 const arrAllPatch = ArrImport.arrAllPatch;
 const arrSet = ArrImport.arrSet;
 const arrSetPatch = ArrImport.arrSetPatch;
 const isArr = ArrImport.isArr;
 
-const ObjImport = Context.isDevMode ? require('./compromise/obj_dev_mode') : require('./compromise/obj');
+const ObjImport = Context.isDevMode ? require('./invary/obj_dev_mode') : require('./invary/obj');
 
 const Obj = ObjImport.Obj;
-const ObjCompromise = ObjImport.ObjCompromise;
+const ObjInvary = ObjImport.ObjInvary;
 const objAll = ObjImport.objAll;
 const objAllPatch = ObjImport.objAllPatch;
 const objSet = ObjImport.objSet;
@@ -34,14 +34,14 @@ const isObj = ObjImport.isObj;
 
 export {
     Arr,
-    ArrCompromise,
+    ArrInvary,
     arrSet,
     arrSetPatch,
     arrAll,
     arrAllPatch,
     isArr,
     Obj,
-    ObjCompromise,
+    ObjInvary,
     objSet,
     objSetPatch,
     objAll,

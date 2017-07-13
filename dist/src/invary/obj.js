@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var lib_1 = require("../lib");
 exports.Obj = function (value) {
-    return new ObjCompromise(value);
+    return new ObjInvary(value);
 };
 var copySet = new Set();
 function objSet(ctx, key, val) {
@@ -115,19 +115,19 @@ exports.objAllPatch = objAllPatch;
 var mutables = new Array(32);
 var mutableCurrent = false;
 var mutableIndex = 0;
-function ObjCompromise(obj) {
+function ObjInvary(obj) {
     if (obj) {
         lib_1.objCopySingle(obj, this);
     }
 }
-exports.ObjCompromise = ObjCompromise;
-var ObjCompromiseProto = function () { };
-ObjCompromiseProto.prototype = Object.prototype;
-ObjCompromise.prototype = lib_1.objAssignSingle(new ObjCompromiseProto(), {
+exports.ObjInvary = ObjInvary;
+var ObjInvaryProto = function () { };
+ObjInvaryProto.prototype = Object.prototype;
+ObjInvary.prototype = lib_1.objAssignSingle(new ObjInvaryProto(), {
     constructor: Object.prototype.constructor,
     all: function (a, b, c, d, e, f, g, h) {
         if (arguments.length < 3) {
-            return ObjCompromise.prototype.set.call(this, a, b);
+            return ObjInvary.prototype.set.call(this, a, b);
         }
         var root = this;
         var self;
@@ -139,10 +139,10 @@ ObjCompromise.prototype = lib_1.objAssignSingle(new ObjCompromiseProto(), {
             }
             if (root === this) {
                 if (mutableCurrent === true) {
-                    self = root = mutableCurrent = new ObjCompromise(this);
+                    self = root = mutableCurrent = new ObjInvary(this);
                 }
                 else {
-                    self = root = mutableCurrent || new ObjCompromise(this);
+                    self = root = mutableCurrent || new ObjInvary(this);
                 }
             }
             else {
@@ -176,10 +176,10 @@ ObjCompromise.prototype = lib_1.objAssignSingle(new ObjCompromiseProto(), {
         var root, self;
         var i, l;
         if (mutableCurrent === true) {
-            self = root = mutableCurrent = new ObjCompromise(this);
+            self = root = mutableCurrent = new ObjInvary(this);
         }
         else {
-            self = root = mutableCurrent || new ObjCompromise(this);
+            self = root = mutableCurrent || new ObjInvary(this);
         }
         for (i = 0, l = lib_1.Context.getSetKeysCache.length - 1; i < l; i++) {
             var v = self[lib_1.Context.getSetKeysCache[i]];
@@ -199,6 +199,6 @@ ObjCompromise.prototype = lib_1.objAssignSingle(new ObjCompromiseProto(), {
     freeze: function () {
         return lib_1.arrObjFreeze(this);
     },
-    isObj: function (val) { return val instanceof ObjCompromise; },
+    isObj: function (val) { return val instanceof ObjInvary; },
 });
-exports.isObj = ObjCompromise.prototype.isObj;
+exports.isObj = ObjInvary.prototype.isObj;

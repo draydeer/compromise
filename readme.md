@@ -1,4 +1,4 @@
-# Compromise
+# Invary
 
 A small library of simple immutable data structures like Array and Object. For big data structures using of [Immutable.js](https://github.com/facebook/immutable-js/) will be a better way.
 
@@ -106,7 +106,7 @@ allPatchCompare(obj, {c: 2}); // {}
 allPatchCompare(obj, {c: 3}); // {c: 3} 
 ```
 
-## ArrCompromise and ObjCompromise commons
+## ArrInvary and ObjInvary commons
 
 Initialize immutable Array or Object:
 
@@ -121,11 +121,11 @@ let obj = Obj({a: 1});
 or
 
 ```javascript
-let arr = new ArrCompromise([1, 2]);
+let arr = new ArrInvary([1, 2]);
 ```
 
 ```javascript
-let obj = new ObjCompromise({a: 1});
+let obj = new ObjInvary({a: 1});
 ```
 
 Structures provide methods with the same behavior, as well as the methods (*get*, *set* and *all*) described above:
@@ -148,9 +148,9 @@ let obj = Obj({a: 1});
 obj.all('a', 2, 'b', 2); // new Obj = {a: 2, b: 2}
 ```
 
-## ArrCompromise
+## ArrInvary
 
-ArrCompromise provides immutable analogs of the common Array methods. The result of calling some of these methods is a tuple with the reference to the new Arr and the result of operation.
+ArrInvary provides immutable analogs of the common Array methods. The result of calling some of these methods is a tuple with the reference to the new Arr and the result of operation.
 
 ```javascript
 let arr = Arr([0, 1, 2]);
@@ -165,7 +165,7 @@ Methods:
 * **pop** - like Array.pop, returns [copy, popped element]
 * **push** - like Array.push, returns [copy, new length]
 * **shift** - like Array.shift, returns [copy, shifted element]
-* **slice** - like Array.slice, returns new ArrCompromise
+* **slice** - like Array.slice, returns new ArrInvary
 * **unshift** - like Array.unshift, returns [copy, new length]
 
 ## Batch
@@ -202,7 +202,7 @@ arr = arr.batch((mutable1) {
 
 ## Development mode
 
-In the development mode all Compromise entities will be frozen to avoid bugs during development process. To activate development mode set env variable NODE_ENV=dev or set window.COMPROMISE_ENV=dev.
+In the development mode all Invary entities will be frozen to avoid bugs during development process. To activate development mode set env variable NODE_ENV=dev or set window.COMPROMISE_ENV=dev.
 
 ## Benchmarks
 
