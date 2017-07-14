@@ -144,7 +144,7 @@ exports.arrObjFreeze = arrObjFreeze;
 var Context;
 (function (Context) {
     Context.getSetKeysCache = [];
-    Context.isDevMode = process ? process.env.NODE_ENV === 'dev' : window['COMPROMISE_ENV'] === 'dev';
+    Context.isDevMode = process ? process.env.NODE_ENV === 'dev' : window['INVARY_ENV'] === 'dev';
 })(Context = exports.Context || (exports.Context = {}));
 function anyGetInContext(key, def) {
     var self = this;
