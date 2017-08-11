@@ -1,7 +1,7 @@
 {
   "name": "invary",
   "description": "A small library of simple immutable data structures like Array and Object.",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "filename": "index.ts",
   "main": "./dist/src/index.js",
   "homepage": "https://github.com/draydeer/invary",
