@@ -14,5 +14,8 @@ export declare module Context {
     let getSetKeysCache: any[];
     let isDevMode: boolean;
 }
+export declare type TDict<T> = {
+    [key: string]: T;
+};
 export declare type TKey = string | (number | string)[];
 export declare function anyGetInContext(key: TKey, def?: any): any;

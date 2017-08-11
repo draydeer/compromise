@@ -20,7 +20,7 @@
   "scripts": {
     "build": "rm -rf dist/ && tsc -d -p . --outDir dist",
     "coveralls": "istanbul cover --root dist/src jasmine-node dist/specs",
-    "test": "jasmine-node dist/specs"
+    "test": "jasmine-node dist/specs && NODE_ENV=dev jasmine-node dist/specs"
   },
   "dependencies": {
     "@types/es6-shim": "^0.31.34",

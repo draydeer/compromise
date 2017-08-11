@@ -1,5 +1,21 @@
-import {get, set, setPatch, all, allPatch} from "../src";
-import {allPatchCompare} from "../src/index";
+import {get, set, setPatch, all, allPatch, construct} from "../src";
+import {allPatchCompare} from "../src";
+import {ArrInvary} from "../src";
+import {ObjInvary} from "../src";
+
+describe('construct', () => {
+    it('should construct ArrInvary from array', () => {
+        const arr = construct([1, 2, 3]);
+
+        expect(arr instanceof ArrInvary).toBeTruthy();
+    });
+
+    it('should construct ObjInvary from object', () => {
+        const arr = construct({a: 1, b: 2, c: 3});
+
+        expect(arr instanceof ObjInvary).toBeTruthy();
+    });
+});
 
 describe('get', () => {
     it('should return value by existing path', () => {

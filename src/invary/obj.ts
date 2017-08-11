@@ -8,20 +8,13 @@ import {
     objCopySingle
 } from "../lib";
 
-export interface IObj extends Object {
+import {
+    IObjInvary,
+    TObjInvary
+} from "./types";
 
-    get(key: TKey, def?: any): any;
-
-    set(key: TKey, val: any): this;
-
-    isObj(val: any): boolean;
-
-}
-
-export type TObj<T> = IObj & T;
-
-export const Obj = function<T> (value: any): TObj<T> {
-    return new ObjInvary<TObj<T>>(value);
+export const Obj = function<T>(value: any): TObjInvary<T> {
+    return new ObjInvary<TObjInvary<T>>(value);
 };
 
 let copySet = new Set();
@@ -166,7 +159,7 @@ let mutableIndex = 0;
 
 export function ObjInvary<T>(obj?: any) {
     if (obj) {
-        <TObj<T>> objCopySingle(obj, this);
+        <TObjInvary<T>> objCopySingle(obj, this);
     }
 }
 

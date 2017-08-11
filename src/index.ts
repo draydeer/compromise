@@ -5,70 +5,122 @@ import {
     arrPatchCompare,
     objPatchCompare
 } from "./lib";
+
 import {
-    IArr
+    IArr,
+    IArrInvary,
+    TArrInvary,
+    IObj,
+    IObjInvary,
+    TObjInvary
+} from "./invary/types";
+
+import {
+    Arr,
+    ArrInvary,
+    arrAll,
+    arrAllPatch,
+    arrSet,
+    arrSetPatch,
+    isArr,
 } from "./invary/arr";
+
 import {
-    IObj
+    Obj,
+    ObjInvary,
+    objAll,
+    objAllPatch,
+    objSet,
+    objSetPatch,
+    isObj,
 } from "./invary/obj";
 
-const ArrImport = Context.isDevMode ? require('./invary/arr_dev_mode') : require('./invary/arr');
+import {
+    Arr as ArrDev,
+    ArrInvary as ArrInvaryDev,
+    arrAll as arrAllDev,
+    arrAllPatch as arrAllPatchDev,
+    arrSet as arrSetDev,
+    arrSetPatch as arrSetPatchDev,
+    isArr as isArrDev,
+} from "./invary/arr_dev_mode";
 
-const Arr = ArrImport.Arr;
-const ArrInvary = ArrImport.ArrInvary;
-const arrAll = ArrImport.arrAll;
-const arrAllPatch = ArrImport.arrAllPatch;
-const arrSet = ArrImport.arrSet;
-const arrSetPatch = ArrImport.arrSetPatch;
-const isArr = ArrImport.isArr;
-
-const ObjImport = Context.isDevMode ? require('./invary/obj_dev_mode') : require('./invary/obj');
-
-const Obj = ObjImport.Obj;
-const ObjInvary = ObjImport.ObjInvary;
-const objAll = ObjImport.objAll;
-const objAllPatch = ObjImport.objAllPatch;
-const objSet = ObjImport.objSet;
-const objSetPatch = ObjImport.objSetPatch;
-const isObj = ObjImport.isObj;
+import {
+    Obj as ObjDev,
+    ObjInvary as ObjInvaryDev,
+    objAll as objAllDev,
+    objAllPatch as objAllPatchDev,
+    objSet as objSetDev,
+    objSetPatch as objSetPatchDev,
+    isObj as isObjDev,
+} from "./invary/obj_dev_mode";
 
 export {
     Arr,
     ArrInvary,
-    arrSet,
-    arrSetPatch,
+    IArr,
+    IArrInvary,
+    TArrInvary,
+    anyGetInContext,
     arrAll,
     arrAllPatch,
+    arrSet,
+    arrSetPatch,
     isArr,
     Obj,
     ObjInvary,
-    objSet,
-    objSetPatch,
+    IObj,
+    IObjInvary,
+    TObjInvary,
     objAll,
     objAllPatch,
+    objSet,
+    objSetPatch,
     isObj
 };
 
+// monkey patch of dev mode
+if (Context.isDevMode) {
+    exports.Arr = ArrDev;
+    exports.ArrInvary = ArrInvaryDev;
+    exports.arrAll = arrAllDev;
+    exports.arrAllPatch = arrAllPatchDev;
+    exports.arrSet = arrSetDev;
+    exports.arrSetPatch = arrSetPatchDev;
+    exports.isArr = isArrDev;
+    exports.Obj = ObjDev;
+    exports.ObjInvary = ObjInvaryDev;
+    exports.objAll = objAllDev;
+    exports.objAllPatch = objAllPatchDev;
+    exports.objSet = objSetDev;
+    exports.objSetPatch = objSetPatchDev;
+    exports.isObj = isObjDev;
+}
+
 export const get = function (target: any, key: TKey, def?: any) {
-    return anyGetInContext.call(target, key, def);
+    return exports.anyGetInContext.call(target, key, def);
 };
 
 export const set = function (target: any, key: TKey, val: any) {
-    return target instanceof Array ? arrSet(target, key, val) : objSet(target, key, val);
+    return target instanceof Array ? exports.arrSet(target, key, val) : exports.objSet(target, key, val);
 };
 
 export const all = function (target: any, a?, b?, c?, d?, e?, f?, g?, h?) {
-    return target instanceof Array ? arrAll.apply(null, arguments) : objAll.apply(null, arguments)
+    return target instanceof Array ? exports.arrAll.apply(null, arguments) : exports.objAll.apply(null, arguments)
 };
 
 export const setPatch = function (target: any, key: TKey, val: any) {
-    return objSetPatch(target, key, val);
+    return exports.objSetPatch(target, key, val);
 };
 
 export const allPatch = function (target: any, a?, b?, c?, d?, e?, f?, g?, h?) {
-    return objAllPatch.apply(null, arguments)
+    return exports.objAllPatch.apply(null, arguments)
 };
 
 export const allPatchCompare = function (target: any, source: any) {
     return source instanceof Array ? arrPatchCompare(target, source) : objPatchCompare(target, source);
+};
+
+export const construct = function (mixed: any): IArrInvary | IObjInvary {
+    return mixed instanceof Array ? exports.Arr(mixed) : exports.Obj(mixed);
 };

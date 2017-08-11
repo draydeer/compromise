@@ -196,26 +196,23 @@ ArrInvary.prototype = lib_1.objAssignSingle(new ArrInvaryProto(), {
         mutableCurrent = mutables[--mutableIndex];
         return result;
     },
-    freeze: function () {
-        return lib_1.arrObjFreeze(this);
-    },
-    deleteIndex: function (index) {
-        if (index !== void 0 && index < this.length && index > -1) {
+    deleteIndex: function (ind) {
+        if (ind !== void 0 && ind < this.length && ind > -1) {
             if (mutableCurrent) {
                 var i_1, l_1;
                 if (mutableCurrent === true) {
                     mutableCurrent = new ArrInvary(this);
                 }
-                mutableCurrent[index] = null;
-                for (i_1 = index, l_1 = this.length - 1; i_1 < l_1; i_1++) {
+                mutableCurrent[ind] = null;
+                for (i_1 = ind, l_1 = this.length - 1; i_1 < l_1; i_1++) {
                     mutableCurrent[i_1] = mutableCurrent[i_1 + 1];
                 }
                 Array.prototype.pop.call(mutableCurrent);
                 return mutableCurrent;
             }
             var copy = new ArrInvary(this), i = void 0, l = void 0;
-            copy[index] = null;
-            for (i = index, l = this.length - 1; i < l; i++) {
+            copy[ind] = null;
+            for (i = ind, l = this.length - 1; i < l; i++) {
                 copy[i] = copy[i + 1];
             }
             Array.prototype.pop.call(copy);
@@ -223,26 +220,29 @@ ArrInvary.prototype = lib_1.objAssignSingle(new ArrInvaryProto(), {
         }
         return this;
     },
-    insertIndex: function (index, value) {
-        if (index !== void 0 && index < this.length && index > -1) {
+    freeze: function () {
+        return lib_1.arrObjFreeze(this);
+    },
+    insertIndex: function (ind, val) {
+        if (ind !== void 0 && ind < this.length && ind > -1) {
             if (mutableCurrent) {
                 var i_2, l_2;
                 if (mutableCurrent === true) {
                     mutableCurrent = new ArrInvary(this);
                 }
                 Array.prototype.push.call(mutableCurrent, null);
-                for (i_2 = this.length - 1, l_2 = index; i_2 >= l_2; i_2--) {
+                for (i_2 = this.length - 1, l_2 = ind; i_2 >= l_2; i_2--) {
                     mutableCurrent[i_2 + 1] = mutableCurrent[i_2];
                 }
-                mutableCurrent[index] = value;
+                mutableCurrent[ind] = val;
                 return mutableCurrent;
             }
             var copy = new ArrInvary(this), i = void 0, l = void 0;
             Array.prototype.push.call(copy, null);
-            for (i = this.length - 1, l = index; i >= l; i--) {
+            for (i = this.length - 1, l = ind; i >= l; i--) {
                 copy[i + 1] = copy[i];
             }
-            copy[index] = value;
+            copy[ind] = val;
             return copy;
         }
         return this;

@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var src_1 = require("../src");
-describe('Obj', function () {
+describe('ObjInvary', function () {
     it('should be created by factory from array then be instance of ObjInvary', function () {
         var obj = src_1.Obj([1]);
         expect(src_1.isObj(obj)).toBeTruthy();

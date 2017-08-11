@@ -155,23 +155,24 @@ obj.get('b', 2); // 2
 ```javascript
 let obj = Obj({a: 1});
 
-obj.set('b', 2); // new Obj({a: 1, b: 2})
+obj.set('b', 2); // new ObjInvary({a: 1, b: 2})
 ```
 
 ```javascript
 let obj = Obj({a: 1});
 
-obj.all('a', 2, 'b', 2); // new Obj({a: 2, b: 2})
+obj.all('a', 2, 'b', 2); // new ObjInvary({a: 2, b: 2})
 ```
 
 ## ArrInvary
 
-ArrInvary provides immutable analogs of the common Array methods. The result of calling some of these methods is a tuple with the reference to the new ArrInvary and the result of operation.
+ArrInvary provides immutable analogs of the common Array methods.
+The result of calling some of these methods is a tuple with the reference to the new ArrInvary and the result of operation.
 
 ```javascript
 let arr = Arr([0, 1, 2]);
 
-arr = arr.pop(); // [new Arr([0, 1]), 2]
+arr = arr.pop(); // [new ArrInvary([0, 1]), 2]
 ```
 
 Methods:
@@ -193,7 +194,7 @@ After the mutable copy of data has been created all operations will work with it
 ```javascript
 arr = Arr([1, 2, 3]);
 
-arr = arr.batch((mutable) {
+arr = arr.batch((mutable) => {
     mutable = mutable.set([0], 2);
     mutable = mutable.set([1], 3);
     mutable = mutable.push(6)[0];
@@ -207,8 +208,8 @@ Batch operations can be nested:
 ```javascript
 arr = Arr([1, 2, 3]);
 
-arr = arr.batch((mutable1) {
-    const ar2 = mutable1.batch((mutable2) {
+arr = arr.batch((mutable1) => {
+    const ar2 = mutable1.batch((mutable2) => {
         ... do something ...
     });
     
@@ -221,6 +222,12 @@ arr = arr.batch((mutable1) {
 In the development mode all Invary entities will be frozen to avoid bugs during development process. To activate development mode set env variable NODE_ENV=dev or set window.INVARY_ENV=dev.
 
 ## Benchmarks (Intel Core i7, 4 cores, disabled HT, 16gb 1600mhz DDR3)
+
+Test data:
+
+Arr([0, {b0: 1, b1: {b10: 1, b11: {b110: 1, b111: 2}}}, 2, 3, 4, 5, 6, 7, 8, 9]);
+
+Obj({a: 0, b: {b0: 1, b1: {b10: 1, b11: {b110: 1, b111: 2}}}, c: 2, d: 3, e: 4, f: 5, g: 6, h: 7, i: 8, j: 9});
 
 ```
 ------------------------------

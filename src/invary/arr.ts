@@ -8,20 +8,13 @@ import {
     objAssignSingle
 } from "../lib";
 
-export interface IArr extends Array<any> {
+import {
+    IArrInvary,
+    TArrInvary
+} from "./types";
 
-    get(key: TKey, def?: any): any;
-
-    set(key: TKey, val: any): this;
-
-    isArr(val: any): boolean;
-
-}
-
-export type TArr<T> = IArr & T;
-
-export const Arr = function<T> (value: any): TArr<T> {
-    return new ArrInvary<TArr<T>>(value);
+export const Arr = function<T>(value: any): TArrInvary<T> {
+    return new ArrInvary<TArrInvary<T>>(value);
 };
 
 let copySet = new Set();
@@ -166,7 +159,7 @@ let mutableIndex = 0;
 
 export function ArrInvary<T>(arr?: any) {
     if (arr) {
-        <TArr<T>> arrCopySingle(arr, this);
+        <TArrInvary<T>> arrCopySingle(arr, this);
     }
 }
 
@@ -263,11 +256,8 @@ ArrInvary.prototype = objAssignSingle(new ArrInvaryProto(), {
 
         return result;
     },
-    freeze: function() {
-        return arrObjFreeze(this);
-    },
-    deleteIndex: function (index) {
-        if (index !== void 0 && index < this.length && index > - 1) {
+    deleteIndex: function (ind: number|string) {
+        if (ind !== void 0 && ind < this.length && ind > - 1) {
             if (mutableCurrent) {
                 let i, l;
 
@@ -275,9 +265,9 @@ ArrInvary.prototype = objAssignSingle(new ArrInvaryProto(), {
                     mutableCurrent = new ArrInvary(this);
                 }
 
-                mutableCurrent[index] = null;
+                mutableCurrent[ind] = null;
 
-                for (i = index, l = this.length - 1; i < l; i ++) {
+                for (i = ind, l = this.length - 1; i < l; i ++) {
                     mutableCurrent[i] = mutableCurrent[i + 1];
                 }
 
@@ -288,9 +278,9 @@ ArrInvary.prototype = objAssignSingle(new ArrInvaryProto(), {
 
             let copy = new ArrInvary(this), i, l;
 
-            copy[index] = null;
+            copy[ind] = null;
 
-            for (i = index, l = this.length - 1; i < l; i ++) {
+            for (i = ind, l = this.length - 1; i < l; i ++) {
                 copy[i] = copy[i + 1];
             }
 
@@ -301,8 +291,11 @@ ArrInvary.prototype = objAssignSingle(new ArrInvaryProto(), {
 
         return this;
     },
-    insertIndex: function (index, value) {
-        if (index !== void 0 && index < this.length && index > - 1) {
+    freeze: function() {
+        return arrObjFreeze(this);
+    },
+    insertIndex: function (ind, val) {
+        if (ind !== void 0 && ind < this.length && ind > - 1) {
             if (mutableCurrent) {
                 let i, l;
 
@@ -312,11 +305,11 @@ ArrInvary.prototype = objAssignSingle(new ArrInvaryProto(), {
 
                 Array.prototype.push.call(mutableCurrent, null);
 
-                for (i = this.length - 1, l = index; i >= l; i --) {
+                for (i = this.length - 1, l = ind; i >= l; i --) {
                     mutableCurrent[i + 1] = mutableCurrent[i];
                 }
 
-                mutableCurrent[index] = value;
+                mutableCurrent[ind] = val;
 
                 return mutableCurrent;
             }
@@ -325,11 +318,11 @@ ArrInvary.prototype = objAssignSingle(new ArrInvaryProto(), {
 
             Array.prototype.push.call(copy, null);
 
-            for (i = this.length - 1, l = index; i >= l; i --) {
+            for (i = this.length - 1, l = ind; i >= l; i --) {
                 copy[i + 1] = copy[i];
             }
 
-            copy[index] = value;
+            copy[ind] = val;
 
             return copy;
         }

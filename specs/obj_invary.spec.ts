@@ -1,7 +1,7 @@
 import {isArr, Arr, ArrInvary} from "../src";
 import {isObj, Obj, ObjInvary} from "../src";
 
-describe('Obj', () => {
+describe('ObjInvary', () => {
     it('should be created by factory from array then be instance of ObjInvary', () => {
         const obj = Obj([1]);
 

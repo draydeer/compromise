@@ -179,6 +179,8 @@ export module Context {
     export let isDevMode = process ? process.env.NODE_ENV === 'dev' : window['INVARY_ENV'] === 'dev';
 }
 
+export type TDict<T> = { [key: string]: T };
+
 export type TKey = string|(number|string)[];
 
 export function anyGetInContext(key: TKey, def?: any) {

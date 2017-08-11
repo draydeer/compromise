@@ -8,20 +8,13 @@ import {
     objAssignSingle
 } from "../lib";
 
-export interface IArr extends Array<any> {
+import {
+    IArrInvary,
+    TArrInvary
+} from "./types";
 
-    get(key: TKey, def?: any): any;
-
-    set(key: TKey, val: any): this;
-
-    isArr(val: any): boolean;
-
-}
-
-export type TArr<T> = IArr & T;
-
-export const Arr = function<T> (value: any): TArr<T> {
-    return new ArrInvary<TArr<T>>(value);
+export const Arr = function<T>(value: any): TArrInvary<T> {
+    return new ArrInvary<TArrInvary<T>>(value);
 };
 
 let copySet = new Set();
@@ -167,7 +160,7 @@ let mutableIndex = 0;
 
 export function ArrInvary<T>(arr?: any, noFreeze?: boolean) {
     if (arr) {
-        <TArr<T>> arrCopySingle(arr, this);
+        <TArrInvary<T>> arrCopySingle(arr, this);
     }
 
     if (true !== noFreeze) {
