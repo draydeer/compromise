@@ -58,3 +58,12 @@ exports.allPatchCompare = function (target, source) {
 exports.construct = function (mixed) {
     return mixed instanceof Array ? exports.Arr(mixed) : exports.Obj(mixed);
 };
+var isArrayOrigin = Array.isArray.bind(Array);
+var isArray = function (arg) {
+    return arg instanceof exports.ArrInvary || isArrayOrigin(arg);
+};
+exports.applyIsArrayPatch = function () {
+    if (Array.isArray !== isArray) {
+        Array.isArray = isArray;
+    }
+};

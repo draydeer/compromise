@@ -1,4 +1,4 @@
-import {get, set, setPatch, all, allPatch, construct} from "../src";
+import {get, set, setPatch, all, allPatch, construct, applyIsArrayPatch} from "../src";
 import {allPatchCompare} from "../src";
 import {ArrInvary} from "../src";
 import {ObjInvary} from "../src";
@@ -190,5 +190,31 @@ describe('allPatchCompare', () => {
 
         expect(obj).toEqual({a: 1, b: {a: 1}, c: 3, d: 4, e: 5});
         expect(ob2).toEqual({b: {a: 1}, d: 5});
+    });
+});
+
+describe('applyIsArrayPatch', () => {
+    it('should apply patch then return true by Array.isArray(ArrInvary instance)', () => {
+        applyIsArrayPatch();
+
+        expect(Array.isArray(new ArrInvary([]))).toBeTruthy();
+    });
+
+    it('should apply patch then return true by Array.isArray([])', () => {
+        applyIsArrayPatch();
+
+        expect(Array.isArray([])).toBeTruthy();
+    });
+
+    it('should apply patch then return false by Array.isArray(ObjInvary instance)', () => {
+        applyIsArrayPatch();
+
+        expect(Array.isArray(new ObjInvary([]))).toBeFalsy();
+    });
+
+    it('should apply patch then return false by Array.isArray({})', () => {
+        applyIsArrayPatch();
+
+        expect(Array.isArray({})).toBeFalsy();
     });
 });

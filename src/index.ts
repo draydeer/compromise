@@ -124,3 +124,15 @@ export const allPatchCompare = function (target: any, source: any) {
 export const construct = function (mixed: any): IArrInvary | IObjInvary {
     return mixed instanceof Array ? exports.Arr(mixed) : exports.Obj(mixed);
 };
+
+const isArrayOrigin = Array.isArray.bind(Array);
+
+const isArray = function (arg: any): arg is Array<any> {
+    return arg instanceof exports.ArrInvary || isArrayOrigin(arg);
+};
+
+export const applyIsArrayPatch = function () {
+    if (Array.isArray !== isArray) {
+        Array.isArray = isArray;
+    }
+};

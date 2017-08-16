@@ -10,3 +10,4 @@ export declare const setPatch: (target: any, key: TKey, val: any) => any;
 export declare const allPatch: (target: any, a?: any, b?: any, c?: any, d?: any, e?: any, f?: any, g?: any, h?: any) => any;
 export declare const allPatchCompare: (target: any, source: any) => any;
 export declare const construct: (mixed: any) => IArrInvary | IObjInvary;
+export declare const applyIsArrayPatch: () => void;

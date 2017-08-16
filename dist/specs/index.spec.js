@@ -142,3 +142,21 @@ describe('allPatchCompare', function () {
         expect(ob2).toEqual({ b: { a: 1 }, d: 5 });
     });
 });
+describe('applyIsArrayPatch', function () {
+    it('should apply patch then return true by Array.isArray(ArrInvary instance)', function () {
+        src_1.applyIsArrayPatch();
+        expect(Array.isArray(new src_3.ArrInvary([]))).toBeTruthy();
+    });
+    it('should apply patch then return true by Array.isArray([])', function () {
+        src_1.applyIsArrayPatch();
+        expect(Array.isArray([])).toBeTruthy();
+    });
+    it('should apply patch then return false by Array.isArray(ObjInvary instance)', function () {
+        src_1.applyIsArrayPatch();
+        expect(Array.isArray(new src_4.ObjInvary([]))).toBeFalsy();
+    });
+    it('should apply patch then return false by Array.isArray({})', function () {
+        src_1.applyIsArrayPatch();
+        expect(Array.isArray({})).toBeFalsy();
+    });
+});
