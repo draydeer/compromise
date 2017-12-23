@@ -1,5 +1,4 @@
-import { TKey } from "../lib";
-import { TArrInvary } from "./types";
+import { TArrInvary, TKey } from "../types";
 export declare const Arr: <T>(value: any) => TArrInvary<T>;
 export declare function arrSet(ctx: any, key: TKey, val: any): any;
 export declare function arrSetPatch(ctx: any, key: TKey, val: any): any;

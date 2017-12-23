@@ -1,6 +1,5 @@
 import {
     Context,
-    TKey,
     anyGetInContext,
     arrPatchCompare,
     objPatchCompare
@@ -12,8 +11,9 @@ import {
     TArrInvary,
     IObj,
     IObjInvary,
-    TObjInvary
-} from "./invary/types";
+    TObjInvary,
+    TKey
+} from "./types";
 
 import {
     Arr,
@@ -34,6 +34,11 @@ import {
     objSetPatch,
     isObj,
 } from "./invary/obj";
+
+import {
+    RecInvary as Rec,
+    RecInvary,
+} from "./invary/rec"
 
 import {
     Arr as ArrDev,

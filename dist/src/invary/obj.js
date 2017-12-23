@@ -9,6 +9,10 @@ function objSet(ctx, key, val) {
     if (lib_1.anyGetInContext.call(ctx, key) === val) {
         return ctx;
     }
+    return objSetDirect(ctx, key, val);
+}
+exports.objSet = objSet;
+function objSetDirect(ctx, key, val) {
     var root, self = root = lib_1.objCopySingle(ctx);
     var i, l;
     for (i = 0, l = lib_1.Context.getSetKeysCache.length - 1; i < l; i++) {
@@ -19,7 +23,19 @@ function objSet(ctx, key, val) {
     lib_1.Context.getSetKeysCache = null;
     return root;
 }
-exports.objSet = objSet;
+exports.objSetDirect = objSetDirect;
+function objSetDirectMutable(ctx, key, val) {
+    var self = ctx;
+    var i, l;
+    for (i = 0, l = lib_1.Context.getSetKeysCache.length - 1; i < l; i++) {
+        var v = self[lib_1.Context.getSetKeysCache[i]];
+        self = self[lib_1.Context.getSetKeysCache[i]] = (v && typeof v === "object") ? v : {};
+    }
+    self[lib_1.Context.getSetKeysCache[i]] = val;
+    lib_1.Context.getSetKeysCache = null;
+    return ctx;
+}
+exports.objSetDirectMutable = objSetDirectMutable;
 function objSetPatch(ctx, key, val) {
     if (lib_1.anyGetInContext.call(ctx, key) === val) {
         return {};

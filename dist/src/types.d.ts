@@ -1,4 +1,7 @@
-import { TDict, TKey } from "../lib";
+export declare type TDict<T> = {
+    [key: string]: T;
+};
+export declare type TKey = string | (number | string)[];
 export interface IArrInvary extends Array<any> {
     get(key: TKey, def?: any): any;
     set(key: TKey, val: any): this;
@@ -32,3 +35,8 @@ export interface IObjInvary extends Object {
 }
 export declare type TObjInvary<T> = IObjInvary & T;
 export declare type IObj<T> = <T>(value: any) => TObjInvary<T>;
+export interface IRecInvary<T> extends Function {
+    new (props?: Partial<T>): this;
+    set(key: TKey, val: any): this;
+}
+export declare type TRecInvary<T> = IRecInvary<T> & T;

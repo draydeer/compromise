@@ -1,6 +1,5 @@
 import {
     Context,
-    TKey,
     anyGetInContext,
     arrObjClone,
     arrObjFreeze,
@@ -10,8 +9,9 @@ import {
 
 import {
     IObjInvary,
-    TObjInvary
-} from "./types";
+    TObjInvary,
+    TKey
+} from "../types";
 
 export const Obj = function<T>(value: any): TObjInvary<T> {
     return new ObjInvary<TObjInvary<T>>(value);
@@ -24,6 +24,10 @@ export function objSet(ctx: any, key: TKey, val: any) {
         return ctx;
     }
 
+    return objSetDirect(ctx, key, val);
+}
+
+export function objSetDirect(ctx: any, key: TKey, val: any) {
     let root, self = root = objCopySingle(ctx);
     let i, l;
 
@@ -38,6 +42,23 @@ export function objSet(ctx: any, key: TKey, val: any) {
     Context.getSetKeysCache = null;
 
     return root;
+}
+
+export function objSetDirectMutable(ctx: any, key: TKey, val: any) {
+    let self = ctx;
+    let i, l;
+
+    for (i = 0, l = Context.getSetKeysCache.length - 1; i < l; i ++) {
+        const v = self[Context.getSetKeysCache[i]];
+
+        self = self[Context.getSetKeysCache[i]] = (v && typeof v === "object") ? v : {};
+    }
+
+    self[Context.getSetKeysCache[i]] = val;
+
+    Context.getSetKeysCache = null;
+
+    return ctx;
 }
 
 export function objSetPatch(ctx: any, key: TKey, val: any) {

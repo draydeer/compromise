@@ -1,6 +1,5 @@
 import {
     Context,
-    TKey,
     anyGetInContext,
     arrCopySingle,
     arrObjClone,
@@ -10,8 +9,9 @@ import {
 
 import {
     IArrInvary,
-    TArrInvary
-} from "./types";
+    TArrInvary,
+    TKey
+} from "../types";
 
 export const Arr = function<T>(value: any): TArrInvary<T> {
     return new ArrInvary<TArrInvary<T>>(value);
@@ -365,7 +365,6 @@ ArrInvary.prototype = objAssignSingle(new ArrInvaryProto(), {
         }
 
         let copy = new ArrInvary(this, true);
-
         let result = Array.prototype.pop.apply(copy);
 
         copy.freeze();
@@ -382,7 +381,6 @@ ArrInvary.prototype = objAssignSingle(new ArrInvaryProto(), {
         }
 
         let copy = new ArrInvary(this, true);
-
         let result = Array.prototype.push.apply(copy, arguments);
 
         copy.freeze();
@@ -402,7 +400,6 @@ ArrInvary.prototype = objAssignSingle(new ArrInvaryProto(), {
         }
 
         let copy = new ArrInvary(this, true);
-
         let result = Array.prototype.shift.apply(copy);
 
         if (! mutableCurrent) {
@@ -424,7 +421,6 @@ ArrInvary.prototype = objAssignSingle(new ArrInvaryProto(), {
         }
 
         let copy = new ArrInvary(this, true);
-
         let result = Array.prototype.unshift.apply(copy, arguments);
 
         copy.freeze();

@@ -1,10 +1,10 @@
 # Invary
 
-A small library of simple immutable data structures like Array and Object.
+A small library of simple immutable data structures such as Array and Object.
 
-The main goal of this library is to provide immutable data structures which principle of use is similar to Array and Object.
-This may be useful and convenient in case of small objects having 10-20 properties.
-For big data structures using of [Immutable.js](https://github.com/facebook/immutable-js/) will be a better way.
+The main goal of this library is to provide immutable data structures which principle of use is similar to classic JS Array and Object.
+This may be useful and convenient in case of small objects having up to 20 properties.
+For big data structures, using of [Immutable.js](https://github.com/facebook/immutable-js/) will be a better way.
 
 ## Installation
 
@@ -20,9 +20,9 @@ $ npm test
 
 ## Global methods
 
-*get* - gets value by path like 'a.b.c' or ['a', 'b', 'c'].
+*get(context, path, default value)* - gets value by path like 'a.b.c' or ['a', 'b', 'c'].
 
-Returns default value if the path doesn't exists.
+Returns the default value, if the path doesn't exist.
 
 ```javascript
 let obj = {
@@ -39,7 +39,7 @@ get(obj, ['b'], 3); // 3
 
 *set* - sets value by path like 'a.b.c' or ['a', 'b', 'c'].
 
-Returns the copy of the initial data if new value differs from old value.
+Returns the copy of the initial data if the new value differs from old value.
 
 ```javascript
 let obj = {
@@ -221,13 +221,43 @@ arr = arr.batch((mutable1) => {
 
 In the development mode all Invary entities will be frozen to avoid bugs during development process. To activate development mode set env variable NODE_ENV=dev or set window.INVARY_ENV=dev.
 
-## Benchmarks (Intel Core i7, 4 cores, disabled HT, 16gb 1600mhz DDR3)
+## Benchmarks (Intel Core i7, 4 cores, disabled HT, 16gb 1600mhz DDR3, NodeJS 6.12.0)
 
 Test data:
 
-Arr([0, {b0: 1, b1: {b10: 1, b11: {b110: 1, b111: 2}}}, 2, 3, 4, 5, 6, 7, 8, 9]);
+```js
+Arr([
+    0,
+    {
+        b0: 1,
+        b1: {
+            b10: 1,
+            b11: {
+                b110: 1,
+                b111: 2
+            }
+        }
+    },
+    2, 3, 4, 5, 6, 7, 8, 9
+]);
+```
 
-Obj({a: 0, b: {b0: 1, b1: {b10: 1, b11: {b110: 1, b111: 2}}}, c: 2, d: 3, e: 4, f: 5, g: 6, h: 7, i: 8, j: 9});
+```js
+Obj({
+    a: 0,
+    b: {
+        b0: 1,
+        b1: {
+            b10: 1,
+            b11: {
+                b110: 1,
+                b111: 2
+            }
+        }
+    },
+    c: 2, d: 3, e: 4, f: 5, g: 6, h: 7, i: 8, j: 9
+});
+```
 
 ```
 ------------------------------

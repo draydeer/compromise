@@ -1,3 +1,7 @@
+import {
+    TKey
+} from "./types";
+
 export function arrAssignArrayLike(target, a?, b?, c?, d?, e?, f?, g?, h?): any {
     let i, j, l, m, length;
 
@@ -178,10 +182,6 @@ export module Context {
     export let getSetKeysCache = [];
     export let isDevMode = process ? process.env.NODE_ENV === 'dev' : window['INVARY_ENV'] === 'dev';
 }
-
-export type TDict<T> = { [key: string]: T };
-
-export type TKey = string|(number|string)[];
 
 export function anyGetInContext(key: TKey, def?: any) {
     let self = this;

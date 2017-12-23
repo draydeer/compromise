@@ -1,3 +1,4 @@
+import { TKey } from "./types";
 export declare function arrAssignArrayLike(target: any, a?: any, b?: any, c?: any, d?: any, e?: any, f?: any, g?: any, h?: any): any;
 export declare function arrAssignArrayLikeSingle(target: any, source: any): any;
 export declare function arrCopySingle(source: any, ctx?: any): any;
@@ -14,8 +15,4 @@ export declare module Context {
     let getSetKeysCache: any[];
     let isDevMode: boolean;
 }
-export declare type TDict<T> = {
-    [key: string]: T;
-};
-export declare type TKey = string | (number | string)[];
 export declare function anyGetInContext(key: TKey, def?: any): any;

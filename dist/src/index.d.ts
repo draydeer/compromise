@@ -1,5 +1,5 @@
-import { TKey, anyGetInContext } from "./lib";
-import { IArr, IArrInvary, TArrInvary, IObj, IObjInvary, TObjInvary } from "./invary/types";
+import { anyGetInContext } from "./lib";
+import { IArr, IArrInvary, TArrInvary, IObj, IObjInvary, TObjInvary, TKey } from "./types";
 import { Arr, ArrInvary, arrAll, arrAllPatch, arrSet, arrSetPatch, isArr } from "./invary/arr";
 import { Obj, ObjInvary, objAll, objAllPatch, objSet, objSetPatch, isObj } from "./invary/obj";
 export { Arr, ArrInvary, IArr, IArrInvary, TArrInvary, anyGetInContext, arrAll, arrAllPatch, arrSet, arrSetPatch, isArr, Obj, ObjInvary, IObj, IObjInvary, TObjInvary, objAll, objAllPatch, objSet, objSetPatch, isObj };
