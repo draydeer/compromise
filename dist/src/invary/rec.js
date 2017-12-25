@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var lib_1 = require("../lib");
 var obj_1 = require("./obj");
-function RecInvary(props) {
+function Rec(props) {
     var RecInvary = /** @class */ (function () {
         function RecInvary(props) {
             this.__props = function () {
@@ -37,4 +37,4 @@ function RecInvary(props) {
     }
     return RecInvary;
 }
-exports.RecInvary = RecInvary;
+exports.Rec = Rec;

@@ -35,10 +35,7 @@ import {
     isObj,
 } from "./invary/obj";
 
-import {
-    RecInvary as Rec,
-    RecInvary,
-} from "./invary/rec"
+import {Rec} from "./invary/rec"
 
 import {
     Arr as ArrDev,

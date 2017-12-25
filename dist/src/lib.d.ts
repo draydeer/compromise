@@ -16,3 +16,12 @@ export declare module Context {
     let isDevMode: boolean;
 }
 export declare function anyGetInContext(key: TKey, def?: any): any;
+export declare function specialize(copier: (ctx: any) => any): {
+    set: (ctx: any, key: TKey, val: any) => any;
+    setInContext: (key: TKey, val: any) => any;
+    setDirect: (ctx: any, key: TKey, val: any) => any;
+    setDirectMutable: (ctx: any, key: TKey, val: any) => any;
+    setPatch: (ctx: any, key: TKey, val: any) => any;
+    all: (ctx: any, a?: any, b?: any, c?: any, d?: any, e?: any, f?: any, g?: any, h?: any) => any;
+    allPatch: (ctx: any, a?: any, b?: any, c?: any, d?: any, e?: any, f?: any, g?: any, h?: any) => any;
+};

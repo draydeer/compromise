@@ -1,133 +1,173 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var lib_1 = require("../lib");
+var lib_2 = require("../lib");
+var const_1 = require("../const");
 exports.Obj = function (value) {
     return new ObjInvary(value);
 };
 var copySet = new Set();
-function objSet(ctx, key, val) {
-    if (lib_1.anyGetInContext.call(ctx, key) === val) {
-        return ctx;
-    }
-    return objSetDirect(ctx, key, val);
-}
-exports.objSet = objSet;
-function objSetDirect(ctx, key, val) {
-    var root, self = root = lib_1.objCopySingle(ctx);
-    var i, l;
-    for (i = 0, l = lib_1.Context.getSetKeysCache.length - 1; i < l; i++) {
-        var v = self[lib_1.Context.getSetKeysCache[i]];
-        self = self[lib_1.Context.getSetKeysCache[i]] = (v && typeof v === "object") ? lib_1.arrObjClone(v) : {};
-    }
-    self[lib_1.Context.getSetKeysCache[i]] = val;
-    lib_1.Context.getSetKeysCache = null;
-    return root;
-}
-exports.objSetDirect = objSetDirect;
-function objSetDirectMutable(ctx, key, val) {
-    var self = ctx;
-    var i, l;
-    for (i = 0, l = lib_1.Context.getSetKeysCache.length - 1; i < l; i++) {
-        var v = self[lib_1.Context.getSetKeysCache[i]];
-        self = self[lib_1.Context.getSetKeysCache[i]] = (v && typeof v === "object") ? v : {};
-    }
-    self[lib_1.Context.getSetKeysCache[i]] = val;
-    lib_1.Context.getSetKeysCache = null;
-    return ctx;
-}
-exports.objSetDirectMutable = objSetDirectMutable;
-function objSetPatch(ctx, key, val) {
-    if (lib_1.anyGetInContext.call(ctx, key) === val) {
-        return {};
-    }
-    var root, self = root = (_a = {}, _a[lib_1.Context.getSetKeysCache[0]] = ctx[lib_1.Context.getSetKeysCache[0]], _a);
-    var i, l;
-    for (i = 0, l = lib_1.Context.getSetKeysCache.length - 1; i < l; i++) {
-        var v = self[lib_1.Context.getSetKeysCache[i]];
-        self = self[lib_1.Context.getSetKeysCache[i]] = (v && typeof v === "object") ? lib_1.arrObjClone(v) : {};
-    }
-    self[lib_1.Context.getSetKeysCache[i]] = val;
-    lib_1.Context.getSetKeysCache = null;
-    return root;
-    var _a;
-}
-exports.objSetPatch = objSetPatch;
-function objAll(ctx, a, b, c, d, e, f, g, h) {
-    if (arguments.length < 4) {
-        return objSet(ctx, a, b);
-    }
-    var root = ctx;
-    var self;
-    var i, j, l, m;
-    copySet.clear();
-    for (i = 1, l = arguments.length; i < l; i += 2) {
-        if (lib_1.anyGetInContext.call(ctx, arguments[i]) === arguments[i + 1]) {
-            continue;
-        }
-        if (root === ctx) {
-            self = root = lib_1.objCopySingle(ctx);
-        }
-        else {
-            self = root;
-        }
-        for (j = 0, m = lib_1.Context.getSetKeysCache.length - 1; j < m; j++) {
-            var v = self[lib_1.Context.getSetKeysCache[j]];
-            if (v && typeof v === "object") {
-                if (false === copySet.has(v)) {
-                    self = self[lib_1.Context.getSetKeysCache[j]] = lib_1.arrObjClone(v);
-                    copySet.add(self);
-                }
-                else {
-                    self = v;
-                }
-            }
-            else {
-                self = self[lib_1.Context.getSetKeysCache[j]] = {};
-            }
-        }
-        self[lib_1.Context.getSetKeysCache[j]] = arguments[i + 1];
-    }
-    lib_1.Context.getSetKeysCache = null;
-    return root;
-}
-exports.objAll = objAll;
-function objAllPatch(ctx, a, b, c, d, e, f, g, h) {
-    if (arguments.length < 4) {
-        return objSetPatch(ctx, a, b);
-    }
-    var root = {};
-    var self;
-    var i, j, l, m;
-    copySet.clear();
-    for (i = 1, l = arguments.length; i < l; i += 2) {
-        if (lib_1.anyGetInContext.call(ctx, arguments[i]) === arguments[i + 1]) {
-            continue;
-        }
-        self = root;
-        if (false === lib_1.Context.getSetKeysCache[0] in self) {
-            self[lib_1.Context.getSetKeysCache[0]] = ctx[lib_1.Context.getSetKeysCache[0]];
-        }
-        for (j = 0, m = lib_1.Context.getSetKeysCache.length - 1; j < m; j++) {
-            var v = self[lib_1.Context.getSetKeysCache[j]];
-            if (v && typeof v === "object") {
-                if (false === copySet.has(v)) {
-                    self = self[lib_1.Context.getSetKeysCache[j]] = lib_1.arrObjClone(v);
-                    copySet.add(self);
-                }
-                else {
-                    self = v;
-                }
-            }
-            else {
-                self = self[lib_1.Context.getSetKeysCache[j]] = {};
-            }
-        }
-        self[lib_1.Context.getSetKeysCache[j]] = arguments[i + 1];
-    }
-    lib_1.Context.getSetKeysCache = null;
-    return root;
-}
-exports.objAllPatch = objAllPatch;
+//export function objSet(ctx: any, key: TKey, val: any) {
+//    if (anyGetInContext.call(ctx, key) === val) {
+//        return ctx;
+//    }
+//
+//    return objSetDirect(ctx, key, val);
+//}
+//
+//export function objSetDirect(ctx: any, key: TKey, val: any) {
+//    let root, self = root = objCopySingle(ctx);
+//    let i, l;
+//
+//    for (i = 0, l = Context.getSetKeysCache.length - 1; i < l; i ++) {
+//        const v = self[Context.getSetKeysCache[i]];
+//
+//        self = self[Context.getSetKeysCache[i]] = (v && typeof v === "object") ? arrObjClone(v) : {};
+//    }
+//
+//    self[Context.getSetKeysCache[i]] = val;
+//
+//    Context.getSetKeysCache = null;
+//
+//    return root;
+//}
+//
+//export function objSetDirectMutable(ctx: any, key: TKey, val: any) {
+//    let self = ctx;
+//    let i, l;
+//
+//    for (i = 0, l = Context.getSetKeysCache.length - 1; i < l; i ++) {
+//        const v = self[Context.getSetKeysCache[i]];
+//
+//        self = self[Context.getSetKeysCache[i]] = (v && typeof v === "object") ? v : {};
+//    }
+//
+//    self[Context.getSetKeysCache[i]] = val;
+//
+//    Context.getSetKeysCache = null;
+//
+//    return ctx;
+//}
+//
+//export function objSetPatch(ctx: any, key: TKey, val: any) {
+//    if (anyGetInContext.call(ctx, key) === val) {
+//        return {};
+//    }
+//
+//    let root, self = root = {[Context.getSetKeysCache[0]]: ctx[Context.getSetKeysCache[0]]};
+//    let i, l;
+//
+//    for (i = 0, l = Context.getSetKeysCache.length - 1; i < l; i ++) {
+//        const v = self[Context.getSetKeysCache[i]];
+//
+//        self = self[Context.getSetKeysCache[i]] = (v && typeof v === "object") ? arrObjClone(v) : {};
+//    }
+//
+//    self[Context.getSetKeysCache[i]] = val;
+//
+//    Context.getSetKeysCache = null;
+//
+//    return root;
+//}
+//
+//export function objAll(ctx, a?, b?, c?, d?, e?, f?, g?, h?) {
+//    if (arguments.length < 4) {
+//        return objSet(ctx, a, b);
+//    }
+//
+//    let root = ctx;
+//    let self;
+//    let i, j, l, m;
+//
+//    copySet.clear();
+//
+//    for (i = 1, l = arguments.length; i < l; i += 2) {
+//        if (anyGetInContext.call(ctx, arguments[i]) === arguments[i + 1]) {
+//            continue;
+//        }
+//
+//        if (root === ctx) {
+//            self = root = objCopySingle(ctx);
+//        } else {
+//            self = root;
+//        }
+//
+//        for (j = 0, m = Context.getSetKeysCache.length - 1; j < m; j ++) {
+//            const v = self[Context.getSetKeysCache[j]];
+//
+//            if (v && typeof v === "object") {
+//                if (false === copySet.has(v)) {
+//                    self = self[Context.getSetKeysCache[j]] = arrObjClone(v);
+//
+//                    copySet.add(self);
+//                } else {
+//                    self = v;
+//                }
+//            } else {
+//                self = self[Context.getSetKeysCache[j]] = {};
+//            }
+//        }
+//
+//        self[Context.getSetKeysCache[j]] = arguments[i + 1];
+//    }
+//
+//    Context.getSetKeysCache = null;
+//
+//    return root;
+//}
+//
+//export function objAllPatch(ctx, a?, b?, c?, d?, e?, f?, g?, h?) {
+//    if (arguments.length < 4) {
+//        return objSetPatch(ctx, a, b);
+//    }
+//
+//    let root = {};
+//    let self;
+//    let i, j, l, m;
+//
+//    copySet.clear();
+//
+//    for (i = 1, l = arguments.length; i < l; i += 2) {
+//        if (anyGetInContext.call(ctx, arguments[i]) === arguments[i + 1]) {
+//            continue;
+//        }
+//
+//        self = root;
+//
+//        if (false === Context.getSetKeysCache[0] in self) {
+//            self[Context.getSetKeysCache[0]] = ctx[Context.getSetKeysCache[0]];
+//        }
+//
+//        for (j = 0, m = Context.getSetKeysCache.length - 1; j < m; j ++) {
+//            const v = self[Context.getSetKeysCache[j]];
+//
+//            if (v && typeof v === "object") {
+//                if (false === copySet.has(v)) {
+//                    self = self[Context.getSetKeysCache[j]] = arrObjClone(v);
+//
+//                    copySet.add(self);
+//                } else {
+//                    self = v;
+//                }
+//            } else {
+//                self = self[Context.getSetKeysCache[j]] = {};
+//            }
+//        }
+//
+//        self[Context.getSetKeysCache[j]] = arguments[i + 1];
+//    }
+//
+//    Context.getSetKeysCache = null;
+//
+//    return root;
+//}
+var specialized = lib_2.specialize(lib_1.objCopySingle);
+exports.objSet = specialized.set;
+exports.objSetDirect = specialized.setDirect;
+exports.objSetDirectMutable = specialized.setDirectMutable;
+exports.objSetPatch = specialized.setPatch;
+exports.objAll = specialized.all;
+exports.objAllPatch = specialized.allPatch;
 var mutables = new Array(32);
 var mutableCurrent = false;
 var mutableIndex = 0;
@@ -166,7 +206,7 @@ ObjInvary.prototype = lib_1.objAssignSingle(new ObjInvaryProto(), {
             }
             for (j = 0, m = lib_1.Context.getSetKeysCache.length - 1; j < m; j++) {
                 var v = self[lib_1.Context.getSetKeysCache[j]];
-                if (v && typeof v === "object") {
+                if (v && typeof v === const_1.OBJECT) {
                     if (false === copySet.has(v)) {
                         self = self[lib_1.Context.getSetKeysCache[j]] = lib_1.arrObjClone(v);
                         copySet.add(self);
@@ -199,7 +239,7 @@ ObjInvary.prototype = lib_1.objAssignSingle(new ObjInvaryProto(), {
         }
         for (i = 0, l = lib_1.Context.getSetKeysCache.length - 1; i < l; i++) {
             var v = self[lib_1.Context.getSetKeysCache[i]];
-            self = self[lib_1.Context.getSetKeysCache[i]] = (v && typeof v === "object") ? lib_1.arrObjClone(v) : {};
+            self = self[lib_1.Context.getSetKeysCache[i]] = (v && typeof v === const_1.OBJECT) ? lib_1.arrObjClone(v) : {};
         }
         self[lib_1.Context.getSetKeysCache[i]] = val;
         lib_1.Context.getSetKeysCache = null;

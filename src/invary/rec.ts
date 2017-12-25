@@ -11,7 +11,7 @@ import {
     objSetDirectMutable
 } from "./obj";
 
-export function RecInvary<T>(props: T): TRecInvary<T> {
+export function Rec<T>(props: T): TRecInvary<T> {
     class RecInvary {
         constructor(props?: Partial<T>) {
             (<any>this).__props = function () {

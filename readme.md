@@ -261,98 +261,98 @@ Obj({
 
 ```
 ------------------------------
-ArrInvary (10 elements, depth 0) get existing index
+Arr (path - 0) get existing index
 
 Total ops.: 10000000
-Time spent: 524 ms
-Ops. per second: 19083969.465648856
-Time per single op.: 0.0000524 ms
+Time spent: 601 ms
+Ops. per second: 16638935.108153079
+Time per single op.: 0.0000601 ms
 
 ------------------------------
-ArrInvary (10 elements, depth 4) get existing index
+Arr (path - 1.b1.b11.b111) get existing index
 
 Total ops.: 10000000
-Time spent: 953 ms
-Ops. per second: 10493179.433368312
-Time per single op.: 0.0000953 ms
+Time spent: 838 ms
+Ops. per second: 11933174.224343674
+Time per single op.: 0.0000838 ms
 
 ------------------------------
-ArrInvary (10 elements, depth 0) set existing index with same value
+Arr (path - 0) set existing index with same value
 
 Total ops.: 10000000
-Time spent: 596 ms
-Ops. per second: 16778523.489932887
-Time per single op.: 0.0000596 ms
+Time spent: 658 ms
+Ops. per second: 15197568.389057752
+Time per single op.: 0.0000658 ms
 
 ------------------------------
-ArrInvary (10 elements, depth 4) set existing index with same value
+Arr (path - 1.b1.b11.b111) set existing index with same value
 
 Total ops.: 10000000
-Time spent: 981 ms
-Ops. per second: 10193679.91845056
-Time per single op.: 0.0000981 ms
+Time spent: 893 ms
+Ops. per second: 11198208.286674133
+Time per single op.: 0.0000893 ms
 
 ------------------------------
-ArrInvary (10 elements, depth 0) set existing index with new value (substitute array copying)
+Arr (path - 0, 10 props to be copied) set existing index with new value
 
 Total ops.: 10000000
-Time spent: 5292 ms
-Ops. per second: 1889644.746787604
-Time per single op.: 0.0005292 ms
+Time spent: 4888 ms
+Ops. per second: 2045826.5139116202
+Time per single op.: 0.0004888 ms
 
 ------------------------------
-ArrInvary (10 elements, depth 4) set existing index with new value (substitute array copying)
+Arr (path - 1.b1.b11.b111, 14 props to be copied) set existing index with new value
 
 Total ops.: 10000000
-Time spent: 16730 ms
-Ops. per second: 597728.6312014345
-Time per single op.: 0.001673 ms
+Time spent: 10305 ms
+Ops. per second: 970402.7171276079
+Time per single op.: 0.0010305 ms
 
 ------------------------------
-ObjInvary (10 props, depth 0) get existing key
+Obj (path - a) get existing key
 
 Total ops.: 10000000
-Time spent: 793 ms
-Ops. per second: 12610340.479192939
-Time per single op.: 0.0000793 ms
+Time spent: 554 ms
+Ops. per second: 18050541.516245488
+Time per single op.: 0.0000554 ms
 
 ------------------------------
-ObjInvary (10 props, depth 4) get existing key
+Obj (path - b.b1.b11.b111) get existing key
 
 Total ops.: 10000000
-Time spent: 1026 ms
-Ops. per second: 9746588.693957115
-Time per single op.: 0.0001026 ms
+Time spent: 939 ms
+Ops. per second: 10649627.263045793
+Time per single op.: 0.0000939 ms
 
 ------------------------------
-ObjInvary (10 props, depth 0) set existing key with same value
+Obj (path - a) set existing key with same value
 
 Total ops.: 10000000
-Time spent: 793 ms
-Ops. per second: 12610340.479192939
-Time per single op.: 0.0000793 ms
+Time spent: 534 ms
+Ops. per second: 18726591.760299623
+Time per single op.: 0.0000534 ms
 
 ------------------------------
-ObjInvary (10 props, depth 4) set existing key with same value
+Obj (path - b.b1.b11.b111) set existing key with same value
 
 Total ops.: 10000000
-Time spent: 1009 ms
-Ops. per second: 9910802.775024777
-Time per single op.: 0.0001009 ms
+Time spent: 902 ms
+Ops. per second: 11086474.501108648
+Time per single op.: 0.0000902 ms
 
 ------------------------------
-ObjInvary (10 props, depth 0) set existing key with new value
+Obj (path - a, 10 props to be copied) set existing key with new value
 
 Total ops.: 10000000
-Time spent: 4497 ms
-Ops. per second: 2223704.6920169
-Time per single op.: 0.0004497 ms
+Time spent: 3066 ms
+Ops. per second: 3261578.6040443573
+Time per single op.: 0.0003066 ms
 
 ------------------------------
-ObjInvary (10 props, depth 4) set existing key with new value
+Obj (path - b.b1.b11.b111, 14 props to be copied) set existing key with new value
 
 Total ops.: 10000000
-Time spent: 15411 ms
-Ops. per second: 648887.1585231329
-Time per single op.: 0.0015411 ms
+Time spent: 8040 ms
+Ops. per second: 1243781.0945273633
+Time per single op.: 0.000804 ms
 ```

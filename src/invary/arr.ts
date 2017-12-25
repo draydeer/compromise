@@ -12,6 +12,7 @@ import {
     TArrInvary,
     TKey
 } from "../types";
+import {OBJECT} from "../const";
 
 export const Arr = function<T>(value: any): TArrInvary<T> {
     return new ArrInvary<TArrInvary<T>>(value);
@@ -198,7 +199,7 @@ ArrInvary.prototype = objAssignSingle(new ArrInvaryProto(), {
             for (j = 0, m = Context.getSetKeysCache.length - 1; j < m; j ++) {
                 const v = self[Context.getSetKeysCache[j]];
 
-                if (v && typeof v === "object") {
+                if (v && typeof v === OBJECT) {
                     if (false === copySet.has(v)) {
                         self = self[Context.getSetKeysCache[j]] = arrObjClone(v);
 
@@ -236,7 +237,7 @@ ArrInvary.prototype = objAssignSingle(new ArrInvaryProto(), {
         for (i = 0, l = Context.getSetKeysCache.length - 1; i < l; i ++) {
             const v = self[Context.getSetKeysCache[i]];
 
-            self = self[Context.getSetKeysCache[i]] = (v && typeof v === "object") ? arrObjClone(v) : {};
+            self = self[Context.getSetKeysCache[i]] = (v && typeof v === OBJECT) ? arrObjClone(v) : {};
         }
 
         self[Context.getSetKeysCache[i]] = val;
