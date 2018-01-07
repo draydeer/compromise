@@ -61,7 +61,7 @@ function objAssign(target, a, b, c, d, e, f, g, h) {
         var argv = arguments[i];
         if (argv) {
             var keys = Object.keys(argv);
-            for (j = 1, k = keys[0], m = keys.length; j <= m; k = keys[j++]) {
+            for (j = 0, k = keys[0], m = keys.length; j < m; k = keys[++j]) {
                 target[k] = argv[k];
             }
         }
@@ -70,28 +70,28 @@ function objAssign(target, a, b, c, d, e, f, g, h) {
 }
 exports.objAssign = objAssign;
 function objAssignSingle(target, source) {
-    var i, l, k, keys = Object.keys(source);
-    for (i = 1, k = keys[0], l = keys.length; i <= l; k = keys[i++]) {
+    var i = 0, keys = Object.keys(source), k = keys[0], l = keys.length;
+    for (; i < l; k = keys[++i]) {
         target[k] = source[k];
     }
     return target;
 }
 exports.objAssignSingle = objAssignSingle;
 function objCopySingle(source, ctx) {
-    var i, l, k, keys = Object.keys(source), target = ctx || {};
-    for (i = 1, k = keys[0], l = keys.length; i <= l; k = keys[i++]) {
+    var i = 0, keys = Object.keys(source), k = keys[0], l = keys.length, target = ctx || {};
+    for (; i < l; k = keys[++i]) {
         target[k] = source[k];
     }
     return target;
 }
 exports.objCopySingle = objCopySingle;
 function objMerge(a, b, c, d, e, f, g, h) {
-    var i, j, l, k, m, target = {};
+    var i, j, k, l, m, target = {};
     for (i = 0, l = arguments.length; i < l; i++) {
         var argv = arguments[i];
         if (argv) {
             var keys = Object.keys(argv);
-            for (j = 1, k = keys[0], m = keys.length; j <= m; k = keys[j++]) {
+            for (j = 0, k = keys[0], m = keys.length; j < m; k = keys[++j]) {
                 target[k] = argv[k];
             }
         }
@@ -100,8 +100,8 @@ function objMerge(a, b, c, d, e, f, g, h) {
 }
 exports.objMerge = objMerge;
 function objPatchCompare(target, source) {
-    var i, l, k, keys = Object.keys(source), patch = {};
-    for (i = 1, k = keys[0], l = keys.length; i <= l; k = keys[i++]) {
+    var i = 0, keys = Object.keys(source), k = keys[0], l = keys.length, patch = {};
+    for (; i < l; k = keys[++i]) {
         var v = source[k];
         if (v !== target[k]) {
             patch[k] = v && typeof v === const_1.OBJECT ? arrObjClone(source[k]) : v;
@@ -129,8 +129,8 @@ function arrObjFreeze(source) {
             }
         }
         else {
-            var i = void 0, l = void 0, k = void 0, keys = Object.keys(source), v = void 0;
-            for (i = 0, l = keys.length, k = keys[0]; i < l; i++, k = keys[i]) {
+            var i = 0, keys = Object.keys(source), k = keys[0], l = keys.length, v = void 0;
+            for (; i < l; k = keys[++i]) {
                 v = source[k];
                 if (v && typeof v === const_1.OBJECT && false === Object.isFrozen(v)) {
                     arrObjFreeze(v);
@@ -171,16 +171,10 @@ function specialize(copier) {
         if (anyGetInContext.call(ctx, key) === val) {
             return ctx;
         }
-        return setDirect(ctx, key, val);
+        return setByGetSetKeysCache(ctx, val);
     }
-    function setInContext(key, val) {
-        if (anyGetInContext.call(this, key) === val) {
-            return this;
-        }
-        return setDirect(this, key, val);
-    }
-    function setDirect(ctx, key, val) {
-        var root, self = root = copier(ctx);
+    function setByGetSetKeysCache(ctx, val) {
+        var root, self = root = copier.call(ctx, ctx);
         var i, l;
         for (i = 0, l = Context.getSetKeysCache.length - 1; i < l; i++) {
             var v = self[Context.getSetKeysCache[i]];
@@ -190,16 +184,11 @@ function specialize(copier) {
         Context.getSetKeysCache = null;
         return root;
     }
-    function setDirectMutable(ctx, key, val) {
-        var self = ctx;
-        var i, l;
-        for (i = 0, l = Context.getSetKeysCache.length - 1; i < l; i++) {
-            var v = self[Context.getSetKeysCache[i]];
-            self = self[Context.getSetKeysCache[i]] = (v && typeof v === const_1.OBJECT) ? v : {};
+    function setInContext(key, val) {
+        if (anyGetInContext.call(this, key) === val) {
+            return this;
         }
-        self[Context.getSetKeysCache[i]] = val;
-        Context.getSetKeysCache = null;
-        return ctx;
+        return setByGetSetKeysCache(this, val);
     }
     function setPatch(ctx, key, val) {
         if (anyGetInContext.call(ctx, key) === val) {
@@ -292,9 +281,8 @@ function specialize(copier) {
     }
     return {
         set: set,
+        setByGetSetKeysCache: setByGetSetKeysCache,
         setInContext: setInContext,
-        setDirect: setDirect,
-        setDirectMutable: setDirectMutable,
         setPatch: setPatch,
         all: all,
         allPatch: allPatch,

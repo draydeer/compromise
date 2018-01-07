@@ -6,17 +6,17 @@ import {
     TKey,
     TRecInvary
 } from "../types";
-import {
-    objSetDirect,
-    objSetDirectMutable
-} from "./obj";
+import {objCopySingle, specialize} from "../lib";
+
+const specialized = specialize(objCopySingle);
+const setByGetSetKeysCache = specialized.setByGetSetKeysCache;
 
 export function Rec<T>(props: T): TRecInvary<T> {
     class RecInvary {
         constructor(props?: Partial<T>) {
-            (<any>this).__props = function () {
-                return props
-            };
+            if (props) {
+                objCopySingle(props, this);
+            }
         }
 
         public set(key: TKey, val: any) {
@@ -24,27 +24,11 @@ export function Rec<T>(props: T): TRecInvary<T> {
                 return this;
             }
 
-            let p = (<any>this).__props();
-
-            if (p) {
-                return new RecInvary(objSetDirect(p, key, val));
-            }
-
-            return new RecInvary(objSetDirectMutable({}, key, val));
+            return new RecInvary(setByGetSetKeysCache(this, val));
         };
     }
 
-    for (let k in props) {
-        if (props.hasOwnProperty(k)) {
-            (<any>Object).defineProperty(RecInvary.prototype, k, {
-                get: function() {
-                    let p = (<any>this).__props();
-
-                    return p && k in p ? p[k] : props[k];
-                }
-            });
-        }
-    }
+    objCopySingle(props, RecInvary.prototype);
 
     return <TRecInvary<T>>RecInvary;
 }

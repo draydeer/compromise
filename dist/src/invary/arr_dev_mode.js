@@ -1,117 +1,16 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var lib_1 = require("../lib");
+var lib_2 = require("../lib");
 exports.Arr = function (value) {
     return new ArrInvary(value);
 };
 var copySet = new Set();
-function arrSet(ctx, key, val) {
-    if (lib_1.anyGetInContext.call(ctx, key) === val) {
-        return ctx;
-    }
-    var root, self = root = lib_1.arrCopySingle(ctx);
-    var i, l;
-    for (i = 0, l = lib_1.Context.getSetKeysCache.length - 1; i < l; i++) {
-        var v = self[lib_1.Context.getSetKeysCache[i]];
-        self = self[lib_1.Context.getSetKeysCache[i]] = (v && typeof v === "object") ? lib_1.arrObjClone(v) : {};
-    }
-    self[lib_1.Context.getSetKeysCache[i]] = val;
-    lib_1.Context.getSetKeysCache = null;
-    return root;
-}
-exports.arrSet = arrSet;
-function arrSetPatch(ctx, key, val) {
-    if (lib_1.anyGetInContext.call(ctx, key) === val) {
-        return {};
-    }
-    var root, self = root = (_a = {}, _a[lib_1.Context.getSetKeysCache[0]] = ctx[lib_1.Context.getSetKeysCache[0]], _a);
-    var i, l;
-    for (i = 0, l = lib_1.Context.getSetKeysCache.length - 1; i < l; i++) {
-        var v = self[lib_1.Context.getSetKeysCache[i]];
-        self = self[lib_1.Context.getSetKeysCache[i]] = (v && typeof v === "object") ? lib_1.arrObjClone(v) : {};
-    }
-    self[lib_1.Context.getSetKeysCache[i]] = val;
-    lib_1.Context.getSetKeysCache = null;
-    return root;
-    var _a;
-}
-exports.arrSetPatch = arrSetPatch;
-function arrAll(ctx, a, b, c, d, e, f, g, h) {
-    if (arguments.length < 4) {
-        return arrSet(ctx, a, b);
-    }
-    var root = ctx;
-    var self;
-    var i, j, l, m;
-    copySet.clear();
-    for (i = 1, l = arguments.length; i < l; i += 2) {
-        if (lib_1.anyGetInContext.call(ctx, arguments[i]) === arguments[i + 1]) {
-            continue;
-        }
-        if (root === ctx) {
-            self = root = lib_1.arrCopySingle(ctx);
-        }
-        else {
-            self = root;
-        }
-        for (j = 0, m = lib_1.Context.getSetKeysCache.length - 1; j < m; j++) {
-            var v = self[lib_1.Context.getSetKeysCache[j]];
-            if (v && typeof v === "object") {
-                if (false === copySet.has(v)) {
-                    self = self[lib_1.Context.getSetKeysCache[j]] = lib_1.arrObjClone(v);
-                    copySet.add(self);
-                }
-                else {
-                    self = v;
-                }
-            }
-            else {
-                self = self[lib_1.Context.getSetKeysCache[j]] = {};
-            }
-        }
-        self[lib_1.Context.getSetKeysCache[j]] = arguments[i + 1];
-    }
-    lib_1.Context.getSetKeysCache = null;
-    return root;
-}
-exports.arrAll = arrAll;
-function arrAllPatch(ctx, a, b, c, d, e, f, g, h) {
-    if (arguments.length < 4) {
-        return arrSetPatch(ctx, a, b);
-    }
-    var root = {};
-    var self;
-    var i, j, l, m;
-    copySet.clear();
-    for (i = 1, l = arguments.length; i < l; i += 2) {
-        if (lib_1.anyGetInContext.call(ctx, arguments[i]) === arguments[i + 1]) {
-            continue;
-        }
-        self = root;
-        if (false === lib_1.Context.getSetKeysCache[0] in self) {
-            self[lib_1.Context.getSetKeysCache[0]] = ctx[lib_1.Context.getSetKeysCache[0]];
-        }
-        for (j = 0, m = lib_1.Context.getSetKeysCache.length - 1; j < m; j++) {
-            var v = self[lib_1.Context.getSetKeysCache[j]];
-            if (v && typeof v === "object") {
-                if (false === copySet.has(v)) {
-                    self = self[lib_1.Context.getSetKeysCache[j]] = lib_1.arrObjClone(v);
-                    copySet.add(self);
-                }
-                else {
-                    self = v;
-                }
-            }
-            else {
-                self = self[lib_1.Context.getSetKeysCache[j]] = {};
-            }
-        }
-        self[lib_1.Context.getSetKeysCache[j]] = arguments[i + 1];
-    }
-    lib_1.Context.getSetKeysCache = null;
-    return root;
-}
-exports.arrAllPatch = arrAllPatch;
+var specialized = lib_2.specialize(lib_1.arrCopySingle);
+exports.arrSet = specialized.set;
+exports.arrSetPatch = specialized.setPatch;
+exports.arrAll = specialized.all;
+exports.arrAllPatch = specialized.allPatch;
 var mutables = new Array(32);
 var mutableCurrent = false;
 var mutableDevMode = lib_1.Context.isDevMode;

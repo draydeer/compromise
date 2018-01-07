@@ -20,12 +20,18 @@
   },
   "license": "MIT",
   "scripts": {
+    "benchmark": "npm run build && node ./dist/benchmarks/arr_obj",
     "build": "rm -rf dist/ && node ./node_modules/.bin/tsc -d -p . --outDir dist",
     "coveralls": "npm run build && node ./node_modules/.bin/istanbul cover --root dist/src jasmine-node dist/spec",
-    "test": "npm run build && node ./node_modules/.bin/jasmine-node dist/spec && NODE_ENV=dev node ./node_modules/.bin/jasmine-node dist/spec"
+    "test": "npm run build && node ./node_modules/.bin/jasmine-node dist/spec"
   },
   "dependencies": {
     "@types/es6-shim": "0.31.34",
-    "@types/node": "8.0.8"
+    "@types/node": "8.0.8",
+    "crio": "^5.0.0",
+    "fast.js": "^0.1.1",
+    "immutable": "^3.8.2",
+    "mori": "^0.3.2",
+    "seamless-immutable": "^7.1.2"
   }
 }

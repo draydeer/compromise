@@ -78,7 +78,7 @@ export function objAssign(target, a?, b?, c?, d?, e?, f?, g?, h?): any {
         if (argv) {
             let keys = Object.keys(argv);
 
-            for (j = 1, k = keys[0], m = keys.length; j <= m; k = keys[j ++]) {
+            for (j = 0, k = keys[0], m = keys.length; j < m; k = keys[++ j]) {
                 target[k] = argv[k];
             }
         }
@@ -88,9 +88,9 @@ export function objAssign(target, a?, b?, c?, d?, e?, f?, g?, h?): any {
 }
 
 export function objAssignSingle(target, source) {
-    let i, l, k, keys = Object.keys(source);
+    let i = 0, keys = Object.keys(source), k = keys[0], l = keys.length;
 
-    for (i = 1, k = keys[0], l = keys.length; i <= l; k = keys[i ++]) {
+    for (; i < l; k = keys[++ i]) {
         target[k] = source[k];
     }
 
@@ -98,9 +98,9 @@ export function objAssignSingle(target, source) {
 }
 
 export function objCopySingle(source, ctx?) {
-    let i, l, k, keys = Object.keys(source), target = ctx || {};
+    let i = 0, keys = Object.keys(source), k = keys[0], l = keys.length, target = ctx || {};
 
-    for (i = 1, k = keys[0], l = keys.length; i <= l; k = keys[i ++]) {
+    for (; i < l; k = keys[++ i]) {
         target[k] = source[k];
     }
 
@@ -108,7 +108,7 @@ export function objCopySingle(source, ctx?) {
 }
 
 export function objMerge(a?, b?, c?, d?, e?, f?, g?, h?): any {
-    let i, j, l, k, m, target = {};
+    let i, j, k, l, m, target = {};
 
     for (i = 0, l = arguments.length; i < l; i ++) {
         let argv = arguments[i];
@@ -116,7 +116,7 @@ export function objMerge(a?, b?, c?, d?, e?, f?, g?, h?): any {
         if (argv) {
             let keys = Object.keys(argv);
 
-            for (j = 1, k = keys[0], m = keys.length; j <= m; k = keys[j ++]) {
+            for (j = 0, k = keys[0], m = keys.length; j < m; k = keys[++ j]) {
                 target[k] = argv[k];
             }
         }
@@ -126,9 +126,9 @@ export function objMerge(a?, b?, c?, d?, e?, f?, g?, h?): any {
 }
 
 export function objPatchCompare(target, source): any {
-    let i, l, k, keys = Object.keys(source), patch = {};
+    let i = 0, keys = Object.keys(source), k = keys[0], l = keys.length, patch = {};
 
-    for (i = 1, k = keys[0], l = keys.length; i <= l; k = keys[i ++]) {
+    for (; i < l; k = keys[++ i]) {
         const v = source[k];
 
         if (v !== target[k]) {
@@ -160,9 +160,9 @@ export function arrObjFreeze(source: any): any {
                 Object.freeze(source);
             }
         } else {
-            let i, l, k, keys = Object.keys(source), v;
+            let i = 0, keys = Object.keys(source), k = keys[0], l = keys.length, v;
 
-            for (i = 0, l = keys.length, k = keys[0]; i < l; i ++, k = keys[i]) {
+            for (; i < l; k = keys[++ i]) {
                 v = source[k];
 
                 if (v && typeof v === OBJECT && false === Object.isFrozen(v)) {
@@ -202,7 +202,7 @@ export function anyGetInContext(key: TKey, def?: any) {
     return keys[i] in self ? self[keys[i]] : def;
 }
 
-export function specialize(copier: (ctx: any) => any) {
+export function specialize(copier: (source: any) => any) {
     let copySet = new Set();
     
     function set(ctx: any, key: TKey, val: any): any {
@@ -210,19 +210,11 @@ export function specialize(copier: (ctx: any) => any) {
             return ctx;
         }
 
-        return setDirect(ctx, key, val);
+        return setByGetSetKeysCache(ctx, val);
     }
 
-    function setInContext(key: TKey, val: any): any {
-        if (anyGetInContext.call(this, key) === val) {
-            return this;
-        }
-
-        return setDirect(this, key, val);
-    }
-
-    function setDirect(ctx: any, key: TKey, val: any): any {
-        let root, self = root = copier(ctx);
+    function setByGetSetKeysCache(ctx: any, val: any): any {
+        let root, self = root = copier.call(ctx, ctx);
         let i, l;
 
         for (i = 0, l = Context.getSetKeysCache.length - 1; i < l; i ++) {
@@ -238,21 +230,12 @@ export function specialize(copier: (ctx: any) => any) {
         return root;
     }
 
-    function setDirectMutable(ctx: any, key: TKey, val: any): any {
-        let self = ctx;
-        let i, l;
-
-        for (i = 0, l = Context.getSetKeysCache.length - 1; i < l; i ++) {
-            const v = self[Context.getSetKeysCache[i]];
-
-            self = self[Context.getSetKeysCache[i]] = (v && typeof v === OBJECT) ? v : {};
+    function setInContext(key: TKey, val: any): any {
+        if (anyGetInContext.call(this, key) === val) {
+            return this;
         }
 
-        self[Context.getSetKeysCache[i]] = val;
-
-        Context.getSetKeysCache = null;
-
-        return ctx;
+        return setByGetSetKeysCache(this, val);
     }
 
     function setPatch(ctx: any, key: TKey, val: any): any {
@@ -370,9 +353,8 @@ export function specialize(copier: (ctx: any) => any) {
 
     return {
         set,
+        setByGetSetKeysCache,
         setInContext,
-        setDirect,
-        setDirectMutable,
         setPatch,
         all,
         allPatch,

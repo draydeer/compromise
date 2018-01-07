@@ -12,6 +12,7 @@ import {
     TArrInvary,
     TKey
 } from "../types";
+import {specialize} from "../lib";
 
 export const Arr = function<T>(value: any): TArrInvary<T> {
     return new ArrInvary<TArrInvary<T>>(value);
@@ -19,139 +20,12 @@ export const Arr = function<T>(value: any): TArrInvary<T> {
 
 let copySet = new Set();
 
-export function arrSet(ctx: any, key: TKey, val: any) {
-    if (anyGetInContext.call(ctx, key) === val) {
-        return ctx;
-    }
+const specialized = specialize(arrCopySingle);
 
-    let root, self = root = arrCopySingle(ctx);
-    let i, l;
-
-    for (i = 0, l = Context.getSetKeysCache.length - 1; i < l; i ++) {
-        const v = self[Context.getSetKeysCache[i]];
-
-        self = self[Context.getSetKeysCache[i]] = (v && typeof v === "object") ? arrObjClone(v) : {};
-    }
-
-    self[Context.getSetKeysCache[i]] = val;
-
-    Context.getSetKeysCache = null;
-
-    return root;
-}
-
-export function arrSetPatch(ctx: any, key: TKey, val: any) {
-    if (anyGetInContext.call(ctx, key) === val) {
-        return {};
-    }
-
-    let root, self = root = {[Context.getSetKeysCache[0]]: ctx[Context.getSetKeysCache[0]]};
-    let i, l;
-
-    for (i = 0, l = Context.getSetKeysCache.length - 1; i < l; i ++) {
-        const v = self[Context.getSetKeysCache[i]];
-
-        self = self[Context.getSetKeysCache[i]] = (v && typeof v === "object") ? arrObjClone(v) : {};
-    }
-
-    self[Context.getSetKeysCache[i]] = val;
-
-    Context.getSetKeysCache = null;
-
-    return root;
-}
-
-export function arrAll(ctx, a?, b?, c?, d?, e?, f?, g?, h?) {
-    if (arguments.length < 4) {
-        return arrSet(ctx, a, b);
-    }
-
-    let root = ctx;
-    let self;
-    let i, j, l, m;
-
-    copySet.clear();
-
-    for (i = 1, l = arguments.length; i < l; i += 2) {
-        if (anyGetInContext.call(ctx, arguments[i]) === arguments[i + 1]) {
-            continue;
-        }
-
-        if (root === ctx) {
-            self = root = arrCopySingle(ctx);
-        } else {
-            self = root;
-        }
-
-        for (j = 0, m = Context.getSetKeysCache.length - 1; j < m; j ++) {
-            const v = self[Context.getSetKeysCache[j]];
-
-            if (v && typeof v === "object") {
-                if (false === copySet.has(v)) {
-                    self = self[Context.getSetKeysCache[j]] = arrObjClone(v);
-
-                    copySet.add(self);
-                } else {
-                    self = v;
-                }
-            } else {
-                self = self[Context.getSetKeysCache[j]] = {};
-            }
-        }
-
-        self[Context.getSetKeysCache[j]] = arguments[i + 1];
-    }
-
-    Context.getSetKeysCache = null;
-
-    return root;
-}
-
-export function arrAllPatch(ctx, a?, b?, c?, d?, e?, f?, g?, h?) {
-    if (arguments.length < 4) {
-        return arrSetPatch(ctx, a, b);
-    }
-
-    let root = {};
-    let self;
-    let i, j, l, m;
-
-    copySet.clear();
-
-    for (i = 1, l = arguments.length; i < l; i += 2) {
-        if (anyGetInContext.call(ctx, arguments[i]) === arguments[i + 1]) {
-            continue;
-        }
-
-        self = root;
-
-        if (false === Context.getSetKeysCache[0] in self) {
-            self[Context.getSetKeysCache[0]] = ctx[Context.getSetKeysCache[0]];
-        }
-
-        for (j = 0, m = Context.getSetKeysCache.length - 1; j < m; j ++) {
-            const v = self[Context.getSetKeysCache[j]];
-
-            if (v && typeof v === "object") {
-                if (false === copySet.has(v)) {
-                    self = self[Context.getSetKeysCache[j]] = arrObjClone(v);
-
-                    copySet.add(self);
-                } else {
-                    self = v;
-                }
-            } else {
-                self = self[Context.getSetKeysCache[j]] = {};
-            }
-        }
-
-        self[Context.getSetKeysCache[j]] = arguments[i + 1];
-    }
-
-    Context.getSetKeysCache = null;
-
-    return root;
-}
+export const arrSet = specialized.set;
+export const arrSetPatch = specialized.setPatch;
+export const arrAll = specialized.all;
+export const arrAllPatch = specialized.allPatch;
 
 let mutables = new Array(32);
 let mutableCurrent = false;
