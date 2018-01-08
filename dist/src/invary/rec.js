@@ -15,6 +15,9 @@ function Rec(props) {
             if (lib_1.anyGetInContext.call(this, key) === val) {
                 return this;
             }
+            if (false === lib_1.Context.getSetKeysCache[0] in props) {
+                throw new Error("Key was not defined in props: " + lib_1.Context.getSetKeysCache[0]);
+            }
             return new RecInvary(setByGetSetKeysCache(this, val));
         };
         ;

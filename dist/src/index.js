@@ -18,6 +18,8 @@ exports.objAllPatch = obj_1.objAllPatch;
 exports.objSet = obj_1.objSet;
 exports.objSetPatch = obj_1.objSetPatch;
 exports.isObj = obj_1.isObj;
+var rec_1 = require("./invary/rec");
+exports.Rec = rec_1.Rec;
 var arr_dev_mode_1 = require("./invary/arr_dev_mode");
 var obj_dev_mode_1 = require("./invary/obj_dev_mode");
 // monkey patch of dev mode

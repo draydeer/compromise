@@ -15,15 +15,13 @@ describe('RecInvary', function () {
         var cls = rec_1.Rec(data);
         expect(new cls().a).toBe(data.a);
     });
-    //it('should throw on property set', () => {
-    //    const cls = Rec<IData>(data);
-    //
-    //    function x() {
-    //        new cls().a = 4;
-    //    }
-    //
-    //    expect(x).toThrow();
-    //});
+    it('should throw on set of unknown property', function () {
+        var cls = rec_1.Rec(data);
+        function x() {
+            new cls().set('d.e.f', 4);
+        }
+        expect(x).toThrow();
+    });
     it('should not set same value by existing path then return same instance of RecInvary class', function () {
         var cls = rec_1.Rec(data);
         var rec = new cls();

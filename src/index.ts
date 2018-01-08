@@ -78,7 +78,8 @@ export {
     objAllPatch,
     objSet,
     objSetPatch,
-    isObj
+    isObj,
+    Rec
 };
 
 // monkey patch of dev mode

@@ -24,6 +24,10 @@ export function Rec<T>(props: T): TRecInvary<T> {
                 return this;
             }
 
+            if (false === Context.getSetKeysCache[0] in props) {
+                throw new Error(`Key was not defined in props: ${Context.getSetKeysCache[0]}`);
+            }
+
             return new RecInvary(setByGetSetKeysCache(this, val));
         };
     }
