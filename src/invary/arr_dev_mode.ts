@@ -154,8 +154,10 @@ ArrInvary.prototype = objAssignSingle(new ArrInvaryProto(), {
     freeze: function() {
         return arrObjFreeze(this);
     },
-    deleteIndex: function (index) {
-        if (index !== void 0 && index < this.length && index > - 1) {
+    deleteIndex: function (start: number|string, count?: number) {
+        if (start !== void 0 && start < this.length && start > - 1) {
+            let countToDelete = count || 1;
+
             if (mutableCurrent) {
                 let i, l;
 
@@ -163,26 +165,28 @@ ArrInvary.prototype = objAssignSingle(new ArrInvaryProto(), {
                     mutableCurrent = new ArrInvary(this, true);
                 }
 
-                mutableCurrent[index] = null;
+                mutableCurrent[start] = null;
 
-                for (i = index, l = this.length - 1; i < l; i ++) {
-                    mutableCurrent[i] = mutableCurrent[i + 1];
+                for (i = start, l = this.length - countToDelete; i < l; i ++) {
+                    mutableCurrent[i] = mutableCurrent[i + countToDelete];
                 }
 
-                Array.prototype.pop.call(mutableCurrent);
+                for (i = 0; i < countToDelete; i ++) {
+                    Array.prototype.pop.call(mutableCurrent);
+                }
 
                 return mutableCurrent;
             }
 
             let copy = new ArrInvary(this, true), i, l;
 
-            copy[index] = null;
-
-            for (i = index, l = this.length - 1; i < l; i ++) {
-                copy[i] = copy[i + 1];
+            for (i = start, l = this.length - countToDelete; i < l; i ++) {
+                copy[i] = copy[i + countToDelete];
             }
 
-            Array.prototype.pop.call(copy);
+            for (i = 0; i < countToDelete; i ++) {
+                Array.prototype.pop.call(copy);
+            }
 
             copy.freeze();
 
@@ -191,8 +195,10 @@ ArrInvary.prototype = objAssignSingle(new ArrInvaryProto(), {
 
         return this;
     },
-    insertIndex: function (index, value) {
-        if (index !== void 0 && index < this.length && index > - 1) {
+    insertIndex: function (start, a?, b?, c?, d?, e?, f?, g?, h?) {
+        if (start !== void 0 && start < this.length && start > - 1) {
+            let countToInsert = arguments.length - 1;
+
             if (mutableCurrent) {
                 let i, l;
 
@@ -200,26 +206,34 @@ ArrInvary.prototype = objAssignSingle(new ArrInvaryProto(), {
                     mutableCurrent = new ArrInvary(this, true);
                 }
 
-                Array.prototype.push.call(mutableCurrent, null);
-
-                for (i = this.length - 1, l = index; i >= l; i --) {
-                    mutableCurrent[i + 1] = mutableCurrent[i];
+                for (i = 0; i < countToInsert; i ++) {
+                    Array.prototype.push.call(mutableCurrent, null);
                 }
 
-                mutableCurrent[index] = value;
+                for (i = this.length - 1, l = start; i >= l; i --) {
+                    mutableCurrent[i + countToInsert] = mutableCurrent[i];
+                }
+
+                for (i = 0; i < countToInsert; i ++) {
+                    mutableCurrent[start + i] = arguments[i + 1];
+                }
 
                 return mutableCurrent;
             }
 
             let copy = new ArrInvary(this, true), i, l;
 
-            Array.prototype.push.call(copy, null);
-
-            for (i = this.length - 1, l = index; i >= l; i --) {
-                copy[i + 1] = copy[i];
+            for (i = 0; i < countToInsert; i ++) {
+                Array.prototype.push.call(copy, null);
             }
 
-            copy[index] = value;
+            for (i = this.length - 1, l = start; i >= l; i --) {
+                copy[i + countToInsert] = copy[i];
+            }
+
+            for (i = 0; i < countToInsert; i ++) {
+                copy[start + i] = arguments[i + 1];
+            }
 
             copy.freeze();
 

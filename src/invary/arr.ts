@@ -131,8 +131,10 @@ ArrInvary.prototype = objAssignSingle(new ArrInvaryProto(), {
 
         return result;
     },
-    deleteIndex: function (ind: number|string) {
-        if (ind !== void 0 && ind < this.length && ind > - 1) {
+    deleteIndex: function (start: number|string, count?: number) {
+        if (start !== void 0 && start < this.length && start > - 1) {
+            let countToDelete = count || 1;
+
             if (mutableCurrent) {
                 let i, l;
 
@@ -140,26 +142,28 @@ ArrInvary.prototype = objAssignSingle(new ArrInvaryProto(), {
                     mutableCurrent = new ArrInvary(this);
                 }
 
-                mutableCurrent[ind] = null;
+                mutableCurrent[start] = null;
 
-                for (i = ind, l = this.length - 1; i < l; i ++) {
-                    mutableCurrent[i] = mutableCurrent[i + 1];
+                for (i = start, l = this.length - countToDelete; i < l; i ++) {
+                    mutableCurrent[i] = mutableCurrent[i + countToDelete];
                 }
 
-                Array.prototype.pop.call(mutableCurrent);
+                for (i = 0; i < countToDelete; i ++) {
+                    Array.prototype.pop.call(mutableCurrent);
+                }
 
                 return mutableCurrent;
             }
 
             let copy = new ArrInvary(this), i, l;
 
-            copy[ind] = null;
-
-            for (i = ind, l = this.length - 1; i < l; i ++) {
-                copy[i] = copy[i + 1];
+            for (i = start, l = this.length - countToDelete; i < l; i ++) {
+                copy[i] = copy[i + countToDelete];
             }
 
-            Array.prototype.pop.call(copy);
+            for (i = 0; i < countToDelete; i ++) {
+                Array.prototype.pop.call(copy);
+            }
 
             return copy;
         }
@@ -169,8 +173,8 @@ ArrInvary.prototype = objAssignSingle(new ArrInvaryProto(), {
     freeze: function() {
         return arrObjFreeze(this);
     },
-    insertIndex: function (ind, a?, b?, c?, d?, e?, f?, g?, h?) {
-        if (ind !== void 0 && ind < this.length && ind > - 1) {
+    insertIndex: function (start, a?, b?, c?, d?, e?, f?, g?, h?) {
+        if (start !== void 0 && start < this.length && start > - 1) {
             let countToInsert = arguments.length - 1;
 
             if (mutableCurrent) {
@@ -180,16 +184,16 @@ ArrInvary.prototype = objAssignSingle(new ArrInvaryProto(), {
                     mutableCurrent = new ArrInvary(this);
                 }
 
-                for (i = 1; i < countToInsert; i ++) {
+                for (i = 0; i < countToInsert; i ++) {
                     Array.prototype.push.call(mutableCurrent, null);
                 }
 
-                for (i = this.length - countToInsert, l = ind; i >= l; i --) {
+                for (i = this.length - 1, l = start; i >= l; i --) {
                     mutableCurrent[i + countToInsert] = mutableCurrent[i];
                 }
 
-                for (i = 1; i < countToInsert; i ++) {
-                    mutableCurrent[ind ++] = arguments[i];
+                for (i = 0; i < countToInsert; i ++) {
+                    mutableCurrent[start + i] = arguments[i + 1];
                 }
 
                 return mutableCurrent;
@@ -201,12 +205,12 @@ ArrInvary.prototype = objAssignSingle(new ArrInvaryProto(), {
                 Array.prototype.push.call(copy, null);
             }
 
-            for (i = this.length - countToInsert, l = ind; i >= l; i --) {
+            for (i = this.length - 1, l = start; i >= l; i --) {
                 copy[i + countToInsert] = copy[i];
             }
 
             for (i = 0; i < countToInsert; i ++) {
-                copy[ind ++] = arguments[i + 1];
+                copy[start + i] = arguments[i + 1];
             }
 
             return copy;
@@ -262,6 +266,8 @@ ArrInvary.prototype = objAssignSingle(new ArrInvaryProto(), {
     },
     splice: function (start, deleteCount, a?, b?, c?, d?, e?, f?, g?, h?) {
         if (start !== void 0 && start < this.length && start > - 1) {
+            let deleted = deleteCount > 0 ? Array.prototype.slice(start, deleteCount) : [];
+
 
         }
 

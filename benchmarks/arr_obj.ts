@@ -1,11 +1,4 @@
 import {
-    arrMerge,
-    arrAssignArrayLike,
-    arrAssignArrayLikeSingle,
-    objAssign,
-    objAssignSingle
-} from "../src/lib";
-import {
     Arr
 } from "../src";
 import {

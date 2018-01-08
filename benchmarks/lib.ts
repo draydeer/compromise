@@ -1,16 +1,8 @@
 import {
     arrMerge,
-    arrAssignArrayLike,
-    arrAssignArrayLikeSingle,
     objAssign,
     objAssignSingle
 } from "../src/lib";
-import {
-    Arr
-} from "../src/invary/arr";
-import {
-    Obj
-} from "../src/invary/obj";
 
 let time, timeSpentNew, timeSpentOld;
 

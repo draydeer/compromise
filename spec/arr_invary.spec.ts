@@ -108,12 +108,12 @@ function test(isArr, Arr, ArrInvary) {
 
         it('should delete element by index then return new instance of ArrInvary', () => {
             const arr:any = Arr([1, {a: 2}, 3, 4]);
-            const ar2:any = arr.deleteIndex(1);
+            const ar2:any = arr.deleteIndex(1, 2);
 
             expect(arr).toEqual(Arr([1, {a: 2}, 3, 4]));
             expect(ar2).not.toBe(arr);
-            expect(ar2.length).toBe(3);
-            expect(ar2).toEqual(Arr([arr[0], arr[2], arr[3]]));
+            expect(ar2.length).toBe(2);
+            expect(ar2).toEqual(Arr([arr[0], arr[3]]));
         });
 
         it('should not delete element by not existing index then return same instance of ArrInvary', () => {
@@ -131,12 +131,12 @@ function test(isArr, Arr, ArrInvary) {
 
         it('should insert element by index then return new instance of ArrInvary', () => {
             const arr:any = Arr([1, {a: 2}, 3, 4]);
-            const ar2:any = arr.insertIndex(1, 2);
+            const ar2:any = arr.insertIndex(1, 2, 3);
 
             expect(arr).toEqual(Arr([1, {a: 2}, 3, 4]));
             expect(ar2).not.toBe(arr);
-            expect(ar2.length).toBe(5);
-            expect(ar2).toEqual(Arr([arr[0], 2, arr[1], arr[2], arr[3]]));
+            expect(ar2.length).toBe(6);
+            expect(ar2).toEqual(Arr([arr[0], 2, 3, arr[1], arr[2], arr[3]]));
         });
 
         it('should not insert element by not existing index then return same instance of ArrInvary', () => {

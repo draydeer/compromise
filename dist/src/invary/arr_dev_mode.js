@@ -115,51 +115,64 @@ ArrInvary.prototype = lib_1.objAssignSingle(new ArrInvaryProto(), {
     freeze: function () {
         return lib_1.arrObjFreeze(this);
     },
-    deleteIndex: function (index) {
-        if (index !== void 0 && index < this.length && index > -1) {
+    deleteIndex: function (start, count) {
+        if (start !== void 0 && start < this.length && start > -1) {
+            var countToDelete = count || 1;
             if (mutableCurrent) {
                 var i_1, l_1;
                 if (mutableCurrent === true) {
                     mutableCurrent = new ArrInvary(this, true);
                 }
-                mutableCurrent[index] = null;
-                for (i_1 = index, l_1 = this.length - 1; i_1 < l_1; i_1++) {
-                    mutableCurrent[i_1] = mutableCurrent[i_1 + 1];
+                mutableCurrent[start] = null;
+                for (i_1 = start, l_1 = this.length - countToDelete; i_1 < l_1; i_1++) {
+                    mutableCurrent[i_1] = mutableCurrent[i_1 + countToDelete];
                 }
-                Array.prototype.pop.call(mutableCurrent);
+                for (i_1 = 0; i_1 < countToDelete; i_1++) {
+                    Array.prototype.pop.call(mutableCurrent);
+                }
                 return mutableCurrent;
             }
             var copy = new ArrInvary(this, true), i = void 0, l = void 0;
-            copy[index] = null;
-            for (i = index, l = this.length - 1; i < l; i++) {
-                copy[i] = copy[i + 1];
+            for (i = start, l = this.length - countToDelete; i < l; i++) {
+                copy[i] = copy[i + countToDelete];
             }
-            Array.prototype.pop.call(copy);
+            for (i = 0; i < countToDelete; i++) {
+                Array.prototype.pop.call(copy);
+            }
             copy.freeze();
             return copy;
         }
         return this;
     },
-    insertIndex: function (index, value) {
-        if (index !== void 0 && index < this.length && index > -1) {
+    insertIndex: function (start, a, b, c, d, e, f, g, h) {
+        if (start !== void 0 && start < this.length && start > -1) {
+            var countToInsert = arguments.length - 1;
             if (mutableCurrent) {
                 var i_2, l_2;
                 if (mutableCurrent === true) {
                     mutableCurrent = new ArrInvary(this, true);
                 }
-                Array.prototype.push.call(mutableCurrent, null);
-                for (i_2 = this.length - 1, l_2 = index; i_2 >= l_2; i_2--) {
-                    mutableCurrent[i_2 + 1] = mutableCurrent[i_2];
+                for (i_2 = 0; i_2 < countToInsert; i_2++) {
+                    Array.prototype.push.call(mutableCurrent, null);
                 }
-                mutableCurrent[index] = value;
+                for (i_2 = this.length - 1, l_2 = start; i_2 >= l_2; i_2--) {
+                    mutableCurrent[i_2 + countToInsert] = mutableCurrent[i_2];
+                }
+                for (i_2 = 0; i_2 < countToInsert; i_2++) {
+                    mutableCurrent[start + i_2] = arguments[i_2 + 1];
+                }
                 return mutableCurrent;
             }
             var copy = new ArrInvary(this, true), i = void 0, l = void 0;
-            Array.prototype.push.call(copy, null);
-            for (i = this.length - 1, l = index; i >= l; i--) {
-                copy[i + 1] = copy[i];
+            for (i = 0; i < countToInsert; i++) {
+                Array.prototype.push.call(copy, null);
             }
-            copy[index] = value;
+            for (i = this.length - 1, l = start; i >= l; i--) {
+                copy[i + countToInsert] = copy[i];
+            }
+            for (i = 0; i < countToInsert; i++) {
+                copy[start + i] = arguments[i + 1];
+            }
             copy.freeze();
             return copy;
         }
