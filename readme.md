@@ -177,13 +177,34 @@ arr = arr.pop(); // [new ArrInvary([0, 1]), 2]
 
 Methods:
 
-* **deleteIndex** - deletes the provided position, returns copy
-* **insertIndex** - inserts value in the provided position, returns copy
-* **pop** - like Array.pop, returns [copy, popped element]
-* **push** - like Array.push, returns [copy, new length]
-* **shift** - like Array.shift, returns [copy, shifted element]
-* **slice** - like Array.slice, returns new ArrInvary
-* **unshift** - like Array.unshift, returns [copy, new length]
+* **deleteIndex(start, count=1)** - deletes number of elements in the provided position, returns copy
+* **insertIndex(start, ...values)** - inserts values in the provided position, returns copy
+* **pop()** - like Array.pop, returns [copy, popped element]
+* **push(value)** - like Array.push, returns [copy, new length]
+* **shift()** - like Array.shift, returns [copy, shifted element]
+* **slice(begin, end)** - like Array.slice, returns new ArrInvary
+* **splice(start, deleteCount, ...values)** - like Array.splice, returns [copy, array of deleted elements]
+* **unshift()** - like Array.unshift, returns [copy, new length]
+
+## RecInvary
+
+RecInvary is a record with default properties which will be used as default values if some property is not set yet to a custom value.
+RecInvary class (not instance) must be constructed with Rec factory.
+
+```javascript
+let cls = Rec({a: 1, b: 2, c: 3}); // constructs RecInvary class with default properties "a", "b" and "c" in the prototype
+let record = new cls(); // new RecInvary()
+
+record.a; // 1
+
+record.get('a'); // 1
+
+record = record.set('a', 2); // new RecInvary({a: 2});
+
+record.get('a'); // 2
+
+record = record.set('x', 2); // throws Error('Key was not defined in props: x')
+```
 
 ## Batch
 
@@ -219,7 +240,7 @@ arr = arr.batch((mutable1) => {
 
 ## Development mode
 
-In the development mode all Invary entities will be frozen to avoid bugs during development process. To activate development mode set env variable NODE_ENV=dev or set window.INVARY_ENV=dev.
+In the development mode all Invary entities will be frozen to avoid errors during development process. To activate development mode set env variable NODE_ENV=dev or set window.INVARY_ENV=dev.
 
 ## Benchmarks (Intel Core i7, 4 cores, disabled HT, 16gb 1600mhz DDR3, NodeJS 6.12.0)
 

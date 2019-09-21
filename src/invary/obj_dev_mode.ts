@@ -18,8 +18,6 @@ export const Obj = function<T>(value: any): TObjInvary<T> {
     return new ObjInvary<TObjInvary<T>>(value);
 };
 
-let copySet = new Set();
-
 const specialized = specialize(objCopySingle);
 
 export const objSet = specialized.set;
@@ -44,94 +42,30 @@ export function ObjInvary<T>(obj?: any, noFreeze?: boolean) {
 
 const ObjInvaryProto = function () {};
 
+const specializedObjInvary = specialize(
+    function () {
+        if (mutableCurrent === true) {
+            mutableCurrent = new ObjInvary(this, true);
+
+            return mutableCurrent;
+        }
+
+        return mutableCurrent || new ObjInvary(this, true);
+    },
+    function () {
+        if (! mutableCurrent) {
+            this.freeze();
+        }
+    }
+);
+
 ObjInvaryProto.prototype = Object.prototype;
 
 ObjInvary.prototype = objAssignSingle(new ObjInvaryProto(), {
     constructor: Object.prototype.constructor,
-    all: function (a?, b?, c?, d?, e?, f?, g?, h?) {
-        if (arguments.length < 3) {
-            return ObjInvary.prototype.set.call(this, a, b);
-        }
-
-        let root = this;
-        let self;
-        let i, j, l, m;
-
-        copySet.clear();
-
-        for (i = 0, l = arguments.length; i < l; i += 2) {
-            if (anyGetInContext.call(this, arguments[i]) === arguments[i + 1]) {
-                continue;
-            }
-
-            if (root === this) {
-                if (mutableCurrent === true) {
-                    self = root = mutableCurrent = new ObjInvary(this, true);
-                } else {
-                    self = root = mutableCurrent || new ObjInvary(this, true);
-                }
-            } else {
-                self = root;
-            }
-
-            for (j = 0, m = Context.getSetKeysCache.length - 1; j < m; j ++) {
-                const v = self[Context.getSetKeysCache[j]];
-
-                if (v && typeof v === "object") {
-                    if (false === copySet.has(v)) {
-                        self = self[Context.getSetKeysCache[j]] = arrObjClone(v);
-
-                        copySet.add(self);
-                    } else {
-                        self = v;
-                    }
-                } else {
-                    self = self[Context.getSetKeysCache[j]] = {};
-                }
-            }
-
-            self[Context.getSetKeysCache[j]] = arguments[i + 1];
-        }
-
-        if (! mutableCurrent) {
-            root.freeze();
-        }
-
-        Context.getSetKeysCache = null;
-
-        return root;
-    },
+    all: specializedObjInvary.allInContext,
     get: anyGetInContext,
-    set: function (key: TKey, val: any) {
-        if (anyGetInContext.call(this, key) === val) {
-            return this;
-        }
-
-        let root, self;
-        let i, l;
-
-        if (mutableCurrent === true) {
-            self = root = mutableCurrent = new ObjInvary(this, true);
-        } else {
-            self = root = mutableCurrent || new ObjInvary(this, true);
-        }
-
-        for (i = 0, l = Context.getSetKeysCache.length - 1; i < l; i ++) {
-            const v = self[Context.getSetKeysCache[i]];
-
-            self = self[Context.getSetKeysCache[i]] = (v && typeof v === "object") ? arrObjClone(v) : {};
-        }
-
-        self[Context.getSetKeysCache[i]] = val;
-
-        if (! mutableCurrent) {
-            root.freeze();
-        }
-
-        Context.getSetKeysCache = null;
-
-        return root;
-    },
+    set: specializedObjInvary.setInContext,
     batch: function (callback) {
         mutables[++ mutableIndex] = mutableCurrent;
         mutableCurrent = true;
@@ -158,3 +92,6 @@ ObjInvary.prototype = objAssignSingle(new ObjInvaryProto(), {
 });
 
 export const isObj = ObjInvary.prototype.isObj;
+export const toObj = function (obj) {
+    return obj instanceof ObjInvary ? obj : new ObjInvary(obj);
+};

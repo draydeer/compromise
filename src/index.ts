@@ -8,7 +8,7 @@ import {
 import {
     IArr,
     IArrInvary,
-    TArrInvary,
+    //TArrInvary,
     IObj,
     IObjInvary,
     TObjInvary,
@@ -57,12 +57,16 @@ import {
     isObj as isObjDev,
 } from "./invary/obj_dev_mode";
 
+import {
+    Rec as RecDev,
+} from "./invary/rec_dev_mode";
+
 export {
     Arr,
     ArrInvary,
     IArr,
     IArrInvary,
-    TArrInvary,
+    //TArrInvary,
     anyGetInContext,
     arrAll,
     arrAllPatch,
@@ -98,6 +102,7 @@ if (Context.isDevMode) {
     exports.objSet = objSetDev;
     exports.objSetPatch = objSetPatchDev;
     exports.isObj = isObjDev;
+    exports.Rec = RecDev;
 }
 
 export const get = function (target: any, key: TKey, def?: any) {
@@ -124,7 +129,7 @@ export const allPatchCompare = function (target: any, source: any) {
     return source instanceof Array ? arrPatchCompare(target, source) : objPatchCompare(target, source);
 };
 
-export const construct = function (mixed: any): IArrInvary | IObjInvary {
+export const construct = function (mixed: any): IArrInvary<any> | IObjInvary {
     return mixed instanceof Array ? exports.Arr(mixed) : exports.Obj(mixed);
 };
 
@@ -139,3 +144,7 @@ export const applyIsArrayPatch = function () {
         Array.isArray = isArray;
     }
 };
+
+class A<T> extends Array<T> {
+
+}

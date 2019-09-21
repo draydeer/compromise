@@ -18,6 +18,8 @@ export function Rec<T>(props: T): TRecInvary<T> {
             if (props) {
                 objCopySingle(props, this);
             }
+
+            arrObjFreeze(this);
         }
 
         public get(key: TKey, def?: any) {}

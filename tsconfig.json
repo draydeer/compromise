@@ -1,7 +1,9 @@
 {
     "compilerOptions": {
+        "declaration": true,
         "emitDecoratorMetadata": false,
         "experimentalDecorators": true,
+        "inlineSourceMap": true,
         "module": "commonjs",
         "outDir": "dist",
         "target": "ES5",

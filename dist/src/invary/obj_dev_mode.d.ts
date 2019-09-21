@@ -6,3 +6,4 @@ export declare const objAll: (ctx: any, a?: any, b?: any, c?: any, d?: any, e?: 
 export declare const objAllPatch: (ctx: any, a?: any, b?: any, c?: any, d?: any, e?: any, f?: any, g?: any, h?: any) => any;
 export declare function ObjInvary<T>(obj?: any, noFreeze?: boolean): void;
 export declare const isObj: any;
+export declare const toObj: (obj: any) => any;

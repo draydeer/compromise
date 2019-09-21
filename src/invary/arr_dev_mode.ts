@@ -9,16 +9,14 @@ import {
 
 import {
     IArrInvary,
-    TArrInvary,
+    //TArrInvary,
     TKey
 } from "../types";
 import {specialize} from "../lib";
 
-export const Arr = function<T>(value: any): TArrInvary<T> {
-    return new ArrInvary<TArrInvary<T>>(value);
+export const Arr = function<T>(value: any): IArrInvary<T> {
+    return new ArrInvary<IArrInvary<T>>(value);
 };
-
-let copySet = new Set();
 
 const specialized = specialize(arrCopySingle);
 
@@ -34,7 +32,7 @@ let mutableIndex = 0;
 
 export function ArrInvary<T>(arr?: any, noFreeze?: boolean) {
     if (arr) {
-        <TArrInvary<T>> arrCopySingle(arr, this);
+        <IArrInvary<T>> arrCopySingle(arr, this);
     }
 
     if (true !== noFreeze) {
@@ -44,94 +42,30 @@ export function ArrInvary<T>(arr?: any, noFreeze?: boolean) {
 
 const ArrInvaryProto = function () {};
 
+const specializedArrInvary = specialize(
+    function () {
+        if (mutableCurrent === true) {
+            mutableCurrent = new ArrInvary(this, true);
+
+            return mutableCurrent;
+        }
+
+        return mutableCurrent || new ArrInvary(this, true);
+    },
+    function () {
+        if (! mutableCurrent) {
+            this.freeze();
+        }
+    }
+);
+
 ArrInvaryProto.prototype = Array.prototype;
 
 ArrInvary.prototype = objAssignSingle(new ArrInvaryProto(), {
     constructor: Array.prototype.constructor,
-    all: function (a?, b?, c?, d?, e?, f?, g?, h?) {
-        if (arguments.length < 3) {
-            return this.set(a, b);
-        }
-
-        let root = this;
-        let self;
-        let i, j, l, m;
-
-        copySet.clear();
-
-        for (i = 0, l = arguments.length; i < l; i += 2) {
-            if (anyGetInContext.call(this, arguments[i]) === arguments[i + 1]) {
-                continue;
-            }
-
-            if (root === this) {
-                if (mutableCurrent === true) {
-                    self = root = mutableCurrent = new ArrInvary(this, true);
-                } else {
-                    self = root = mutableCurrent || new ArrInvary(this, true);
-                }
-            } else {
-                self = root;
-            }
-
-            for (j = 0, m = Context.getSetKeysCache.length - 1; j < m; j ++) {
-                const v = self[Context.getSetKeysCache[j]];
-
-                if (v && typeof v === "object") {
-                    if (false === copySet.has(v)) {
-                        self = self[Context.getSetKeysCache[j]] = arrObjClone(v);
-
-                        copySet.add(self);
-                    } else {
-                        self = self[Context.getSetKeysCache[j]] = v;
-                    }
-                } else {
-                    self = self[Context.getSetKeysCache[j]] = {};
-                }
-            }
-
-            self[Context.getSetKeysCache[j]] = arguments[i + 1];
-        }
-
-        if (! mutableCurrent) {
-            root.freeze();
-        }
-
-        Context.getSetKeysCache = null;
-
-        return root;
-    },
+    all: specializedArrInvary.allInContext,
     get: anyGetInContext,
-    set: function (key: TKey, val: any) {
-        if (anyGetInContext.call(this, key) === val) {
-            return this;
-        }
-
-        let root, self;
-        let i, l;
-
-        if (mutableCurrent === true) {
-            self = root = mutableCurrent = new ArrInvary(this, true);
-        } else {
-            self = root = mutableCurrent || new ArrInvary(this, true);
-        }
-
-        for (i = 0, l = Context.getSetKeysCache.length - 1; i < l; i ++) {
-            const v = self[Context.getSetKeysCache[i]];
-
-            self = self[Context.getSetKeysCache[i]] = (v && typeof v === "object") ? arrObjClone(v) : {};
-        }
-
-        self[Context.getSetKeysCache[i]] = val;
-
-        if (! mutableCurrent) {
-            root.freeze();
-        }
-
-        Context.getSetKeysCache = null;
-
-        return root;
-    },
+    set: specializedArrInvary.setInContext,
     batch: function (callback) {
         mutables[++ mutableIndex] = mutableCurrent;
         mutableCurrent = true;
@@ -289,6 +223,24 @@ ArrInvary.prototype = objAssignSingle(new ArrInvaryProto(), {
 
         let copy = new ArrInvary(this, true);
         let result = Array.prototype.shift.apply(copy);
+
+        if (! mutableCurrent) {
+            copy.freeze();
+        }
+
+        return [copy, result];
+    },
+    splice: function (start, deleteCount, a?, b?, c?, d?, e?, f?, g?, h?) {
+        if (mutableCurrent) {
+            if (mutableCurrent === true) {
+                mutableCurrent = new ArrInvary(this, true);
+            }
+
+            return [mutableCurrent, Array.prototype.splice.apply(mutableCurrent, arguments)];
+        }
+
+        let copy = new ArrInvary(this, true);
+        let result = Array.prototype.splice.apply(copy, arguments);
 
         if (! mutableCurrent) {
             copy.freeze();

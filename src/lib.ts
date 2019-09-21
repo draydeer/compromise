@@ -1,6 +1,22 @@
 import {OBJECT} from "./const";
 import {TKey} from "./types";
 
+export interface Constructor<T> {
+    new(...args: any[]): T;
+}
+
+export function es5Class(): (target: Constructor<any>) => any {
+    return (target: Constructor<any>) => {
+        return class extends target {
+            constructor(...args: any[]) {
+                super(args);
+
+                Object.setPrototypeOf(this, target.prototype);
+            }
+        }
+    }
+}
+
 export function arrAssignArrayLike(target, a?, b?, c?, d?, e?, f?, g?, h?): any {
     let i, j, l, m, length;
 
@@ -202,7 +218,7 @@ export function anyGetInContext(key: TKey, def?: any) {
     return keys[i] in self ? self[keys[i]] : def;
 }
 
-export function specialize(copier: (source: any) => any) {
+export function specialize(copier: (source: any) => any, beforeReturnCb?: () => any) {
     let copySet = new Set();
     
     function set(ctx: any, key: TKey, val: any): any {
@@ -211,6 +227,14 @@ export function specialize(copier: (source: any) => any) {
         }
 
         return setByGetSetKeysCache(ctx, val);
+    }
+
+    function setInContext(key: TKey, val: any): any {
+        if (anyGetInContext.call(this, key) === val) {
+            return this;
+        }
+
+        return setByGetSetKeysCache(this, val);
     }
 
     function setByGetSetKeysCache(ctx: any, val: any): any {
@@ -225,17 +249,13 @@ export function specialize(copier: (source: any) => any) {
 
         self[Context.getSetKeysCache[i]] = val;
 
+        if (beforeReturnCb) {
+            beforeReturnCb.call(root);
+        }
+
         Context.getSetKeysCache = null;
 
         return root;
-    }
-
-    function setInContext(key: TKey, val: any): any {
-        if (anyGetInContext.call(this, key) === val) {
-            return this;
-        }
-
-        return setByGetSetKeysCache(this, val);
     }
 
     function setPatch(ctx: any, key: TKey, val: any): any {
@@ -253,6 +273,10 @@ export function specialize(copier: (source: any) => any) {
         }
 
         self[Context.getSetKeysCache[i]] = val;
+
+        if (beforeReturnCb) {
+            beforeReturnCb.call(root);
+        }
 
         Context.getSetKeysCache = null;
 
@@ -276,7 +300,7 @@ export function specialize(copier: (source: any) => any) {
             }
 
             if (root === ctx) {
-                self = root = copier(ctx);
+                self = root = copier.call(ctx, ctx);
             } else {
                 self = root;
             }
@@ -298,6 +322,60 @@ export function specialize(copier: (source: any) => any) {
             }
 
             self[Context.getSetKeysCache[j]] = arguments[i + 1];
+        }
+
+        if (beforeReturnCb) {
+            beforeReturnCb.call(root);
+        }
+
+        Context.getSetKeysCache = null;
+
+        return root;
+    }
+
+    function allInContext(a?, b?, c?, d?, e?, f?, g?, h?): any {
+        if (arguments.length < 3) {
+            return set(this, a, b);
+        }
+
+        let root = this;
+        let self;
+        let i, j, l, m;
+
+        copySet.clear();
+
+        for (i = 0, l = arguments.length; i < l; i += 2) {
+            if (anyGetInContext.call(this, arguments[i]) === arguments[i + 1]) {
+                continue;
+            }
+
+            if (root === this) {
+                self = root = copier.call(this, this);
+            } else {
+                self = root;
+            }
+
+            for (j = 0, m = Context.getSetKeysCache.length - 1; j < m; j ++) {
+                const v = self[Context.getSetKeysCache[j]];
+
+                if (v && typeof v === OBJECT) {
+                    if (false === copySet.has(v)) {
+                        self = self[Context.getSetKeysCache[j]] = arrObjClone(v);
+
+                        copySet.add(self);
+                    } else {
+                        self = v;
+                    }
+                } else {
+                    self = self[Context.getSetKeysCache[j]] = {};
+                }
+            }
+
+            self[Context.getSetKeysCache[j]] = arguments[i + 1];
+        }
+
+        if (beforeReturnCb) {
+            beforeReturnCb.call(root);
         }
 
         Context.getSetKeysCache = null;
@@ -346,6 +424,10 @@ export function specialize(copier: (source: any) => any) {
             self[Context.getSetKeysCache[j]] = arguments[i + 1];
         }
 
+        if (beforeReturnCb) {
+            beforeReturnCb.call(root);
+        }
+
         Context.getSetKeysCache = null;
 
         return root;
@@ -357,6 +439,68 @@ export function specialize(copier: (source: any) => any) {
         setInContext,
         setPatch,
         all,
+        allInContext,
         allPatch,
+    };
+}
+
+export function specializeArr(copier: (source: any) => any, beforeReturnCb?: () => any) {
+    function deleteIndexInContext(start: number|string, count?: number) {
+        if (start !== void 0 && start < this.length && start > - 1) {
+            let countToDelete = count || 1;
+            let root = copier.call(this, this), i, l;
+
+            for (i = start, l = this.length - countToDelete; i < l; i ++) {
+                root[i] = root[i + countToDelete];
+            }
+
+            for (i = 0; i < countToDelete; i ++) {
+                Array.prototype.pop.call(root);
+            }
+
+            if (beforeReturnCb) {
+                beforeReturnCb.call(root);
+            }
+
+            return root;
+        }
+
+        return this;
+    }
+
+    function insertIndexInContext(start, a?, b?, c?, d?, e?, f?, g?, h?) {
+        if (start !== void 0 && start < this.length && start > - 1) {
+            let countToInsert = arguments.length - 1;
+            let root = copier.call(this, this), i, l;
+
+            for (i = 0; i < countToInsert; i ++) {
+                Array.prototype.push.call(root, null);
+            }
+
+            for (i = this.length - 1, l = start; i >= l; i --) {
+                root[i + countToInsert] = root[i];
+            }
+
+            for (i = 0; i < countToInsert; i ++) {
+                root[start + i] = arguments[i + 1];
+            }
+
+            return root;
+        }
+
+        return this;
+    }
+
+    function popInContext() {
+        let root = copier.call(this, this);
+        let result = Array.prototype.pop.apply(root);
+
+        return [root, result];
+    }
+
+    return {
+        deleteIndexInContext,
+        insertIndexInContext,
+        popInContext,
     };
 }

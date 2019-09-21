@@ -201,6 +201,16 @@ function test(isArr, Arr, ArrInvary) {
             expect(ar2).toEqual(Arr([arr[1], arr[2]]));
         });
 
+        it('should splice then return new instance of ArrInvary', () => {
+            const arr:any = Arr([1, {a: 2}, 3, 4]);
+            const [ar2, _] = arr.splice(1, 2, 5, 6, 7);
+
+            expect(ar2).not.toBe(arr);
+            expect(ar2.length).toBe(5);
+            expect(ar2).toEqual(Arr([arr[0], 5, 6, 7, arr[3]]));
+            expect(_).toEqual([arr[1], arr[2]]);
+        });
+
         it('should call toJSON on JSON.stringify then return valid stringified json', () => {
             const arr:any = Arr([1, {a: 2}, 3, 4]);
 

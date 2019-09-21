@@ -47,7 +47,9 @@ function test(isObj, Obj, ObjInvary) {
             const ob3:any = obj.set('1.a', 3);
 
             expect(ob2).not.toBe(obj);
+            expect(ob2 instanceof ObjInvary).toBeTruthy();
             expect(ob3).not.toBe(obj);
+            expect(ob3 instanceof ObjInvary).toBeTruthy();
             expect(obj[0]).toBe(1);
             expect(ob2[0]).toBe(2);
             expect(obj[1]).toBe(ob2[1]);
